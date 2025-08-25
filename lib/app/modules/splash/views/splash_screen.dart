@@ -1,4 +1,4 @@
-import 'package:blume/app/controller/storage_controller.dart';
+
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -44,18 +44,7 @@ class _SplashScreenState extends State<SplashScreen>
     );
 
     Future.delayed(const Duration(seconds: 3), () async {
-      final storageController = Get.put(StorageController());
-      bool newUser = await storageController.getUserStatus();
-      if (newUser) {
-        Get.offAllNamed(AppRoutes.onboarding);
-        await storageController.saveStatus("notNewAgain");
-        return;
-      }
-      String? token = await storageController.getToken();
-      if (token == null || token.isEmpty) {
-        Get.offAllNamed(AppRoutes.onboarding);
-        return;
-      }
+      Get.offAllNamed(AppRoutes.onboarding);
     });
   }
 
@@ -69,16 +58,6 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Get.theme.scaffoldBackgroundColor,
-      // body: Center(
-      //   child: Text(
-      //     "BLUME",
-      //     style: GoogleFonts.figtree(
-      //       fontSize: 50,
-      //       fontWeight: FontWeight.w800,
-      //       color: AppColors.primaryColor,
-      //     ),
-      //   ),
-      // ),
       body: Center(
         child: AnimatedBuilder(
           animation: _controller,

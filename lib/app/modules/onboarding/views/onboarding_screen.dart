@@ -1,4 +1,5 @@
 import 'package:blume/app/resources/colors.dart';
+import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -38,9 +39,12 @@ class OnboardingScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 10),
+
               CustomButton(
-                ontap: () {},
-                bgColor: AppColors.darkButtonColor,
+                ontap: () => Get.toNamed(AppRoutes.login),
+                bgColor: Get.isDarkMode
+                    ? AppColors.darkButtonColor
+                    : AppColors.lightButtonColor,
                 isLoading: false.obs,
                 child: Text(
                   "Login",

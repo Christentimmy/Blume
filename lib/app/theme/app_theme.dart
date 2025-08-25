@@ -38,12 +38,12 @@ final ThemeData darkTheme = ThemeData(
     bodyLarge: GoogleFonts.montserrat(
       fontSize: 20,
       fontWeight: FontWeight.w700,
-      color: Colors.white70,
+      color: Colors.white,
     ),
     bodyMedium: GoogleFonts.montserrat(
       fontSize: 14,
       fontWeight: FontWeight.w500,
-      color: Colors.white70,
+      color: Colors.white,
     ),
     bodySmall: GoogleFonts.montserrat(
       fontSize: 12,
