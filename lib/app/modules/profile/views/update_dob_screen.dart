@@ -1,4 +1,5 @@
 import 'package:blume/app/modules/profile/widgets/date_widget.dart';
+import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -47,7 +48,7 @@ class UpdateDobScreen extends StatelessWidget {
               ),
               const Spacer(),
               CustomButton(
-                ontap: () {},
+                ontap: () => Get.toNamed(AppRoutes.updateGender),
                 isLoading: false.obs,
                 child: Text(
                   "Next",
