@@ -1,3 +1,4 @@
+
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/utils/validator.dart';
@@ -7,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class SignUpScreen extends StatelessWidget {
+  const SignUpScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class LoginScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: ListView(
             children: [
-              SizedBox(height: Get.height * 0.11),
+              SizedBox(height: Get.height * 0.1),
               Center(
                 child: Text(
                   "BLUME",
@@ -33,17 +34,17 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(height: 10),
               Center(
                 child: Text(
-                  "Welcome back",
+                  "Welcome to Blume",
                   style: Get.textTheme.bodyLarge?.copyWith(fontSize: 24),
                 ),
               ),
               Center(
                 child: Text(
-                  "Login to your account",
+                  "Sign up to continue",
                   style: Get.textTheme.bodyMedium,
                 ),
               ),
-              SizedBox(height: Get.height * 0.1),
+              SizedBox(height: Get.height * 0.06),
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 3.0,
@@ -65,7 +66,29 @@ class LoginScreen extends StatelessWidget {
                 prefixIconColor: AppColors.primaryColor,
               ),
 
-              SizedBox(height: Get.height * 0.02),
+              SizedBox(height: Get.height * 0.025),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 3.0,
+                  vertical: 2,
+                ),
+                child: Text(
+                  "Phone Number",
+                  style: GoogleFonts.figtree(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.primaryColor,
+                  ),
+                ),
+              ),
+              CustomTextField(
+                hintText: "Enter your phone number",
+                validator: validateEmail,
+                prefixIcon: Icons.phone,
+                prefixIconColor: AppColors.primaryColor,
+              ),
+
+              SizedBox(height: Get.height * 0.025),
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 3.0,
@@ -85,44 +108,32 @@ class LoginScreen extends StatelessWidget {
                 prefixIcon: Icons.lock,
                 prefixIconColor: AppColors.primaryColor,
               ),
-              SizedBox(height: 5),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    "Forgot Password?",
-                    style: Get.textTheme.bodyMedium?.copyWith(
-                      color: AppColors.primaryColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
+            
               SizedBox(height: Get.height * 0.05),
               CustomButton(
                 ontap: () {},
                 isLoading: false.obs,
                 child: Text(
-                  "Login",
+                  "Sign Up",
                   style: Get.textTheme.bodyMedium?.copyWith(
                     color: Colors.white,
                   ),
                 ),
               ),
-              SizedBox(height: Get.height * 0.1),
-              Row(
+               SizedBox(height: Get.height * 0.1),
+               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Don't have an account? ",
+                    "Already have an account? ",
                     style: Get.textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.normal,
                     ),
                   ),
                   InkWell(
-                    onTap: () => Get.toNamed(AppRoutes.signup),
+                    onTap: () => Get.toNamed(AppRoutes.login),
                     child: Text(
-                      "Sign Up",
+                      "Login",
                       style: Get.textTheme.bodyMedium?.copyWith(
                         color: AppColors.primaryColor,
                         fontWeight: FontWeight.bold,

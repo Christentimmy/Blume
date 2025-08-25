@@ -29,7 +29,9 @@ class OnboardingScreen extends StatelessWidget {
               ),
               const Spacer(),
               CustomButton(
-                ontap: () {},
+                ontap: () {
+                  Get.toNamed(AppRoutes.signup);
+                },
                 isLoading: false.obs,
                 child: Text(
                   "Create account",
