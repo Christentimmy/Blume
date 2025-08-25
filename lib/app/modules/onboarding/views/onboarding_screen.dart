@@ -40,7 +40,7 @@ class OnboardingScreen extends StatelessWidget {
               SizedBox(height: 10),
               CustomButton(
                 ontap: () {},
-                bgColor: Color.fromRGBO(255, 255, 255, 0.05),
+                bgColor: AppColors.darkButtonColor,
                 isLoading: false.obs,
                 child: Text(
                   "Login",
