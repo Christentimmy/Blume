@@ -1,13 +1,13 @@
-import 'package:blume/app/resources/colors.dart';
-import 'package:blume/app/routes/app_routes.dart';
+import 'package:blume/app/modules/profile/widgets/date_widget.dart';
 import 'package:blume/app/widgets/custom_button.dart';
-import 'package:blume/app/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class UpdateNameScreen extends StatelessWidget {
-  const UpdateNameScreen({super.key});
+class UpdateDobScreen extends StatelessWidget {
+  UpdateDobScreen({super.key});
+
+  final Rxn<DateTime> selectedDate = Rxn<DateTime>();
 
   @override
   Widget build(BuildContext context) {
@@ -26,29 +26,28 @@ class UpdateNameScreen extends StatelessWidget {
               ),
               SizedBox(height: Get.height * 0.02),
               Text(
-                "First name",
+                "Birthday",
                 style: GoogleFonts.figtree(
                   fontSize: 28,
                   fontWeight: FontWeight.w700,
                 ),
               ),
               Text(
-                "this is how your name appears on your profile",
-                // textAlign: TextAlign.center,
+                "Your birthday is shown on your profile but not your date of birth",
                 style: GoogleFonts.figtree(
                   fontSize: 15,
                   fontWeight: FontWeight.w400,
                 ),
               ),
               SizedBox(height: Get.height * 0.02),
-              CustomTextField(
-                hintText: "Enter your first name",
-                prefixIcon: Icons.person,
-                prefixIconColor: AppColors.primaryColor,
+              FunctionalDatePicker(
+                onDateChanged: (date) {
+                  selectedDate.value = date;
+                },
               ),
               const Spacer(),
               CustomButton(
-                ontap: () => Get.toNamed(AppRoutes.updateDob),
+                ontap: () {},
                 isLoading: false.obs,
                 child: Text(
                   "Next",
