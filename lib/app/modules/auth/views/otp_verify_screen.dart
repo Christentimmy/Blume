@@ -67,14 +67,14 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
                   submittedPinTheme: submittedPinTheme(),
                   focusedPinTheme: focusedPinTheme(),
                   defaultPinTheme: defaultPinTheme(),
-                  // onCompleted: (value) => Get.toNamed(AppRoutes.login),
+                  onCompleted: (value) => Get.toNamed(AppRoutes.updateName),
                 ),
               ),
               SizedBox(height: Get.height * 0.02),
               resendOtpRow(),
               const Spacer(),
               CustomButton(
-                ontap: () => Get.toNamed(AppRoutes.login),
+                ontap: () => Get.toNamed(AppRoutes.updateName),
                 isLoading: false.obs,
                 child: Text(
                   "Verify",

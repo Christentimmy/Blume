@@ -4,4 +4,5 @@ class AppRoutes {
   static const login = '/login';
   static const signup = '/signup';
   static const otpVerify = '/otp-verify';
+  static const updateName = '/update-name';
 }
