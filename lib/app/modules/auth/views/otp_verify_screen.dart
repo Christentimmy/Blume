@@ -64,7 +64,7 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
                   length: 6,
                   closeKeyboardWhenCompleted: true,
                   hapticFeedbackType: HapticFeedbackType.lightImpact,
-                  submittedPinTheme: focusedPinTheme(),
+                  submittedPinTheme: submittedPinTheme(),
                   focusedPinTheme: focusedPinTheme(),
                   defaultPinTheme: defaultPinTheme(),
                   // onCompleted: (value) => Get.toNamed(AppRoutes.login),
@@ -125,7 +125,7 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
     );
   }
 
-  PinTheme? focusedPinTheme() {
+  PinTheme? submittedPinTheme() {
     return PinTheme(
       width: Get.width * 0.15,
       height: Get.height * 0.07,
@@ -138,6 +138,23 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
         borderRadius: BorderRadius.circular(15),
         border: Border.all(color: Color(0xFFE8E6EA)),
         color: AppColors.primaryColor,
+      ),
+    );
+  }
+
+  PinTheme? focusedPinTheme() {
+    return PinTheme(
+      width: Get.width * 0.15,
+      height: Get.height * 0.07,
+      textStyle: GoogleFonts.figtree(
+        fontWeight: FontWeight.w600,
+        fontSize: 18,
+        color: AppColors.primaryColor,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: AppColors.primaryColor),
+        color: Colors.white,
       ),
     );
   }
