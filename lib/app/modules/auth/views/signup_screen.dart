@@ -111,7 +111,7 @@ class SignUpScreen extends StatelessWidget {
             
               SizedBox(height: Get.height * 0.05),
               CustomButton(
-                ontap: () {},
+                ontap: () => Get.toNamed(AppRoutes.otpVerify),
                 isLoading: false.obs,
                 child: Text(
                   "Sign Up",

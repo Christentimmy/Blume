@@ -2,6 +2,7 @@
 
 
 import 'package:blume/app/modules/auth/views/login_screen.dart';
+import 'package:blume/app/modules/auth/views/otp_verify_screen.dart';
 import 'package:blume/app/modules/auth/views/signup_screen.dart';
 import 'package:blume/app/modules/onboarding/views/onboarding_screen.dart';
 import 'package:blume/app/modules/splash/views/splash_screen.dart';
@@ -15,5 +16,6 @@ class AppPages {
     GetPage(name: AppRoutes.onboarding, page: () => OnboardingScreen()),
     GetPage(name: AppRoutes.login, page: () => LoginScreen()),
     GetPage(name: AppRoutes.signup, page: () => SignUpScreen()),
+    GetPage(name: AppRoutes.otpVerify, page: () => OtpVerifyScreen()),
   ];
 }
