@@ -24,4 +24,5 @@ class AppRoutes {
   static const viewStory = '/view-story';
   static const message = '/message';
   static const audioCall = '/audio-call';
+  static const videoCall = '/video-call';
 }

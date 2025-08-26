@@ -51,7 +51,10 @@ class MessageScreen extends StatelessWidget {
           ],
         ),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.video_call)),
+          IconButton(
+            onPressed: () => Get.toNamed(AppRoutes.videoCall),
+            icon: Icon(Icons.video_call),
+          ),
           IconButton(
             onPressed: () => Get.toNamed(AppRoutes.audioCall),
             icon: Icon(Icons.call),

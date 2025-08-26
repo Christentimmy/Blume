@@ -8,6 +8,7 @@ import 'package:blume/app/modules/location/views/set_location_screen.dart';
 import 'package:blume/app/modules/messages/views/audio_call_screen.dart';
 import 'package:blume/app/modules/messages/views/chat_list_screen.dart';
 import 'package:blume/app/modules/messages/views/message_screen.dart';
+import 'package:blume/app/modules/messages/views/video_call_screen.dart';
 import 'package:blume/app/modules/notification/views/notification_screen.dart';
 import 'package:blume/app/modules/onboarding/views/onboarding_screen.dart';
 import 'package:blume/app/modules/profile/views/add_pictures_screen.dart';
@@ -53,5 +54,6 @@ class AppPages {
     GetPage(name: AppRoutes.viewStory, page: () => ViewStoryScreen()),
     GetPage(name: AppRoutes.message, page: () => MessageScreen()),
     GetPage(name: AppRoutes.audioCall, page: () => AudioCallScreen()),
+    GetPage(name: AppRoutes.videoCall, page: () => VideoCallScreen()),
   ];
 }
