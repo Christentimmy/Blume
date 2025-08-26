@@ -100,7 +100,7 @@ class LoginScreen extends StatelessWidget {
               ),
               SizedBox(height: Get.height * 0.05),
               CustomButton(
-                ontap: () {},
+                ontap: () => Get.toNamed(AppRoutes.bottomNavigation),
                 isLoading: false.obs,
                 child: Text(
                   "Login",

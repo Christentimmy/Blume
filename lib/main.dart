@@ -19,7 +19,7 @@ class MainApp extends StatelessWidget {
       darkTheme: darkTheme,
       theme: lightTheme,
       themeMode: ThemeMode.light,
-      initialRoute: AppRoutes.bottomNavigation,
+      initialRoute: AppRoutes.splash,
       getPages: AppPages.routes,
       debugShowCheckedModeBanner: false,
       initialBinding: AppBindings(),

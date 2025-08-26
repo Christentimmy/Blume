@@ -75,7 +75,7 @@ class SettingsScreen extends StatelessWidget {
                 bgColor: Get.isDarkMode
                     ? AppColors.darkButtonColor
                     : AppColors.lightButtonColor,
-                ontap: () {},
+                ontap: () => Get.offAllNamed(AppRoutes.login),
                 isLoading: false.obs,
                 child: Text(
                   'Logout',

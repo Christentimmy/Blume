@@ -54,7 +54,7 @@ class SetLocationScreen extends StatelessWidget {
               ),
               Spacer(),
               CustomButton(
-                ontap: () => Get.toNamed(AppRoutes.home),
+                ontap: () => Get.toNamed(AppRoutes.bottomNavigation),
                 isLoading: false.obs,
                 child: Text(
                   "Location",
