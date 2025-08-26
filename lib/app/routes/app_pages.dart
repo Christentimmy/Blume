@@ -23,6 +23,7 @@ import 'package:blume/app/modules/profile/views/update_dob_screen.dart';
 import 'package:blume/app/modules/profile/views/update_gender_screen.dart';
 import 'package:blume/app/modules/profile/views/update_name_screen.dart';
 import 'package:blume/app/modules/search/views/search_screen.dart';
+import 'package:blume/app/modules/settings/views/settings_screen.dart';
 import 'package:blume/app/modules/splash/views/splash_screen.dart';
 import 'package:blume/app/modules/story/views/view_story_screen.dart';
 import 'package:get/get.dart';
@@ -57,5 +58,6 @@ class AppPages {
     GetPage(name: AppRoutes.audioCall, page: () => AudioCallScreen()),
     GetPage(name: AppRoutes.videoCall, page: () => VideoCallScreen()),
     GetPage(name: AppRoutes.profile, page: () => ProfileScreen()),
+    GetPage(name: AppRoutes.settings, page: () => SettingsScreen()),
   ];
 }
