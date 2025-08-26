@@ -19,7 +19,7 @@ class MainApp extends StatelessWidget {
       darkTheme: darkTheme,
       theme: lightTheme,
       themeMode: ThemeMode.dark,
-      initialRoute: AppRoutes.chatList,
+      initialRoute: AppRoutes.viewStory,
       getPages: AppPages.routes,
       debugShowCheckedModeBanner: false,
       initialBinding: AppBindings(),

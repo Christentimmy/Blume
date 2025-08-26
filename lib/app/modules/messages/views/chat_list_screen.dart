@@ -1,4 +1,5 @@
 import 'package:blume/app/resources/colors.dart';
+import 'package:blume/app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -98,42 +99,47 @@ class ChatListScreen extends StatelessWidget {
         itemCount: 10,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
-          return Stack(
-            children: [
-              Container(
-                width: Get.width * 0.18,
-                height: Get.height * 0.085,
-                margin: const EdgeInsets.only(right: 10),
-                padding: const EdgeInsets.all(1.5),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(40),
-                  border: Border.all(color: AppColors.primaryColor, width: 2),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(40),
-                  child: Image.asset(
-                    "assets/images/plm.png",
-                    fit: BoxFit.cover,
+          return InkWell(
+            onTap: () {
+              Get.toNamed(AppRoutes.viewStory);
+            },
+            child: Stack(
+              children: [
+                Container(
+                  width: Get.width * 0.18,
+                  height: Get.height * 0.085,
+                  margin: const EdgeInsets.only(right: 10),
+                  padding: const EdgeInsets.all(1.5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(40),
+                    border: Border.all(color: AppColors.primaryColor, width: 2),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(40),
+                    child: Image.asset(
+                      "assets/images/plm.png",
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-              ),
-              index == 0
-                  ? Positioned(
-                      right: 5,
-                      bottom: 0,
-                      child: InkWell(
-                        onTap: () {
-                          // Get.toNamed(AppRoutes.createPost);
-                        },
-                        child: CircleAvatar(
-                          radius: 12,
-                          backgroundColor: AppColors.primaryColor,
-                          child: Icon(Icons.add, color: Colors.white),
+                index == 0
+                    ? Positioned(
+                        right: 5,
+                        bottom: 0,
+                        child: InkWell(
+                          onTap: () {
+                            // Get.toNamed(AppRoutes.createPost);
+                          },
+                          child: CircleAvatar(
+                            radius: 12,
+                            backgroundColor: AppColors.primaryColor,
+                            child: Icon(Icons.add, color: Colors.white),
+                          ),
                         ),
-                      ),
-                    )
-                  : SizedBox(),
-            ],
+                      )
+                    : SizedBox(),
+              ],
+            ),
           );
         },
       ),
