@@ -10,4 +10,5 @@ class AppRoutes {
   static const relationshipPreference = '/relationship-preference';
   static const distancePreference = '/distance-preference';
   static const education = '/education';
+  static const lifestyle = '/lifestyle';
 }

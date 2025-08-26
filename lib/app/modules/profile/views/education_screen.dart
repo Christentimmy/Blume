@@ -21,9 +21,25 @@ class EducationScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: Get.height * 0.02),
-              IconButton(
-                onPressed: () => Get.back(),
-                icon: Icon(Icons.arrow_back_ios_new),
+              Row(
+                children: [
+                  IconButton(
+                    onPressed: () => Get.back(),
+                    icon: Icon(Icons.arrow_back_ios_new),
+                  ),
+                  const Spacer(),
+                  InkWell(
+                    onTap: () => Get.toNamed(AppRoutes.lifestyle),
+                    child: Text(
+                      "Skip",
+                      style: GoogleFonts.figtree(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: Get.height * 0.02),
               Text(
@@ -61,7 +77,7 @@ class EducationScreen extends StatelessWidget {
               ),
               SizedBox(height: 10),
               CustomButton(
-                ontap: () => Get.toNamed(AppRoutes.updateDob),
+                ontap: () => Get.toNamed(AppRoutes.lifestyle),
                 isLoading: false.obs,
                 child: Text(
                   "Next",
