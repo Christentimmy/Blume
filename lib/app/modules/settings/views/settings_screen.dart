@@ -6,7 +6,9 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key});
+  SettingsScreen({super.key});
+
+  final RxBool _isDarkMode = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +51,25 @@ class SettingsScreen extends StatelessWidget {
                 ontap: () => Get.toNamed(AppRoutes.disclaimer),
               ),
               buildSettingTile(title: 'Help & Safety', icon: Icons.help),
+              Obx(
+                () => buildSettingTile(
+                  title: 'Dark Mode',
+                  icon: Icons.nightlight_round_outlined,
+                  trailing: Transform.scale(
+                    scale: 0.7,
+                    child: Switch(
+                      value: _isDarkMode.value,
+                      activeColor: AppColors.primaryColor,
+                      onChanged: (value) {
+                        Get.changeThemeMode(
+                          value ? ThemeMode.dark : ThemeMode.light,
+                        );
+                        _isDarkMode.value = value;
+                      },
+                    ),
+                  ),
+                ),
+              ),
               SizedBox(height: Get.height * 0.04),
               CustomButton(
                 bgColor: Get.isDarkMode
@@ -59,7 +80,6 @@ class SettingsScreen extends StatelessWidget {
                 child: Text(
                   'Logout',
                   style: GoogleFonts.figtree(
-                    color: Get.isDarkMode ? Colors.white : Colors.black,
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
                   ),
@@ -76,6 +96,7 @@ class SettingsScreen extends StatelessWidget {
     required String title,
     required IconData icon,
     VoidCallback? ontap,
+    Widget? trailing,
   }) {
     return ListTile(
       onTap: ontap,
@@ -85,7 +106,7 @@ class SettingsScreen extends StatelessWidget {
         title,
         style: GoogleFonts.figtree(fontSize: 20, fontWeight: FontWeight.w600),
       ),
-      trailing: Icon(Icons.arrow_forward_ios, size: 18),
+      trailing: trailing ?? Icon(Icons.arrow_forward_ios, size: 18),
     );
   }
 }

@@ -30,4 +30,5 @@ class AppRoutes {
   static const disclaimer = '/disclaimer';
   static const verification = '/verification';
   static const subscription = '/subscription';
+  static const bottomNavigation = '/bottom-navigation';
 }

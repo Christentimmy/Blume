@@ -29,6 +29,7 @@ import 'package:blume/app/modules/story/views/view_story_screen.dart';
 import 'package:blume/app/modules/subscription/views/subscription_screen.dart';
 import 'package:blume/app/modules/verification/views/disclaimer_screen.dart';
 import 'package:blume/app/modules/verification/views/verification_screen.dart';
+import 'package:blume/app/widgets/bottom_navigation_widget.dart';
 import 'package:get/get.dart';
 import 'app_routes.dart';
 
@@ -65,6 +66,6 @@ class AppPages {
     GetPage(name: AppRoutes.disclaimer, page: () => DisclaimerScreen()),
     GetPage(name: AppRoutes.verification, page: () => VerificationScreen()),
     GetPage(name: AppRoutes.subscription, page: () => SubscriptionScreen()),
-    
+    GetPage(name: AppRoutes.bottomNavigation, page: () => BottomNavigationWidget()),
   ];
 }
