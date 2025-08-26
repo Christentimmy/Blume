@@ -9,7 +9,6 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -47,7 +46,6 @@ class ProfileScreen extends StatelessWidget {
                     Text(
                       'Gallery',
                       style: GoogleFonts.figtree(
-                        color: Colors.white,
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
                       ),
@@ -104,12 +102,11 @@ class ProfileScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Icon(Icons.arrow_back, color: Colors.white, size: 28),
+          Icon(Icons.arrow_back, size: 28),
           SizedBox(width: Get.width * 0.03),
           Text(
             'Don cullion',
             style: GoogleFonts.figtree(
-              color: Colors.white,
               fontSize: 24,
               fontWeight: FontWeight.w600,
             ),
@@ -117,9 +114,9 @@ class ProfileScreen extends StatelessWidget {
           SizedBox(width: 8),
           Icon(Icons.verified, color: Colors.purple, size: 20),
           const Spacer(),
-          Icon(Icons.notifications_outlined, color: Colors.white, size: 28),
+          Icon(Icons.notifications_outlined, size: 28),
           SizedBox(width: 16),
-          Icon(Icons.apps, color: Colors.white, size: 28),
+          Icon(Icons.apps, size: 28),
         ],
       ),
     );
@@ -173,16 +170,9 @@ class ProfileScreen extends StatelessWidget {
       children: [
         Text(
           number,
-          style: GoogleFonts.figtree(
-            color: Colors.white,
-            fontSize: 32,
-            fontWeight: FontWeight.bold,
-          ),
+          style: GoogleFonts.figtree(fontSize: 32, fontWeight: FontWeight.bold),
         ),
-        Text(
-          label,
-          style: GoogleFonts.figtree(color: Colors.grey[400], fontSize: 16),
-        ),
+        Text(label, style: GoogleFonts.figtree(fontSize: 16)),
       ],
     );
   }
@@ -196,16 +186,12 @@ class ProfileScreen extends StatelessWidget {
           Text(
             'Bio',
             style: GoogleFonts.figtree(
-              color: Colors.white,
               fontSize: 20,
               fontWeight: FontWeight.w600,
             ),
           ),
           SizedBox(height: 4),
-          Text(
-            'Bio goes here',
-            style: GoogleFonts.figtree(color: Colors.grey[500], fontSize: 16),
-          ),
+          Text('Bio goes here', style: GoogleFonts.figtree(fontSize: 16)),
         ],
       ),
     );
@@ -220,7 +206,6 @@ class ProfileScreen extends StatelessWidget {
           Text(
             'Profile boosts',
             style: GoogleFonts.figtree(
-              color: Colors.white,
               fontSize: 20,
               fontWeight: FontWeight.w600,
             ),
@@ -228,7 +213,7 @@ class ProfileScreen extends StatelessWidget {
           SizedBox(height: 4),
           Text(
             'Boost your profile for more visibility',
-            style: GoogleFonts.figtree(color: Colors.grey[500], fontSize: 16),
+            style: GoogleFonts.figtree(fontSize: 16),
           ),
           SizedBox(height: 16),
           Row(
@@ -248,7 +233,9 @@ class ProfileScreen extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Get.isDarkMode
+              ? AppColors.darkButtonColor
+              : AppColors.lightButtonColor,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
@@ -258,7 +245,7 @@ class ProfileScreen extends StatelessWidget {
             Text(
               price,
               style: GoogleFonts.figtree(
-                color: Colors.red,
+                color: AppColors.primaryColor,
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
               ),
@@ -309,7 +296,6 @@ class ProfileScreen extends StatelessWidget {
             Text(
               title,
               style: GoogleFonts.figtree(
-                color: Colors.white,
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
               ),
@@ -319,14 +305,7 @@ class ProfileScreen extends StatelessWidget {
         ),
         if (!isEmpty) ...[
           SizedBox(height: 8),
-          Text(
-            content,
-            style: GoogleFonts.figtree(
-              color: Colors.grey[300],
-              fontSize: 16,
-              height: 1.4,
-            ),
-          ),
+          Text(content, style: GoogleFonts.figtree(fontSize: 16, height: 1.4)),
           SizedBox(height: 8),
           Text(
             'Read more',
@@ -351,12 +330,11 @@ class ProfileScreen extends StatelessWidget {
             Text(
               'Location',
               style: GoogleFonts.figtree(
-                color: Colors.white,
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
               ),
             ),
-            Icon(Icons.edit, color: Colors.grey[500], size: 20),
+            Icon(Icons.edit, size: 20),
           ],
         ),
         SizedBox(height: 8),
@@ -365,7 +343,7 @@ class ProfileScreen extends StatelessWidget {
           children: [
             Text(
               'Chicago, IL United States',
-              style: GoogleFonts.figtree(color: Colors.grey[300], fontSize: 16),
+              style: GoogleFonts.figtree(fontSize: 16),
             ),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -405,12 +383,11 @@ class ProfileScreen extends StatelessWidget {
             Text(
               'Interests',
               style: GoogleFonts.figtree(
-                color: Colors.white,
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
               ),
             ),
-            Icon(Icons.edit, color: Colors.grey[500], size: 20),
+            Icon(Icons.edit, size: 20),
           ],
         ),
         SizedBox(height: 16),
@@ -448,7 +425,7 @@ class ProfileScreen extends StatelessWidget {
           Text(
             label,
             style: GoogleFonts.figtree(
-              color: isSelected ? Colors.red : Colors.grey[300],
+              color: isSelected ? Colors.red : null,
               fontSize: 16,
               fontWeight: FontWeight.w500,
             ),
