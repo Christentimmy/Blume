@@ -2,6 +2,7 @@ import 'package:blume/app/modules/auth/views/login_screen.dart';
 import 'package:blume/app/modules/auth/views/otp_verify_screen.dart';
 import 'package:blume/app/modules/auth/views/signup_screen.dart';
 import 'package:blume/app/modules/onboarding/views/onboarding_screen.dart';
+import 'package:blume/app/modules/profile/views/add_pictures_screen.dart';
 import 'package:blume/app/modules/profile/views/distance_preference_screen.dart';
 import 'package:blume/app/modules/profile/views/education_screen.dart';
 import 'package:blume/app/modules/profile/views/interest_screen.dart';
@@ -31,5 +32,6 @@ class AppPages {
     GetPage(name: AppRoutes.lifestyle, page: () => LifeStyleScreen()),
     GetPage(name: AppRoutes.religionWork, page: () => ReligionWorkScreen()),
     GetPage(name: AppRoutes.interest, page: () => InterestScreen()),
+    GetPage(name: AppRoutes.addPictures, page: () => AddPicturesScreen()),
   ];
 }

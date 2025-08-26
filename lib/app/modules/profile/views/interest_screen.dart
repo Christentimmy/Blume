@@ -57,7 +57,7 @@ class InterestScreen extends StatelessWidget {
                   ),
                   const Spacer(),
                   InkWell(
-                    onTap: () => Get.toNamed(AppRoutes.religionWork),
+                    onTap: () => Get.toNamed(AppRoutes.addPictures),
                     child: Text(
                       "Skip",
                       style: GoogleFonts.figtree(
@@ -128,7 +128,7 @@ class InterestScreen extends StatelessWidget {
               ),
               SizedBox(height: 10),
               CustomButton(
-                ontap: () => Get.toNamed(AppRoutes.religionWork),
+                ontap: () => Get.toNamed(AppRoutes.addPictures),
                 isLoading: false.obs,
                 child: Text(
                   "Next",
