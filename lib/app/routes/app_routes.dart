@@ -16,4 +16,5 @@ class AppRoutes {
   static const addPictures = '/add-pictures';
   static const setLocation = '/set-location';
   static const home = '/home';
+  static const match = '/match';
 }

@@ -2,6 +2,7 @@ import 'package:blume/app/modules/auth/views/login_screen.dart';
 import 'package:blume/app/modules/auth/views/otp_verify_screen.dart';
 import 'package:blume/app/modules/auth/views/signup_screen.dart';
 import 'package:blume/app/modules/home/views/home_screen.dart';
+import 'package:blume/app/modules/home/views/match_screen.dart';
 import 'package:blume/app/modules/location/views/set_location_screen.dart';
 import 'package:blume/app/modules/onboarding/views/onboarding_screen.dart';
 import 'package:blume/app/modules/profile/views/add_pictures_screen.dart';
@@ -37,5 +38,6 @@ class AppPages {
     GetPage(name: AppRoutes.addPictures, page: () => AddPicturesScreen()),
     GetPage(name: AppRoutes.setLocation, page: () => SetLocationScreen()),
     GetPage(name: AppRoutes.home, page: () => HomeScreen()),
+    GetPage(name: AppRoutes.match, page: () => MatchScreen()),
   ];
 }
