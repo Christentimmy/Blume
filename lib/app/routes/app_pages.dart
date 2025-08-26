@@ -4,6 +4,7 @@ import 'package:blume/app/modules/auth/views/signup_screen.dart';
 import 'package:blume/app/modules/home/views/home_screen.dart';
 import 'package:blume/app/modules/home/views/match_screen.dart';
 import 'package:blume/app/modules/location/views/set_location_screen.dart';
+import 'package:blume/app/modules/notification/views/notification_screen.dart';
 import 'package:blume/app/modules/onboarding/views/onboarding_screen.dart';
 import 'package:blume/app/modules/profile/views/add_pictures_screen.dart';
 import 'package:blume/app/modules/profile/views/distance_preference_screen.dart';
@@ -39,5 +40,6 @@ class AppPages {
     GetPage(name: AppRoutes.setLocation, page: () => SetLocationScreen()),
     GetPage(name: AppRoutes.home, page: () => HomeScreen()),
     GetPage(name: AppRoutes.match, page: () => MatchScreen()),
+    GetPage(name: AppRoutes.notification, page: () => NotificationScreen()),
   ];
 }

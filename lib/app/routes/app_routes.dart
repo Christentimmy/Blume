@@ -17,4 +17,5 @@ class AppRoutes {
   static const setLocation = '/set-location';
   static const home = '/home';
   static const match = '/match';
+  static const notification = '/notification';
 }

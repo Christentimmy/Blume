@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:blume/app/resources/colors.dart';
+import 'package:blume/app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -30,7 +31,13 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  Icon(FontAwesomeIcons.bell, color: Get.theme.iconTheme.color),
+                  InkWell(
+                    onTap: () => Get.toNamed(AppRoutes.notification),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 5),
+                      child: Icon(Icons.notifications),
+                    ),
+                  ),
                 ],
               ),
               SizedBox(height: Get.height * 0.05),
@@ -39,94 +46,106 @@ class HomeScreen extends StatelessWidget {
                   cardCount: 20,
                   backgroundCardCount: 2,
                   backgroundCardOffset: Offset(0, -45),
+                  onSwipeEnd: (previousIndex, targetIndex, activity) {
+                    Get.toNamed(AppRoutes.match);
+                  },
                   cardBuilder: (context, index) {
-                    return Stack(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.asset("assets/images/frm.png"),
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(20),
-                                bottomRight: Radius.circular(20),
-                              ),
-                              child: BackdropFilter(
-                                filter: ImageFilter.blur(
-                                  sigmaX: 10,
-                                  sigmaY: 10,
-                                ),
-                                child: Container(
-                                  height: Get.height * 0.18,
-                                  color: Colors.black.withOpacity(0),
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 15,
-                            vertical: 20,
+                    return Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 15,
+                        vertical: 20,
+                      ),
+                      child: Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.asset("assets/images/frm.png"),
                           ),
-                          child: Column(
+                          Column(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    "Blaire  23",
-                                    style: GoogleFonts.figtree(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.white,
-                                    ),
+                              ClipRRect(
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(20),
+                                  bottomRight: Radius.circular(20),
+                                ),
+                                child: BackdropFilter(
+                                  filter: ImageFilter.blur(
+                                    sigmaX: 10,
+                                    sigmaY: 10,
                                   ),
-                                  const Spacer(),
-                                  CircleAvatar(
-                                    radius: 20,
-                                    backgroundColor: Colors.white.withOpacity(
-                                      0.2,
-                                    ),
-                                    child: Icon(
-                                      FontAwesomeIcons.circleExclamation,
-                                      size: 18,
-                                      color: Colors.white,
-                                    ),
+                                  child: Container(
+                                    height: Get.height * 0.18,
+                                    color: Colors.black.withOpacity(0),
                                   ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Icon(Icons.location_on, color: Colors.white),
-                                  Text(
-                                    "5 miles away",
-                                    style: GoogleFonts.figtree(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: Get.height * 0.01),
-                              Text(
-                                "“I’ll fall for you if you love dogs 🐶 and good jollof rice 🍛.” Christian girlie!! I think I hate skating too.",
-                                style: GoogleFonts.figtree(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
                                 ),
                               ),
-                              SizedBox(height: Get.height * 0.01),
+                              SizedBox(height: 15),
                             ],
                           ),
-                        ),
-                      ],
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 15,
+                              vertical: 20,
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Blaire  23",
+                                      style: GoogleFonts.figtree(
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    CircleAvatar(
+                                      radius: 20,
+                                      backgroundColor: Colors.white.withOpacity(
+                                        0.2,
+                                      ),
+                                      child: Icon(
+                                        FontAwesomeIcons.circleExclamation,
+                                        size: 18,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.location_on,
+                                      color: Colors.white,
+                                    ),
+                                    Text(
+                                      "5 miles away",
+                                      style: GoogleFonts.figtree(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: Get.height * 0.01),
+                                Text(
+                                  "“I’ll fall for you if you love dogs 🐶 and good jollof rice 🍛.” Christian girlie!! I think I hate skating too.",
+                                  style: GoogleFonts.figtree(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                SizedBox(height: Get.height * 0.01),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     );
                   },
                 ),
