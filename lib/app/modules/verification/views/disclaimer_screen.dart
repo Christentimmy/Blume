@@ -1,3 +1,4 @@
+import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -38,7 +39,7 @@ class DisclaimerScreen extends StatelessWidget {
               ),
               Spacer(),
               CustomButton(
-                ontap: () {},
+                ontap: () => Get.toNamed(AppRoutes.verification),
                 isLoading: false.obs,
                 child: Text(
                   'Allow',
