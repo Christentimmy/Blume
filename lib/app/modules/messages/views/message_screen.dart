@@ -1,4 +1,5 @@
 import 'package:blume/app/resources/colors.dart';
+import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -51,7 +52,10 @@ class MessageScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(onPressed: () {}, icon: Icon(Icons.video_call)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.call)),
+          IconButton(
+            onPressed: () => Get.toNamed(AppRoutes.audioCall),
+            icon: Icon(Icons.call),
+          ),
           IconButton(onPressed: () {}, icon: Icon(Icons.more_vert)),
         ],
       ),

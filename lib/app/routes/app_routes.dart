@@ -23,4 +23,5 @@ class AppRoutes {
   static const chatList = '/chat-list';
   static const viewStory = '/view-story';
   static const message = '/message';
+  static const audioCall = '/audio-call';
 }
