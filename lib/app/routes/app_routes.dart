@@ -25,4 +25,5 @@ class AppRoutes {
   static const message = '/message';
   static const audioCall = '/audio-call';
   static const videoCall = '/video-call';
+  static const profile = '/profile';
 }
