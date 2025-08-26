@@ -1,30 +1,42 @@
+
+import 'package:blume/app/modules/profile/widgets/list_tile_widget.dart';
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/widgets/custom_button.dart';
-import 'package:blume/app/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class ReligionWorkScreen extends StatelessWidget {
-  ReligionWorkScreen({super.key});
+class InterestScreen extends StatelessWidget {
+  InterestScreen({super.key});
 
-  final List<String> religion = [
-    "Agnostic",
-    "Atheist",
-    "Buddhist",
-    "Catholic"
-    "Christian (non-Catholic)",
-    "Hindu",
-    "Jewish",
-    "Muslim",
-    "Spiritual but not religious",
-    "Other",
-    "Prefer not to say",
+  final List<String> lifestyle = [
+    "Volunteering",
+    "Sustainability",
+    "Spirituality",
+    "Minimalism",
+    "Mindfulness",
+    "Volunteering",
   ];
 
-  final RxInt selectedReligionOption = (-1).obs;
+  final List<String> hobbies = [
+    "Reading",
+    "Traveling",
+    "Cooking",
+    "Painting",
+    "Gardening",
+    "Photography",
+    "Music",
+    "Dancing",
+    "Swimming",
+    "Yoga",
+  ];
+
+
+
+  final RxInt selectedLifestyleOption = (-1).obs;
+  final RxInt selectedHobbiesOption = (-1).obs;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +57,7 @@ class ReligionWorkScreen extends StatelessWidget {
                   ),
                   const Spacer(),
                   InkWell(
-                    onTap: () => Get.toNamed(AppRoutes.interest),
+                    onTap: () => Get.toNamed(AppRoutes.religionWork),
                     child: Text(
                       "Skip",
                       style: GoogleFonts.figtree(
@@ -59,45 +71,52 @@ class ReligionWorkScreen extends StatelessWidget {
               ),
               SizedBox(height: Get.height * 0.02),
               Text(
-                "Basics",
+                "Interests",
                 style: GoogleFonts.figtree(
                   fontSize: 28,
                   fontWeight: FontWeight.w700,
                 ),
               ),
               Text(
-                "Be as authentic as you can be",
+                "More of what you like",
                 style: GoogleFonts.figtree(
                   fontSize: 15,
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              SizedBox(height: Get.height * 0.035),
-              buildTitle(title: "Occupation"),
-              CustomTextField(
-                prefixIcon: Icons.work,
-                prefixIconColor: AppColors.primaryColor,
-                hintText: "Occupation",
-              ),
-              SizedBox(height: Get.height * 0.04),
+              SizedBox(height: Get.height * 0.05),
               Expanded(
                 child: ListView(
                   // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    buildTitle(title: "What is your Religion"),
+                    buildTitle(title: "Lifestyle & Values"),
                     SizedBox(height: Get.height * 0.01),
                     buildOptions(
-                      options: religion,
-                      selectedOption: selectedReligionOption,
+                      options: lifestyle,
+                      selectedOption: selectedLifestyleOption,
                     ),
                     SizedBox(height: Get.height * 0.03),
+                    buildTitle(title: "Learning & Hobbies"),
+                    SizedBox(height: Get.height * 0.01),
+                    buildOptions(
+                      options: hobbies,
+                      selectedOption: selectedHobbiesOption,
+                    ),
+                    SizedBox(height: Get.height * 0.03),
+                    // buildTitle(title: "Do you workout?"),
+                    // SizedBox(height: Get.height * 0.01),
+                    // buildOptions(
+                    //   options: workout,
+                    //   selectedOption: selectedWorkoutOption,
+                    // ),
+                    // SizedBox(height: Get.height * 0.02),
                   ],
                 ),
               ),
               SizedBox(height: 10),
               Center(
                 child: AnimatedSmoothIndicator(
-                  activeIndex: 4,
+                  activeIndex: 5,
                   count: 7,
                   effect: const WormEffect(
                     dotWidth: 10,
@@ -109,7 +128,7 @@ class ReligionWorkScreen extends StatelessWidget {
               ),
               SizedBox(height: 10),
               CustomButton(
-                ontap: () => Get.toNamed(AppRoutes.interest),
+                ontap: () => Get.toNamed(AppRoutes.religionWork),
                 isLoading: false.obs,
                 child: Text(
                   "Next",
@@ -127,53 +146,4 @@ class ReligionWorkScreen extends StatelessWidget {
     );
   }
 
-  Wrap buildOptions({
-    required List<String> options,
-    required RxInt selectedOption,
-  }) {
-    return Wrap(
-      runSpacing: 10,
-      children: List.generate(
-        options.length,
-        (index) => Padding(
-          padding: const EdgeInsets.only(right: 10),
-          child: Obx(
-            () => InkWell(
-              onTap: () => selectedOption.value = index,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 15,
-                  vertical: 10,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  border: selectedOption.value == index
-                      ? Border.all(color: AppColors.primaryColor)
-                      : Border.all(color: Colors.grey),
-                  color: Colors.transparent,
-                ),
-                child: Text(
-                  options[index],
-                  style: GoogleFonts.figtree(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: selectedOption.value == index
-                        ? AppColors.primaryColor
-                        : Get.theme.primaryColor,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Text buildTitle({required String title}) {
-    return Text(
-      title,
-      style: GoogleFonts.figtree(fontSize: 18, fontWeight: FontWeight.w600),
-    );
-  }
 }

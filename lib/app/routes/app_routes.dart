@@ -12,4 +12,5 @@ class AppRoutes {
   static const education = '/education';
   static const lifestyle = '/lifestyle';
   static const religionWork = '/religion-work';
+  static const interest = '/interest';
 }
