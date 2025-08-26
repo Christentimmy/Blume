@@ -20,4 +20,5 @@ class AppRoutes {
   static const notification = '/notification';
   static const search = '/search';
   static const likes = '/likes';
+  static const chatList = '/chat-list';
 }

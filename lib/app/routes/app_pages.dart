@@ -5,6 +5,7 @@ import 'package:blume/app/modules/home/views/home_screen.dart';
 import 'package:blume/app/modules/home/views/match_screen.dart';
 import 'package:blume/app/modules/likes/views/likes_screen.dart';
 import 'package:blume/app/modules/location/views/set_location_screen.dart';
+import 'package:blume/app/modules/messages/views/chat_list_screen.dart';
 import 'package:blume/app/modules/notification/views/notification_screen.dart';
 import 'package:blume/app/modules/onboarding/views/onboarding_screen.dart';
 import 'package:blume/app/modules/profile/views/add_pictures_screen.dart';
@@ -45,5 +46,6 @@ class AppPages {
     GetPage(name: AppRoutes.notification, page: () => NotificationScreen()),
     GetPage(name: AppRoutes.search, page: () => SearchScreen()),
     GetPage(name: AppRoutes.likes, page: () => LikesScreen()),
+    GetPage(name: AppRoutes.chatList, page: () => ChatListScreen()),
   ];
 }
