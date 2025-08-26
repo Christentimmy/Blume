@@ -48,13 +48,13 @@ class SetLocationScreen extends StatelessWidget {
                   child: Icon(
                     Icons.location_on,
                     size: 40,
-                    color: Colors.white,
+                    color: Get.theme.primaryColor,
                   ),
                 ),
               ),
               Spacer(),
               CustomButton(
-                ontap: () => Get.toNamed(AppRoutes.lifestyle),
+                ontap: () => Get.toNamed(AppRoutes.home),
                 isLoading: false.obs,
                 child: Text(
                   "Location",
