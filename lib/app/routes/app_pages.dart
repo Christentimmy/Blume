@@ -26,6 +26,7 @@ import 'package:blume/app/modules/search/views/search_screen.dart';
 import 'package:blume/app/modules/settings/views/settings_screen.dart';
 import 'package:blume/app/modules/splash/views/splash_screen.dart';
 import 'package:blume/app/modules/story/views/view_story_screen.dart';
+import 'package:blume/app/modules/verification/views/disclaimer_screen.dart';
 import 'package:get/get.dart';
 import 'app_routes.dart';
 
@@ -59,5 +60,6 @@ class AppPages {
     GetPage(name: AppRoutes.videoCall, page: () => VideoCallScreen()),
     GetPage(name: AppRoutes.profile, page: () => ProfileScreen()),
     GetPage(name: AppRoutes.settings, page: () => SettingsScreen()),
+    GetPage(name: AppRoutes.disclaimer, page: () => DisclaimerScreen()),
   ];
 }

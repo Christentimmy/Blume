@@ -27,4 +27,5 @@ class AppRoutes {
   static const videoCall = '/video-call';
   static const profile = '/profile';
   static const settings = '/settings';
+  static const disclaimer = '/disclaimer';
 }

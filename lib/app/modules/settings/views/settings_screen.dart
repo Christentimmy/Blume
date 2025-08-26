@@ -1,4 +1,5 @@
 import 'package:blume/app/resources/colors.dart';
+import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,9 +27,10 @@ class SettingsScreen extends StatelessWidget {
               buildSettingTile(
                 title: 'My Profile',
                 icon: Icons.person_2_outlined,
+                ontap: () => Get.toNamed(AppRoutes.profile),
               ),
               buildSettingTile(
-                title: 'Settings',
+                title: 'App Settings',
                 icon: Icons.settings_outlined,
               ),
               buildSettingTile(title: 'Discovery settings', icon: Icons.map),
@@ -43,6 +45,7 @@ class SettingsScreen extends StatelessWidget {
               buildSettingTile(
                 title: 'Selfie verification',
                 icon: Icons.person_outline_outlined,
+                ontap: () => Get.toNamed(AppRoutes.disclaimer),
               ),
               buildSettingTile(title: 'Help & Safety', icon: Icons.help),
               SizedBox(height: Get.height * 0.04),
@@ -68,8 +71,13 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  ListTile buildSettingTile({required String title, required IconData icon}) {
+  ListTile buildSettingTile({
+    required String title,
+    required IconData icon,
+    VoidCallback? ontap,
+  }) {
     return ListTile(
+      onTap: ontap,
       contentPadding: EdgeInsets.zero,
       leading: Icon(icon),
       title: Text(
