@@ -29,4 +29,5 @@ class AppRoutes {
   static const settings = '/settings';
   static const disclaimer = '/disclaimer';
   static const verification = '/verification';
+  static const subscription = '/subscription';
 }

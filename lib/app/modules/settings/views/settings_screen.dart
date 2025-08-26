@@ -37,6 +37,7 @@ class SettingsScreen extends StatelessWidget {
               buildSettingTile(
                 title: 'Subscriptions',
                 icon: Icons.wallet_outlined,
+                ontap: () => Get.toNamed(AppRoutes.subscription),
               ),
               buildSettingTile(
                 title: 'Contact',
