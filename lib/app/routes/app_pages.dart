@@ -9,6 +9,7 @@ import 'package:blume/app/modules/profile/views/distance_preference_screen.dart'
 import 'package:blume/app/modules/profile/views/education_screen.dart';
 import 'package:blume/app/modules/profile/views/lifestyle_screen.dart';
 import 'package:blume/app/modules/profile/views/relationship_preference_screen.dart';
+import 'package:blume/app/modules/profile/views/religion_work_screen.dart';
 import 'package:blume/app/modules/profile/views/update_dob_screen.dart';
 import 'package:blume/app/modules/profile/views/update_gender_screen.dart';
 import 'package:blume/app/modules/profile/views/update_name_screen.dart';
@@ -30,5 +31,6 @@ class AppPages {
     GetPage(name: AppRoutes.distancePreference, page: () => DistancePreferenceScreen()),
     GetPage(name: AppRoutes.education, page: () => EducationScreen()),
     GetPage(name: AppRoutes.lifestyle, page: () => LifeStyleScreen()),
+    GetPage(name: AppRoutes.religionWork, page: () => ReligionWorkScreen()),
   ];
 }

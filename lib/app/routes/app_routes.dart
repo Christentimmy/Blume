@@ -11,4 +11,5 @@ class AppRoutes {
   static const distancePreference = '/distance-preference';
   static const education = '/education';
   static const lifestyle = '/lifestyle';
+  static const religionWork = '/religion-work';
 }

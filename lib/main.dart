@@ -18,7 +18,7 @@ class MainApp extends StatelessWidget {
       title: 'Blume',
       darkTheme: darkTheme,
       theme: lightTheme,
-      themeMode: ThemeMode.light,
+      themeMode: ThemeMode.dark,
       initialRoute: AppRoutes.splash,
       getPages: AppPages.routes,
       debugShowCheckedModeBanner: false,
