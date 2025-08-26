@@ -7,4 +7,5 @@ class AppRoutes {
   static const updateName = '/update-name';
   static const updateDob = '/update-dob';
   static const updateGender = '/update-gender';
+  static const relationshipPreference = '/relationship-preference';
 }

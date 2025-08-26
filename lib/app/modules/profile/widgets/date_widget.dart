@@ -1,3 +1,4 @@
+import 'package:blume/app/resources/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,7 +22,7 @@ class _FunctionalDatePickerState extends State<FunctionalDatePicker> {
   List<int> get months => List.generate(12, (index) => index + 1);
   List<int> get years {
     final currentYear = DateTime.now().year;
-    return List.generate(100, (index) => currentYear - 50 + index);
+    return List.generate(100, (index) => currentYear - index);
   }
 
   // Get days in selected month/year
@@ -68,7 +69,7 @@ class _FunctionalDatePickerState extends State<FunctionalDatePicker> {
                 style: GoogleFonts.figtree(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Colors.grey.shade600,
+                  color: Get.theme.primaryColor,
                 ),
               ),
               const SizedBox(width: 5),
@@ -77,6 +78,7 @@ class _FunctionalDatePickerState extends State<FunctionalDatePicker> {
           ),
           icon: const SizedBox.shrink(),
           isExpanded: true,
+          menuMaxHeight: Get.height * 0.6,
           items: items.map((int item) {
             return DropdownMenuItem<int>(
               value: item,
@@ -85,6 +87,7 @@ class _FunctionalDatePickerState extends State<FunctionalDatePicker> {
                   displayText?.call(item) ?? item.toString().padLeft(2, '0'),
                   style: GoogleFonts.figtree(
                     fontSize: 16,
+                    color: Get.theme.primaryColor,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -95,7 +98,7 @@ class _FunctionalDatePickerState extends State<FunctionalDatePicker> {
             onChanged(newValue);
             _updateDate();
           },
-          dropdownColor: Colors.white,
+          dropdownColor: AppColors.secondaryColor,
           borderRadius: BorderRadius.circular(15),
         ),
       ),

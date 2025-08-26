@@ -61,7 +61,7 @@ class UpdateGenderScreen extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                       color: selectedGender.value == "male"
                           ? Colors.white
-                          : Colors.black,
+                          : Get.theme.primaryColor,
                     ),
                   ),
                 ),
@@ -92,7 +92,7 @@ class UpdateGenderScreen extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                       color: selectedGender.value == "female"
                           ? Colors.white
-                          : Colors.black,
+                          : Get.theme.primaryColor,
                     ),
                   ),
                 ),
@@ -127,7 +127,7 @@ class UpdateGenderScreen extends StatelessWidget {
               ),
               SizedBox(height: Get.height * 0.02),
               CustomButton(
-                ontap: () => Get.toNamed(AppRoutes.updateDob),
+                ontap: () => Get.toNamed(AppRoutes.relationshipPreference),
                 isLoading: false.obs,
                 child: Text(
                   "Next",

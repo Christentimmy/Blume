@@ -5,6 +5,7 @@ import 'package:blume/app/modules/auth/views/login_screen.dart';
 import 'package:blume/app/modules/auth/views/otp_verify_screen.dart';
 import 'package:blume/app/modules/auth/views/signup_screen.dart';
 import 'package:blume/app/modules/onboarding/views/onboarding_screen.dart';
+import 'package:blume/app/modules/profile/views/relationship_preference_screen.dart';
 import 'package:blume/app/modules/profile/views/update_dob_screen.dart';
 import 'package:blume/app/modules/profile/views/update_gender_screen.dart';
 import 'package:blume/app/modules/profile/views/update_name_screen.dart';
@@ -23,5 +24,6 @@ class AppPages {
     GetPage(name: AppRoutes.updateName, page: () => UpdateNameScreen()),
     GetPage(name: AppRoutes.updateDob, page: () => UpdateDobScreen()),
     GetPage(name: AppRoutes.updateGender, page: () => UpdateGenderScreen()),
+    GetPage(name: AppRoutes.relationshipPreference, page: () => RelationshipPreferenceScreen()),
   ];
 }

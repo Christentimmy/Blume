@@ -154,7 +154,7 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         border: Border.all(color: AppColors.primaryColor),
-        color: Colors.white,
+        color: Colors.transparent,
       ),
     );
   }

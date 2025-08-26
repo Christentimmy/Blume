@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 final ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
-  primaryColor: AppColors.primaryColor,
+  primaryColor: Colors.black,
   splashColor: Colors.transparent,
   splashFactory: NoSplash.splashFactory,
   scaffoldBackgroundColor: AppColors.lightBackground,
@@ -30,7 +30,7 @@ final ThemeData lightTheme = ThemeData(
 
 final ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
-  primaryColor: AppColors.primaryColor,
+  primaryColor: Colors.white,
   splashColor: Colors.transparent,
   splashFactory: NoSplash.splashFactory,
   scaffoldBackgroundColor: AppColors.darkBackground,
