@@ -8,4 +8,6 @@ class AppRoutes {
   static const updateDob = '/update-dob';
   static const updateGender = '/update-gender';
   static const relationshipPreference = '/relationship-preference';
+  static const distancePreference = '/distance-preference';
+  static const education = '/education';
 }

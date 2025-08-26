@@ -5,13 +5,14 @@ import 'package:blume/app/modules/auth/views/login_screen.dart';
 import 'package:blume/app/modules/auth/views/otp_verify_screen.dart';
 import 'package:blume/app/modules/auth/views/signup_screen.dart';
 import 'package:blume/app/modules/onboarding/views/onboarding_screen.dart';
+import 'package:blume/app/modules/profile/views/distance_preference_screen.dart';
+import 'package:blume/app/modules/profile/views/education_screen.dart';
 import 'package:blume/app/modules/profile/views/relationship_preference_screen.dart';
 import 'package:blume/app/modules/profile/views/update_dob_screen.dart';
 import 'package:blume/app/modules/profile/views/update_gender_screen.dart';
 import 'package:blume/app/modules/profile/views/update_name_screen.dart';
 import 'package:blume/app/modules/splash/views/splash_screen.dart';
 import 'package:get/get.dart';
-
 import 'app_routes.dart';
 
 class AppPages {
@@ -25,5 +26,7 @@ class AppPages {
     GetPage(name: AppRoutes.updateDob, page: () => UpdateDobScreen()),
     GetPage(name: AppRoutes.updateGender, page: () => UpdateGenderScreen()),
     GetPage(name: AppRoutes.relationshipPreference, page: () => RelationshipPreferenceScreen()),
+    GetPage(name: AppRoutes.distancePreference, page: () => DistancePreferenceScreen()),
+    GetPage(name: AppRoutes.education, page: () => EducationScreen()),
   ];
 }

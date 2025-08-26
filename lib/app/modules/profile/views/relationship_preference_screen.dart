@@ -104,7 +104,7 @@ class RelationshipPreferenceScreen extends StatelessWidget {
               ),
               SizedBox(height: 10),
               CustomButton(
-                ontap: () => Get.toNamed(AppRoutes.relationshipPreference),
+                ontap: () => Get.toNamed(AppRoutes.distancePreference),
                 isLoading: false.obs,
                 child: Text(
                   "Next",
