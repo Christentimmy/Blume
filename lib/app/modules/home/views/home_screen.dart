@@ -57,9 +57,14 @@ class HomeScreen extends StatelessWidget {
                       ),
                       child: Stack(
                         children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Image.asset("assets/images/frm.png"),
+                          Positioned.fill(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: Image.asset(
+                                "assets/images/frm.png",
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.end,

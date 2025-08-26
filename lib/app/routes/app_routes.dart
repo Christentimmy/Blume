@@ -19,4 +19,5 @@ class AppRoutes {
   static const match = '/match';
   static const notification = '/notification';
   static const search = '/search';
+  static const likes = '/likes';
 }
