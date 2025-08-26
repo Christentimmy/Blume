@@ -104,7 +104,7 @@ class AddPicturesScreen extends StatelessWidget {
               ),
               SizedBox(height: 10),
               CustomButton(
-                ontap: () => Get.toNamed(AppRoutes.lifestyle),
+                ontap: () => Get.toNamed(AppRoutes.setLocation),
                 isLoading: false.obs,
                 child: Text(
                   "Next",

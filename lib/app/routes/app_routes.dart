@@ -14,4 +14,5 @@ class AppRoutes {
   static const religionWork = '/religion-work';
   static const interest = '/interest';
   static const addPictures = '/add-pictures';
+  static const setLocation = '/set-location';
 }
