@@ -18,4 +18,5 @@ class AppRoutes {
   static const home = '/home';
   static const match = '/match';
   static const notification = '/notification';
+  static const search = '/search';
 }

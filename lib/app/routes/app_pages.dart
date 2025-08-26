@@ -16,6 +16,7 @@ import 'package:blume/app/modules/profile/views/religion_work_screen.dart';
 import 'package:blume/app/modules/profile/views/update_dob_screen.dart';
 import 'package:blume/app/modules/profile/views/update_gender_screen.dart';
 import 'package:blume/app/modules/profile/views/update_name_screen.dart';
+import 'package:blume/app/modules/search/views/search_screen.dart';
 import 'package:blume/app/modules/splash/views/splash_screen.dart';
 import 'package:get/get.dart';
 import 'app_routes.dart';
@@ -41,5 +42,6 @@ class AppPages {
     GetPage(name: AppRoutes.home, page: () => HomeScreen()),
     GetPage(name: AppRoutes.match, page: () => MatchScreen()),
     GetPage(name: AppRoutes.notification, page: () => NotificationScreen()),
+    GetPage(name: AppRoutes.search, page: () => SearchScreen()),
   ];
 }
