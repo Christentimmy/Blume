@@ -22,4 +22,5 @@ class AppRoutes {
   static const likes = '/likes';
   static const chatList = '/chat-list';
   static const viewStory = '/view-story';
+  static const message = '/message';
 }

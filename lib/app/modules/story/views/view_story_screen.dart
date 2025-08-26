@@ -1,6 +1,7 @@
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ViewStoryScreen extends StatelessWidget {
   const ViewStoryScreen({super.key});
@@ -8,6 +9,7 @@ class ViewStoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Get.theme.scaffoldBackgroundColor,
       body: SafeArea(
         child: Column(
           children: [

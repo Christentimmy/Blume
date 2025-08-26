@@ -49,6 +49,9 @@ class ChatListScreen extends StatelessWidget {
     return ListTile(
       contentPadding: EdgeInsets.zero,
       horizontalTitleGap: 10,
+      onTap: () {
+        Get.toNamed(AppRoutes.message);
+      },
       leading: CircleAvatar(
         radius: 35,
         backgroundImage: AssetImage("assets/images/frm.png"),
