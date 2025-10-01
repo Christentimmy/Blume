@@ -28,18 +28,26 @@ class LifeStyleScreen extends StatelessWidget {
     "Trying to quit",
   ];
 
-  final List<String> workout = [
-    "I don’t workout",
-    "A few times a year",
-    "Only on special occasions",
-    "Daily",
-    "Weekends mostly",
-    "A few times a week",
+  final List<String> workout = ["Everyday", "Sometimes", "Often", "Never"];
+
+  final List<String> pet = [
+    "Dogs",
+    "Cats",
+    "Reptile",
+    "Rabits",
+    "Amphibian",
+    "Fish",
+    "Others",
+    "Allergic but still love them",
+    "I have a small zoo",
+    "No, I hate animals",
+    "No, but I love animals"
   ];
 
   final RxInt selectedDrinkOption = (-1).obs;
   final RxInt selectedSmokeOption = (-1).obs;
   final RxInt selectedWorkoutOption = (-1).obs;
+  final RxInt selectedPetOption = (-1).obs;
 
   @override
   Widget build(BuildContext context) {
@@ -113,6 +121,14 @@ class LifeStyleScreen extends StatelessWidget {
                       selectedOption: selectedWorkoutOption,
                     ),
                     SizedBox(height: Get.height * 0.02),
+                    SizedBox(height: Get.height * 0.03),
+                    buildTitle(title: "Do you have pets?"),
+                    SizedBox(height: Get.height * 0.01),
+                    buildOptions(
+                      options: pet,
+                      selectedOption: selectedPetOption,
+                    ),
+                    SizedBox(height: Get.height * 0.02),
                   ],
                 ),
               ),
@@ -148,5 +164,4 @@ class LifeStyleScreen extends StatelessWidget {
       ),
     );
   }
-
 }

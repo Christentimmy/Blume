@@ -1,5 +1,3 @@
-
-
 import 'package:get/get.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -13,7 +11,23 @@ class StorageController extends GetxController {
 
   // Get token
   Future<String?> getToken() async {
-    return await _secureStorage.read(key: 'userToken');
+    try {
+      return await _secureStorage.read(key: 'userToken');
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<String?> getTheme() async {
+    try {
+      return await _secureStorage.read(key: 'theme');
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<void> storeTheme(String theme) async {
+    await _secureStorage.write(key: 'theme', value: theme);
   }
 
   // Delete token
@@ -39,6 +53,10 @@ class StorageController extends GetxController {
   }
 
   Future<String?> getLastPushId(String userId) async {
-    return _secureStorage.read(key: 'push_id_$userId');
+    try {
+      return await _secureStorage.read(key: 'push_id_$userId');
+    } catch (e) {
+      return null;
+    }
   }
 }

@@ -1,10 +1,12 @@
+import 'package:blume/app/controller/storage_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
+
 
 class ThemeController extends GetxController {
   var isDarkMode = false.obs;
-  final String _key = 'isDarkMode';
+  final String key = 'isDarkMode';
 
   @override
   void onInit() {
@@ -13,14 +15,15 @@ class ThemeController extends GetxController {
   }
 
   Future<void> _loadThemeFromPreferences() async {
-    final prefs = await SharedPreferences.getInstance();
-    isDarkMode.value = prefs.getBool(_key) ?? false;
+    final storageController = Get.find<StorageController>();
+    final theme = await storageController.getTheme();
+    isDarkMode.value = theme == 'dark';
     Get.changeThemeMode(isDarkMode.value ? ThemeMode.dark : ThemeMode.light);
   }
 
   Future<void> _saveThemeToPreferences(bool isDarkMode) async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setBool(_key, isDarkMode);
+    final storageController = Get.find<StorageController>();
+    await storageController.storeTheme(isDarkMode ? 'dark' : 'light');
   }
 
   void toggleTheme() {
