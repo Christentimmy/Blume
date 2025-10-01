@@ -100,7 +100,7 @@ class MatchScreen extends StatelessWidget {
               const Spacer(),
               CustomButton(
                 ontap: () {
-                  // Get.toNamed(AppRoutes.signup);
+                  Get.offNamed(AppRoutes.message);
                 },
                 isLoading: false.obs,
                 child: Text(
@@ -113,7 +113,7 @@ class MatchScreen extends StatelessWidget {
               SizedBox(height: 10),
 
               CustomButton(
-                ontap: () => Get.toNamed(AppRoutes.login),
+                ontap: () => Get.back(),
                 bgColor: Get.isDarkMode
                     ? AppColors.darkButtonColor
                     : AppColors.lightButtonColor,

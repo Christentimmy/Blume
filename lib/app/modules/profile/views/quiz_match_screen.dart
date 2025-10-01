@@ -135,7 +135,7 @@ class QuizMatchScreen extends StatelessWidget {
                 ontap: () => Get.back(),
                 isLoading: false.obs,
                 child: Text(
-                  "Next",
+                  "Show Matches",
                   style: GoogleFonts.figtree(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
