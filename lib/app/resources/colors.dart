@@ -13,3 +13,4 @@ class AppColors {
   static const Color darkButtonColor = Color.fromRGBO(255, 255, 255, 0.05);
   static const Color lightButtonColor = Color.fromRGBO(0, 0, 0, 0.05);
 }
+

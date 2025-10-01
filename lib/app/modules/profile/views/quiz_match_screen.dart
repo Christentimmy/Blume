@@ -1,5 +1,4 @@
 import 'package:blume/app/modules/profile/widgets/list_tile_widget.dart';
-import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -133,7 +132,7 @@ class QuizMatchScreen extends StatelessWidget {
               ),
               SizedBox(height: Get.height * 0.03),
               CustomButton(
-                ontap: () => Get.toNamed(AppRoutes.religionWork),
+                ontap: () => Get.back(),
                 isLoading: false.obs,
                 child: Text(
                   "Next",

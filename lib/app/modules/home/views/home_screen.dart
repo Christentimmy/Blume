@@ -7,8 +7,21 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:appinio_swiper/appinio_swiper.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      QuizMatchDialog.show(context);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -203,6 +216,174 @@ class HomeScreen extends StatelessWidget {
           child: Icon(icon, color: Get.theme.primaryColor),
         ),
       ),
+    );
+  }
+}
+
+class QuizMatchDialog {
+  static void show(BuildContext context) {
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: 'Quiz Match',
+      barrierColor: Colors.black.withOpacity(0.5),
+      transitionDuration: const Duration(milliseconds: 400),
+      pageBuilder: (context, anim1, anim2) {
+        return Container();
+      },
+      transitionBuilder: (context, anim1, anim2, child) {
+        final curvedAnimation = CurvedAnimation(
+          parent: anim1,
+          curve: Curves.elasticOut,
+          reverseCurve: Curves.easeInBack,
+        );
+
+        return ScaleTransition(
+          scale: curvedAnimation,
+          child: FadeTransition(
+            opacity: anim1,
+            child: AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
+              backgroundColor: Get.isDarkMode
+                  ? AppColors.darkBackground
+                  : AppColors.lightBackground,
+              contentPadding: EdgeInsets.zero,
+              content: Container(
+                width: MediaQuery.of(context).size.width * 0.85,
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(24),
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: Get.isDarkMode
+                        ? [
+                            AppColors.darkBackground,
+                            AppColors.darkBackground.withOpacity(0.95),
+                          ]
+                        : [
+                            AppColors.lightBackground,
+                            AppColors.secondaryColor.withOpacity(0.5),
+                          ],
+                  ),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Icon with animation
+                    TweenAnimationBuilder<double>(
+                      tween: Tween(begin: 0.0, end: 1.0),
+                      duration: const Duration(milliseconds: 600),
+                      curve: Curves.elasticOut,
+                      builder: (context, value, child) {
+                        return Transform.scale(
+                          scale: value,
+                          child: Container(
+                            padding: const EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              color: AppColors.primaryColor.withOpacity(0.1),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.quiz,
+                              size: 56,
+                              color: AppColors.primaryColor,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Title
+                    Text(
+                      'Try Quiz Match?',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Get.isDarkMode ? Colors.white : Colors.black87,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 12),
+
+                    // Description
+                    Text(
+                      'Test your knowledge and challenge yourself with our exciting quiz match!',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Get.isDarkMode ? Colors.white70 : Colors.black54,
+                        height: 1.4,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 32),
+
+                    // Buttons
+                    Row(
+                      children: [
+                        // Cancel Button
+                        Expanded(
+                          child: TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            style: TextButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              backgroundColor: Get.isDarkMode
+                                  ? AppColors.darkButtonColor
+                                  : AppColors.lightButtonColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: Text(
+                              'Maybe Later',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Get.isDarkMode
+                                    ? Colors.white70
+                                    : Colors.black54,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+
+                        // Confirm Button
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Get.offNamed(AppRoutes.quizMatch);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              backgroundColor: AppColors.primaryColor,
+                              foregroundColor: Colors.white,
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: const Text(
+                              'Let\'s Go!',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
