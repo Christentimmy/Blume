@@ -1,4 +1,3 @@
-
 import 'package:blume/app/modules/profile/widgets/list_tile_widget.dart';
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/routes/app_routes.dart';
@@ -22,21 +21,92 @@ class InterestScreen extends StatelessWidget {
 
   final List<String> hobbies = [
     "Reading",
-    "Traveling",
-    "Cooking",
-    "Painting",
-    "Gardening",
-    "Photography",
-    "Music",
-    "Dancing",
-    "Swimming",
-    "Yoga",
+    "History",
+    "Science & tech",
+    "Languages",
+    "Chess",
+    "Puzzles",
   ];
 
+  final List<String> artsAndCrafts = [
+    "Drawing",
+    "Painting",
+    "Photography",
+    "Fashion",
+    "Music",
+    "Crafts/DIY"
+        "Dancing",
+  ];
 
+  final List<String> sportsAndLeisure = [
+    "Gym workouts",
+    "Running",
+    "Yoga",
+    "Cycling",
+    "Hiking",
+    "Dancing",
+    "Golf",
+    "Basketball",
+    "Soccer",
+    "Tennis",
+    "Volleyball",
+    "Badminton",
+    "Table Tennis",
+    "Chess",
+    "Puzzles",
+    "Other",
+    "Prefer not to say",
+  ];
+
+  final List<String> travelAndAdventure = [
+    "Road trip",
+    "Backpacking",
+    "Camping",
+    "Beach vacations",
+    "Cruise trips",
+    "Hiking",
+    "City exploration",
+  ];
+
+  final List<String> entertainment = [
+    "Movies",
+    "TV series",
+    "Theater",
+    "Stand-up comedy",
+    "Anime",
+    "Gaming",
+    "Podcasts",
+  ];
+
+  final List<String> music = [
+    "Pop",
+    "Hip-hop/Rap",
+    "Rock",
+    "Jazz",
+    "Classical",
+    "EDM/Dance",
+    "Live concerts",
+  ];
+
+  final List<String> foodAndDrink = [
+    "Cooking",
+    "Baking",
+    "Coffee",
+    "Wine",
+    "Beer tasting",
+    "Street food",
+    "Fine dining",
+    "Vegan/Vegetarian lifestyle"
+  ];
 
   final RxInt selectedLifestyleOption = (-1).obs;
   final RxInt selectedHobbiesOption = (-1).obs;
+  final RxInt selectedArtsAndCraftsOption = (-1).obs;
+  final RxInt selectedSportsAndLeisureOption = (-1).obs;
+  final RxInt selectedTravelAndAdventureOption = (-1).obs;
+  final RxInt selectedEntertainmentOption = (-1).obs;
+  final RxInt selectedMusicOption = (-1).obs;
+  final RxInt selectedFoodAndDrinkOption = (-1).obs;
 
   @override
   Widget build(BuildContext context) {
@@ -103,13 +173,48 @@ class InterestScreen extends StatelessWidget {
                       selectedOption: selectedHobbiesOption,
                     ),
                     SizedBox(height: Get.height * 0.03),
-                    // buildTitle(title: "Do you workout?"),
-                    // SizedBox(height: Get.height * 0.01),
-                    // buildOptions(
-                    //   options: workout,
-                    //   selectedOption: selectedWorkoutOption,
-                    // ),
-                    // SizedBox(height: Get.height * 0.02),
+                    buildTitle(title: "Arts & Crafts"),
+                    SizedBox(height: Get.height * 0.01),
+                    buildOptions(
+                      options: artsAndCrafts,
+                      selectedOption: selectedArtsAndCraftsOption,
+                    ),
+                    SizedBox(height: Get.height * 0.03),
+                    buildTitle(title: "Sports & Fitness"),
+                    SizedBox(height: Get.height * 0.01),
+                    buildOptions(
+                      options: sportsAndLeisure,
+                      selectedOption: selectedSportsAndLeisureOption,
+                    ),
+                    SizedBox(height: Get.height * 0.03),
+                    buildTitle(title: "Travel & Adventure"),
+                    SizedBox(height: Get.height * 0.01),
+                    buildOptions(
+                      options: travelAndAdventure,
+                      selectedOption: selectedTravelAndAdventureOption,
+                    ),
+                    SizedBox(height: Get.height * 0.03),
+                    buildTitle(title: "Entertainment"),
+                    SizedBox(height: Get.height * 0.01),
+                    buildOptions(
+                      options: entertainment,
+                      selectedOption: selectedEntertainmentOption,
+                    ),
+                    SizedBox(height: Get.height * 0.03),
+                    buildTitle(title: "Music"),
+                    SizedBox(height: Get.height * 0.01),
+                    buildOptions(
+                      options: music,
+                      selectedOption: selectedMusicOption,
+                    ),
+                    SizedBox(height: Get.height * 0.03),
+                    buildTitle(title: "Food & Drink"),
+                    SizedBox(height: Get.height * 0.01),
+                    buildOptions(
+                      options: foodAndDrink,
+                      selectedOption: selectedFoodAndDrinkOption,
+                    ),
+                    SizedBox(height: Get.height * 0.03),
                   ],
                 ),
               ),
@@ -145,5 +250,4 @@ class InterestScreen extends StatelessWidget {
       ),
     );
   }
-
 }

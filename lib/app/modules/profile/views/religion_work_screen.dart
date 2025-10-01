@@ -35,6 +35,25 @@ class ReligionWorkScreen extends StatelessWidget {
     "Prefer not to say",
   ];
 
+  final List<String> work = [
+    "Drawing",
+    "Painting",
+    "Photography",
+    "Fashion",
+    "Music\"",
+    "Education",
+    "Health & Wellness",
+    "Home & Garden",
+    "Crafts/DIY"
+        "Hobbies",
+    "Law & Government",
+    "Marketing & Sales",
+    "Media & Entertainment",
+    "Nonprofit & Volunteering",
+    "Other",
+    "Prefer not to say",
+  ];
+
   final List<String> height = [
     "Under 5'0",
     "5'0 to 5'3",
