@@ -15,7 +15,7 @@ class ReligionWorkScreen extends StatelessWidget {
     "Atheist",
     "Buddhist",
     "Catholic"
-    "Christian (non-Catholic)",
+        "Christian (non-Catholic)",
     "Hindu",
     "Jewish",
     "Muslim",
@@ -24,7 +24,54 @@ class ReligionWorkScreen extends StatelessWidget {
     "Prefer not to say",
   ];
 
+  final List<String> education = [
+    "High school diploma or GED",
+    "Some college",
+    "Associate's degree"
+        "Bachelor's degree",
+    "Master's degree",
+    "Doctorate (PhD, MD, JD, etc.)",
+    "Trade/technical/vocational training",
+    "Prefer not to say",
+  ];
+
+  final List<String> height = [
+    "Under 5'0",
+    "5'0 to 5'3",
+    "5'4 to 5'7",
+    "5'8 to 5'11",
+    "6'0 to 6'3",
+    "Over 6'3",
+  ];
+
+  final List<String> sexualOrientation = [
+    "Straight",
+    "Gay",
+    "Lesbian",
+    "Bisexual",
+    "Pansexual",
+    "Asexual",
+    "Queer",
+    "Questioning",
+    "Prefer not to say",
+  ];
+
+  final List<String> languagesSpoken = [
+    "English",
+    "Spanish",
+    "French",
+    "Tagalog",
+    "Vietnamese",
+    "Other",
+    "Chinese (Mandarin/Cantonese)",
+  ];
+
   final RxInt selectedReligionOption = (-1).obs;
+  final RxInt selectedEducationOption = (-1).obs;
+  final RxInt selectedWorkOption = (-1).obs;
+  final RxInt selectedHeightOption = (-1).obs;
+  final RxInt selectedSexualOrientationOption = (-1).obs;
+  final RxInt selectedLanguagesSpokenOption = (-1).obs;
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +136,34 @@ class ReligionWorkScreen extends StatelessWidget {
                     buildOptions(
                       options: religion,
                       selectedOption: selectedReligionOption,
+                    ),
+                    SizedBox(height: Get.height * 0.03),
+                    buildTitle(title: "Education"),
+                    SizedBox(height: Get.height * 0.01),
+                    buildOptions(
+                      options: education,
+                      selectedOption: selectedEducationOption,
+                    ),
+                    SizedBox(height: Get.height * 0.03),
+                    buildTitle(title: "Height"),
+                    SizedBox(height: Get.height * 0.01),
+                    buildOptions(
+                      options: height,
+                      selectedOption: selectedHeightOption,
+                    ),
+                    SizedBox(height: Get.height * 0.03),
+                    buildTitle(title: "Sexual Orientation"),
+                    SizedBox(height: Get.height * 0.01),
+                    buildOptions(
+                      options: sexualOrientation,
+                      selectedOption: selectedSexualOrientationOption,
+                    ),
+                    SizedBox(height: Get.height * 0.03),
+                    buildTitle(title: "Languages Spoken"),
+                    SizedBox(height: Get.height * 0.01),
+                    buildOptions(
+                      options: languagesSpoken,
+                      selectedOption: selectedLanguagesSpokenOption,
                     ),
                     SizedBox(height: Get.height * 0.03),
                   ],
