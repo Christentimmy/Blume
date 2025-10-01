@@ -23,18 +23,18 @@ class MatchScreen extends StatelessWidget {
                     onPressed: () => Get.back(),
                     icon: Icon(Icons.arrow_back_ios_new),
                   ),
-                  const Spacer(),
-                  InkWell(
-                    onTap: () => Get.toNamed(AppRoutes.addPictures),
-                    child: Text(
-                      "Skip",
-                      style: GoogleFonts.figtree(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.primaryColor,
-                      ),
-                    ),
-                  ),
+                  // const Spacer(),
+                  // InkWell(
+                  //   onTap: () => Get.toNamed(AppRoutes.addPictures),
+                  //   child: Text(
+                  //     "Skip",
+                  //     style: GoogleFonts.figtree(
+                  //       fontSize: 16,
+                  //       fontWeight: FontWeight.w600,
+                  //       color: AppColors.primaryColor,
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
               SizedBox(height: Get.height * 0.02),

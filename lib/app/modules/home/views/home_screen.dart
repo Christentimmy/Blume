@@ -1,11 +1,12 @@
 import 'dart:ui';
+import 'package:appinio_swiper/appinio_swiper.dart';
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:appinio_swiper/appinio_swiper.dart';
+// import 'package:appinio_swiper/appinio_swiper.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,6 +23,15 @@ class _HomeScreenState extends State<HomeScreen> {
       QuizMatchDialog.show(context);
     });
   }
+
+  final List<String> images = [
+    "assets/images/plm.png",
+    "assets/images/frm.png",
+    "assets/images/plm.png",
+    "assets/images/frm.png",
+  ];
+
+  final swiperController = AppinioSwiperController();
 
   @override
   Widget build(BuildContext context) {
@@ -56,113 +66,151 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(height: Get.height * 0.05),
               Expanded(
                 child: AppinioSwiper(
+                  controller: swiperController,
                   cardCount: 20,
                   backgroundCardCount: 2,
-                  backgroundCardOffset: Offset(0, -45),
+                  backgroundCardOffset: Offset(0, -35),
+                  loop: true,
+                  swipeOptions: SwipeOptions.only(left: true, right: true),
                   onSwipeEnd: (previousIndex, targetIndex, activity) {
-                    Get.toNamed(AppRoutes.match);
+                    if (activity.direction == AxisDirection.right &&
+                        targetIndex == 3) {
+                      Get.toNamed(AppRoutes.match);
+                    }
                   },
                   cardBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 15,
-                        vertical: 20,
-                      ),
-                      child: Stack(
-                        children: [
-                          Positioned.fill(
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: Image.asset(
-                                "assets/images/frm.png",
+                    final activeIndex = 0.obs;
+                    return Stack(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: PageView.builder(
+                            onPageChanged: (value) {
+                              activeIndex.value = value;
+                            },
+                            itemCount: images.length,
+                            itemBuilder: (context, index) {
+                              return Image.asset(
+                                images[index],
                                 fit: BoxFit.cover,
+                              );
+                            },
+                          ),
+                        ),
+                        Positioned(
+                          top: 20,
+                          left: 0,
+                          right: 0,
+                          child: Obx(() {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 25,
+                              ),
+                              child: Row(
+                                children: List.generate(images.length, (i) {
+                                  return Expanded(
+                                    child: AnimatedContainer(
+                                      duration: const Duration(
+                                        milliseconds: 350,
+                                      ),
+                                      margin: const EdgeInsets.symmetric(
+                                        horizontal: 2,
+                                      ),
+                                      height: 4,
+                                      decoration: BoxDecoration(
+                                        color: i == activeIndex.value
+                                            ? Colors.white
+                                            : Colors.white.withOpacity(0.4),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                  );
+                                }),
+                              ),
+                            );
+                          }),
+                        ),
+
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(20),
+                                bottomRight: Radius.circular(20),
+                              ),
+                              child: BackdropFilter(
+                                filter: ImageFilter.blur(
+                                  sigmaX: 10,
+                                  sigmaY: 10,
+                                ),
+                                child: Container(
+                                  height: Get.height * 0.18,
+                                  color: Colors.black.withOpacity(0),
+                                ),
                               ),
                             ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 15,
+                            vertical: 20,
                           ),
-                          Column(
+                          child: Column(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(20),
-                                  bottomRight: Radius.circular(20),
-                                ),
-                                child: BackdropFilter(
-                                  filter: ImageFilter.blur(
-                                    sigmaX: 10,
-                                    sigmaY: 10,
-                                  ),
-                                  child: Container(
-                                    height: Get.height * 0.18,
-                                    color: Colors.black.withOpacity(0),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 15,
-                              vertical: 20,
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      "Blaire  23",
-                                      style: GoogleFonts.figtree(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    CircleAvatar(
-                                      radius: 20,
-                                      backgroundColor: Colors.white.withOpacity(
-                                        0.2,
-                                      ),
-                                      child: Icon(
-                                        FontAwesomeIcons.circleExclamation,
-                                        size: 18,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.location_on,
+                              Row(
+                                children: [
+                                  Text(
+                                    "Blaire  23",
+                                    style: GoogleFonts.figtree(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.w600,
                                       color: Colors.white,
                                     ),
-                                    Text(
-                                      "5 miles away",
-                                      style: GoogleFonts.figtree(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: Get.height * 0.01),
-                                Text(
-                                  "“I’ll fall for you if you love dogs 🐶 and good jollof rice 🍛.” Christian girlie!! I think I hate skating too.",
-                                  style: GoogleFonts.figtree(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white,
                                   ),
+                                  const Spacer(),
+                                  CircleAvatar(
+                                    radius: 20,
+                                    backgroundColor: Colors.white.withOpacity(
+                                      0.2,
+                                    ),
+                                    child: Icon(
+                                      FontAwesomeIcons.circleExclamation,
+                                      size: 18,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Icon(Icons.location_on, color: Colors.white),
+                                  Text(
+                                    "5 miles away",
+                                    style: GoogleFonts.figtree(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: Get.height * 0.01),
+                              Text(
+                                "“I’ll fall for you if you love dogs 🐶 and good jollof rice 🍛.” Christian girlie!! I think I hate skating too.",
+                                style: GoogleFonts.figtree(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
                                 ),
-                                SizedBox(height: Get.height * 0.01),
-                              ],
-                            ),
+                              ),
+                              SizedBox(height: Get.height * 0.01),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     );
                   },
                 ),
@@ -173,22 +221,30 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   buildActionButton(
                     icon: FontAwesomeIcons.arrowsRotate,
-                    onTap: () {},
+                    onTap: () {
+                      swiperController.unswipe();
+                    },
                   ),
                   buildActionButton(
                     size: 35,
                     icon: FontAwesomeIcons.xmark,
-                    onTap: () {},
+                    onTap: () {
+                      swiperController.swipeLeft();
+                    },
                   ),
                   buildActionButton(
                     icon: FontAwesomeIcons.solidHeart,
-                    onTap: () {},
+                    onTap: () {
+                      swiperController.swipeRight();
+                    },
                     size: 35,
                   ),
 
                   buildActionButton(
                     icon: FontAwesomeIcons.paperPlane,
-                    onTap: () {},
+                    onTap: () {
+                      swiperController.swipeRight();
+                    },
                   ),
                 ],
               ),
