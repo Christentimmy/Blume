@@ -19,7 +19,7 @@ class MainApp extends StatelessWidget {
       darkTheme: darkTheme,
       theme: lightTheme,
       themeMode: ThemeMode.light,
-      initialRoute: AppRoutes.splash,
+      initialRoute: AppRoutes.quizMatch,
       getPages: AppPages.routes,
       debugShowCheckedModeBanner: false,
       initialBinding: AppBindings(),

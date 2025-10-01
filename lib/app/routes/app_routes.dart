@@ -31,4 +31,5 @@ class AppRoutes {
   static const verification = '/verification';
   static const subscription = '/subscription';
   static const bottomNavigation = '/bottom-navigation';
+  static const quizMatch = '/quiz-match';
 }
