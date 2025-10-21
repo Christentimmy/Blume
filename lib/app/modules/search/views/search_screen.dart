@@ -40,9 +40,14 @@ class _SearchScreenState extends State<SearchScreen>
 
   final List goalDrivenDating = [
     {"title": "Serious Dater", "image": "assets/icons/love.png"},
-    {"title": "New friends", "image": "assets/icons/newF.png"},
     {"title": "Short-term fun", "image": "assets/icons/flash.png"},
-    {"title": "Free tonight", "image": "assets/icons/moon.png"},
+    {"title": "New friends", "image": "assets/icons/sun-setting.png"},
+    {"title": "Free tonight", "image": "assets/icons/stars-03.png"},
+
+    {"title": "Lesbian", "image": "assets/icons/lesbian.png"},
+    {"title": "Gay", "image": "assets/icons/gay.png"},
+    {"title": "Transgender", "image": "assets/icons/transgender.png"},
+    {"title": "Queer", "image": "assets/icons/q.png"},
   ];
 
   late AnimationController _animationController;
@@ -159,12 +164,12 @@ class _SearchScreenState extends State<SearchScreen>
                         ),
                       ),
                     ),
-                    SizedBox(height: Get.height * 0.02),
+                    SizedBox(height: Get.height * 0.025),
                     Text(
                       "Goal-driven dating",
                       style: GoogleFonts.figtree(
-                        fontSize: 26,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
                         color: Get.theme.primaryColor,
                       ),
                     ),
@@ -227,6 +232,26 @@ class _SearchScreenState extends State<SearchScreen>
                         );
                       },
                     ),
+                    SizedBox(height: Get.height * 0.03),
+                    Text(
+                      "Around me",
+                      style: GoogleFonts.figtree(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: Get.theme.primaryColor,
+                      ),
+                    ),
+                    Text(
+                      "People with “Music” interest around you",
+                      style: GoogleFonts.figtree(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                        color: Get.theme.primaryColor,
+                      ),
+                    ),
+                    
+                    SizedBox(height: Get.height * 0.02),
+                    Image.asset("assets/icons/bMap.png"),
                     SizedBox(height: Get.height * 0.03),
                   ],
                 ),
