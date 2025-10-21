@@ -218,6 +218,7 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(height: Get.height * 0.01),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   buildActionButton(
                     icon: FontAwesomeIcons.arrowsRotate,
