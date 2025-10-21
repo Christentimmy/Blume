@@ -65,193 +65,246 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               SizedBox(height: Get.height * 0.05),
               Expanded(
-                child: AppinioSwiper(
-                  controller: swiperController,
-                  cardCount: 20,
-                  backgroundCardCount: 2,
-                  backgroundCardOffset: Offset(0, -35),
-                  loop: true,
-                  swipeOptions: SwipeOptions.only(left: true, right: true),
-                  onSwipeEnd: (previousIndex, targetIndex, activity) {
-                    if (activity.direction == AxisDirection.right &&
-                        targetIndex == 3) {
-                      Get.toNamed(AppRoutes.match);
-                    }
-                  },
-                  cardBuilder: (context, index) {
-                    final activeIndex = 0.obs;
-                    return Stack(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: PageView.builder(
-                            onPageChanged: (value) {
-                              activeIndex.value = value;
-                            },
-                            itemCount: images.length,
-                            itemBuilder: (context, index) {
-                              return Image.asset(
-                                images[index],
-                                fit: BoxFit.cover,
-                              );
+                child: Stack(
+                  children: [
+                    AppinioSwiper(
+                      controller: swiperController,
+                      cardCount: 20,
+                      backgroundCardCount: 2,
+                      backgroundCardOffset: Offset(0, -35),
+                      loop: true,
+                      swipeOptions: SwipeOptions.only(left: true, right: true),
+                      onSwipeEnd: (previousIndex, targetIndex, activity) {
+                        if (activity.direction == AxisDirection.right &&
+                            targetIndex == 3) {
+                          Get.toNamed(AppRoutes.match);
+                        }
+                      },
+                      cardBuilder: (context, index) {
+                        final activeIndex = 0.obs;
+                        return buildCard(activeIndex);
+                      },
+                    ),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          buildActionButton(
+                            icon: FontAwesomeIcons.arrowsRotate,
+                            onTap: () {
+                              swiperController.unswipe();
                             },
                           ),
-                        ),
-                        Positioned(
-                          top: 20,
-                          left: 0,
-                          right: 0,
-                          child: Obx(() {
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 25,
-                              ),
-                              child: Row(
-                                children: List.generate(images.length, (i) {
-                                  return Expanded(
-                                    child: AnimatedContainer(
-                                      duration: const Duration(
-                                        milliseconds: 350,
-                                      ),
-                                      margin: const EdgeInsets.symmetric(
-                                        horizontal: 2,
-                                      ),
-                                      height: 4,
-                                      decoration: BoxDecoration(
-                                        color: i == activeIndex.value
-                                            ? Colors.white
-                                            : Colors.white.withOpacity(0.4),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    ),
-                                  );
-                                }),
-                              ),
-                            );
-                          }),
-                        ),
+                          buildActionButton(
+                            size: 75,
+                            icon: FontAwesomeIcons.xmark,
+                            onTap: () {
+                              swiperController.swipeLeft();
+                            },
+                          ),
+                          buildActionButton(
+                            icon: FontAwesomeIcons.solidHeart,
+                            onTap: () {
+                              swiperController.swipeRight();
+                            },
+                            size: 75,
+                          ),
 
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(20),
-                                bottomRight: Radius.circular(20),
-                              ),
-                              child: BackdropFilter(
-                                filter: ImageFilter.blur(
-                                  sigmaX: 10,
-                                  sigmaY: 10,
-                                ),
-                                child: Container(
-                                  height: Get.height * 0.18,
-                                  color: Colors.black.withOpacity(0),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 15,
-                            vertical: 20,
+                          buildActionButton(
+                            icon: FontAwesomeIcons.paperPlane,
+                            onTap: () {
+                              swiperController.swipeRight();
+                            },
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    "Blaire  23",
-                                    style: GoogleFonts.figtree(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  const Spacer(),
-                                  CircleAvatar(
-                                    radius: 20,
-                                    backgroundColor: Colors.white.withOpacity(
-                                      0.2,
-                                    ),
-                                    child: Icon(
-                                      FontAwesomeIcons.circleExclamation,
-                                      size: 18,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Icon(Icons.location_on, color: Colors.white),
-                                  Text(
-                                    "5 miles away",
-                                    style: GoogleFonts.figtree(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: Get.height * 0.01),
-                              Text(
-                                "“I’ll fall for you if you love dogs 🐶 and good jollof rice 🍛.” Christian girlie!! I think I hate skating too.",
-                                style: GoogleFonts.figtree(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              SizedBox(height: Get.height * 0.01),
-                            ],
-                          ),
-                        ),
-                      ],
-                    );
-                  },
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              SizedBox(height: Get.height * 0.01),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  buildActionButton(
-                    icon: FontAwesomeIcons.arrowsRotate,
-                    onTap: () {
-                      swiperController.unswipe();
-                    },
-                  ),
-                  buildActionButton(
-                    size: 35,
-                    icon: FontAwesomeIcons.xmark,
-                    onTap: () {
-                      swiperController.swipeLeft();
-                    },
-                  ),
-                  buildActionButton(
-                    icon: FontAwesomeIcons.solidHeart,
-                    onTap: () {
-                      swiperController.swipeRight();
-                    },
-                    size: 35,
-                  ),
 
-                  buildActionButton(
-                    icon: FontAwesomeIcons.paperPlane,
-                    onTap: () {
-                      swiperController.swipeRight();
-                    },
-                  ),
-                ],
-              ),
+              // SizedBox(height: Get.height * 0.01),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Container buildCard(RxInt activeIndex) {
+    return Container(
+      margin: EdgeInsets.only(bottom: Get.height * 0.05),
+      child: Stack(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: PageView.builder(
+              onPageChanged: (value) {
+                activeIndex.value = value;
+              },
+              itemCount: images.length,
+              itemBuilder: (context, index) {
+                return Image.asset(images[index], fit: BoxFit.cover);
+              },
+            ),
+          ),
+          Positioned(
+            top: 20,
+            left: 0,
+            right: 0,
+            child: Obx(() {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                child: Row(
+                  children: List.generate(images.length, (i) {
+                    return Expanded(
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 350),
+                        margin: const EdgeInsets.symmetric(horizontal: 2),
+                        height: 4,
+                        decoration: BoxDecoration(
+                          color: i == activeIndex.value
+                              ? Colors.white
+                              : Colors.white.withOpacity(0.4),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    );
+                  }),
+                ),
+              );
+            }),
+          ),
+
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20),
+                ),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                  child: Container(
+                    height: Get.height * 0.18,
+                    color: Colors.black.withOpacity(0),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      "Blaire  23",
+                      style: GoogleFonts.figtree(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const Spacer(),
+                    CircleAvatar(
+                      radius: 20,
+                      backgroundColor: Colors.white.withOpacity(0.2),
+                      child: Icon(
+                        FontAwesomeIcons.circleExclamation,
+                        size: 18,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Icon(Icons.fence_sharp, color: Colors.white),
+                    Text(
+                      "Interest",
+                      style: GoogleFonts.figtree(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+                // SizedBox(height: Get.height * 0.01),
+                Row(
+                  children: [
+                    Chip(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(22),
+                      ),
+                      backgroundColor: Colors.white.withOpacity(0.3),
+                      label: Text(
+                        "Interest",
+                        style: GoogleFonts.figtree(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          // color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 5),
+                    Chip(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(22),
+                      ),
+                      backgroundColor: Colors.white.withOpacity(0.3),
+                      label: Text(
+                        "Music",
+                        style: GoogleFonts.figtree(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          // color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 5),
+                    Chip(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(22),
+                      ),
+                      backgroundColor: Colors.white.withOpacity(0.3),
+                      label: Text(
+                        "Games",
+                        style: GoogleFonts.figtree(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          // color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 5),
+                    Chip(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(22),
+                      ),
+                      backgroundColor: Colors.white.withOpacity(0.3),
+                      label: Text(
+                        "Books",
+                        style: GoogleFonts.figtree(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          // color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: Get.height * 0.03),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -263,15 +316,26 @@ class _HomeScreenState extends State<HomeScreen> {
   }) {
     return InkWell(
       onTap: onTap,
-      child: Padding(
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      splashFactory: NoSplash.splashFactory,
+      child: Container(
+        width: size ?? 60,
+        height: size ?? 60,
+        margin: EdgeInsets.symmetric(horizontal: 3),
         padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: CircleAvatar(
-          radius: size ?? 30,
-          backgroundColor: Get.isDarkMode
-              ? AppColors.darkButtonColor
-              : AppColors.lightButtonColor,
-          child: Icon(icon, color: Get.theme.primaryColor),
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 10,
+              offset: Offset(0, 5),
+            ),
+          ],
+          shape: BoxShape.circle,
+          color: Get.isDarkMode ? Color(0xFF1E1E1E) : Color(0xFFFFFFFF),
         ),
+        child: Icon(icon, color: AppColors.primaryColor),
       ),
     );
   }
