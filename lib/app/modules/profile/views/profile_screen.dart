@@ -1,4 +1,5 @@
 import 'package:blume/app/resources/colors.dart';
+import 'package:blume/app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -102,7 +103,10 @@ class ProfileScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Icon(Icons.arrow_back, size: 28),
+          InkWell(
+            onTap: () => Get.back(),
+            child: Icon(Icons.arrow_back, size: 28),
+          ),
           SizedBox(width: Get.width * 0.03),
           Text(
             'Don cullion',
@@ -230,36 +234,39 @@ class ProfileScreen extends StatelessWidget {
 
   Widget _buildBoostCard(String price, String description) {
     return Expanded(
-      child: Container(
-        padding: EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Get.isDarkMode
-              ? AppColors.darkButtonColor
-              : AppColors.lightButtonColor,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              price,
-              style: GoogleFonts.figtree(
-                color: AppColors.primaryColor,
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
+      child: GestureDetector(
+        onTap: () => Get.toNamed(AppRoutes.chooseBoostPlan),
+        child: Container(
+          padding: EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Get.isDarkMode
+                ? AppColors.darkButtonColor
+                : AppColors.lightButtonColor,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                price,
+                style: GoogleFonts.figtree(
+                  color: AppColors.primaryColor,
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            SizedBox(height: 4),
-            Text(
-              description,
-              style: GoogleFonts.figtree(
-                color: AppColors.primaryColor,
-                fontSize: 16,
-                fontWeight: FontWeight.normal,
+              SizedBox(height: 4),
+              Text(
+                description,
+                style: GoogleFonts.figtree(
+                  color: AppColors.primaryColor,
+                  fontSize: 16,
+                  fontWeight: FontWeight.normal,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

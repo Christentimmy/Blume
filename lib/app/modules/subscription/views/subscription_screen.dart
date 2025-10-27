@@ -57,7 +57,7 @@ class SubscriptionScreen extends StatelessWidget {
   }) {
     return Container(
       width: Get.width,
-      height: Get.height * 0.45,
+      height: Get.height * 0.5,
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       margin: EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(

@@ -32,4 +32,5 @@ class AppRoutes {
   static const subscription = '/subscription';
   static const bottomNavigation = '/bottom-navigation';
   static const quizMatch = '/quiz-match';
+  static const chooseBoostPlan = '/choose-boost-plan';
 }

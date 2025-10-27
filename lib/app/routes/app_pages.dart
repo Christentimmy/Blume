@@ -12,6 +12,7 @@ import 'package:blume/app/modules/messages/views/video_call_screen.dart';
 import 'package:blume/app/modules/notification/views/notification_screen.dart';
 import 'package:blume/app/modules/onboarding/views/onboarding_screen.dart';
 import 'package:blume/app/modules/profile/views/add_pictures_screen.dart';
+import 'package:blume/app/modules/profile/views/choose_boost_plan_screen.dart';
 import 'package:blume/app/modules/profile/views/distance_preference_screen.dart';
 import 'package:blume/app/modules/profile/views/education_screen.dart';
 import 'package:blume/app/modules/profile/views/interest_screen.dart';
@@ -69,5 +70,6 @@ class AppPages {
     GetPage(name: AppRoutes.subscription, page: () => SubscriptionScreen()),
     GetPage(name: AppRoutes.bottomNavigation, page: () => BottomNavigationWidget()),
     GetPage(name: AppRoutes.quizMatch, page: () => QuizMatchScreen()),
+    GetPage(name: AppRoutes.chooseBoostPlan, page: () => ChooseBoostPlanScreen()),
   ];
 }
