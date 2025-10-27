@@ -31,13 +31,30 @@ class DisclaimerScreen extends StatelessWidget {
                 ),
               ),
               Text(
-                "Click allow to take begin your selfie verification.",
+                "Lets make online dating safe and better by showing you are who you say you are!",
                 style: GoogleFonts.figtree(
                   fontSize: 12,
                   fontWeight: FontWeight.normal,
                 ),
               ),
               Spacer(),
+              Center(
+                child: Image.asset(
+                  'assets/images/verr.png',
+                  height: 200,
+                ),
+              ),
+              Spacer(),
+              Center(
+                child: Text(
+                  "Over 30,000 verified members near you ©",
+                  style: GoogleFonts.figtree(
+                    fontSize: 12,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+              ),
+              SizedBox(height: Get.height * 0.005),
               CustomButton(
                 ontap: () => Get.toNamed(AppRoutes.verification),
                 isLoading: false.obs,
