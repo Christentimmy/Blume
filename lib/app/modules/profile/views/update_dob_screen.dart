@@ -9,7 +9,7 @@ class UpdateDobScreen extends StatelessWidget {
   final VoidCallback? whatNext;
   UpdateDobScreen({super.key, this.whatNext});
 
-  final Rxn<DateTime> selectedDate = Rxn<DateTime>();
+  final Rxn<String> selectedDate = Rxn<String>();
   final userController = Get.find<UserController>();
 
   @override

@@ -59,7 +59,7 @@ class RelationshipPreferenceScreen extends StatelessWidget {
                     onTap: () => selectedIndex.value = relations.indexOf(e),
                     child: Obx(
                       () => Container(
-                        width: Get.height * 0.137,
+                        width: Get.height * 0.129,
                         height: Get.width * 0.215,
                         alignment: Alignment.center,
                         padding: EdgeInsets.symmetric(
@@ -79,7 +79,7 @@ class RelationshipPreferenceScreen extends StatelessWidget {
                           e,
                           textAlign: TextAlign.center,
                           style: GoogleFonts.figtree(
-                            fontSize: 16,
+                            fontSize: 12,
                             fontWeight: FontWeight.w600,
                             color: selectedIndex.value == relations.indexOf(e)
                                 ? AppColors.primaryColor

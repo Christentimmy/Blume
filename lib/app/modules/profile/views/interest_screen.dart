@@ -1,3 +1,4 @@
+import 'package:blume/app/controller/user_controller.dart';
 import 'package:blume/app/modules/profile/widgets/list_tile_widget.dart';
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/routes/app_routes.dart';
@@ -8,7 +9,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class InterestScreen extends StatelessWidget {
-  InterestScreen({super.key});
+  final VoidCallback? whatNext;
+  InterestScreen({super.key, this.whatNext});
 
   final List<String> lifestyle = [
     "Volunteering",
@@ -96,7 +98,7 @@ class InterestScreen extends StatelessWidget {
     "Beer tasting",
     "Street food",
     "Fine dining",
-    "Vegan/Vegetarian lifestyle"
+    "Vegan/Vegetarian lifestyle",
   ];
 
   final RxInt selectedLifestyleOption = (-1).obs;
@@ -107,6 +109,8 @@ class InterestScreen extends StatelessWidget {
   final RxInt selectedEntertainmentOption = (-1).obs;
   final RxInt selectedMusicOption = (-1).obs;
   final RxInt selectedFoodAndDrinkOption = (-1).obs;
+
+  final userController = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
@@ -233,8 +237,60 @@ class InterestScreen extends StatelessWidget {
               ),
               SizedBox(height: 10),
               CustomButton(
-                ontap: () => Get.toNamed(AppRoutes.addPictures),
-                isLoading: false.obs,
+                ontap: () async {
+                  String? sLifeStyle;
+                  String? sHobbies;
+                  String? sArtsAndCrafts;
+                  String? sSportsAndLeisure;
+                  String? sTravelAndAdventure;
+                  String? sEntertainment;
+                  String? sMusic;
+                  String? sFoodAndDrink;
+
+                  if (selectedLifestyleOption.value >= 0) {
+                    sLifeStyle = lifestyle[selectedLifestyleOption.value];
+                  }
+                  if (selectedHobbiesOption.value >= 0) {
+                    sHobbies = hobbies[selectedHobbiesOption.value];
+                  }
+                  if (selectedArtsAndCraftsOption.value >= 0) {
+                    sArtsAndCrafts =
+                        artsAndCrafts[selectedArtsAndCraftsOption.value];
+                  }
+                  if (selectedSportsAndLeisureOption.value >= 0) {
+                    sSportsAndLeisure =
+                        sportsAndLeisure[selectedSportsAndLeisureOption.value];
+                  }
+                  if (selectedTravelAndAdventureOption.value >= 0) {
+                    sTravelAndAdventure =
+                        travelAndAdventure[selectedTravelAndAdventureOption
+                            .value];
+                  }
+                  if (selectedEntertainmentOption.value >= 0) {
+                    sEntertainment =
+                        entertainment[selectedEntertainmentOption.value];
+                  }
+                  if (selectedMusicOption.value >= 0) {
+                    sMusic = music[selectedMusicOption.value];
+                  }
+                  if (selectedFoodAndDrinkOption.value >= 0) {
+                    sFoodAndDrink =
+                        foodAndDrink[selectedFoodAndDrinkOption.value];
+                  }
+
+                  await userController.updateBasic2(
+                    lifestyleAndValues: sLifeStyle,
+                    hobbies: sHobbies,
+                    artsAndCreativity: sArtsAndCrafts,
+                    sportsAndFitness: sSportsAndLeisure,
+                    travelAndAdventure: sTravelAndAdventure,
+                    entertainment: sEntertainment,
+                    music: sMusic,
+                    foodAndDrink: sFoodAndDrink,
+                    whatNext: whatNext,
+                  );
+                },
+                isLoading: userController.isloading,
                 child: Text(
                   "Next",
                   style: GoogleFonts.figtree(

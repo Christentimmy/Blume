@@ -1,12 +1,15 @@
+import 'package:blume/app/controller/location_controller.dart';
 import 'package:blume/app/resources/colors.dart';
-import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SetLocationScreen extends StatelessWidget {
-  const SetLocationScreen({super.key});
+  final VoidCallback? whatNext;
+  SetLocationScreen({super.key, this.whatNext});
+
+  final locationController = Get.find<LocationController>();
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +57,10 @@ class SetLocationScreen extends StatelessWidget {
               ),
               Spacer(),
               CustomButton(
-                ontap: () => Get.toNamed(AppRoutes.bottomNavigation),
-                isLoading: false.obs,
+                ontap: () async {
+                  await locationController.getCurrentCity(nextScreen: whatNext);
+                },
+                isLoading: locationController.isloading,
                 child: Text(
                   "Location",
                   style: GoogleFonts.figtree(

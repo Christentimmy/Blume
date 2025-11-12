@@ -1,10 +1,9 @@
-import 'package:blume/app/resources/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class FunctionalDatePicker extends StatefulWidget {
-  final Function(DateTime)? onDateChanged;
+  final Function(String)? onDateChanged;
 
   const FunctionalDatePicker({super.key, this.onDateChanged});
 
@@ -31,16 +30,22 @@ class _FunctionalDatePickerState extends State<FunctionalDatePicker> {
   }
 
   void _updateDate() {
-    if (selectedDay != null && selectedMonth != null && selectedYear != null) {
-      final maxDays = getDaysInMonth(selectedMonth!, selectedYear!);
-      if (selectedDay! > maxDays) {
-        setState(() {
-          selectedDay = maxDays;
-        });
+    try {
+      if (selectedDay != null &&
+          selectedMonth != null &&
+          selectedYear != null) {
+        final maxDays = getDaysInMonth(selectedMonth!, selectedYear!);
+        if (selectedDay! > maxDays) {
+          setState(() {
+            selectedDay = maxDays;
+          });
+        }
+        final date = DateTime(selectedYear!, selectedMonth!, selectedDay!);
+        final formattedDate = date.toIso8601String();
+        widget.onDateChanged?.call(formattedDate);
       }
-
-      final date = DateTime(selectedYear!, selectedMonth!, selectedDay!);
-      widget.onDateChanged?.call(date);
+    } catch (e) {
+      debugPrint(e.toString());
     }
   }
 
@@ -98,7 +103,9 @@ class _FunctionalDatePickerState extends State<FunctionalDatePicker> {
             onChanged(newValue);
             _updateDate();
           },
-          dropdownColor: AppColors.secondaryColor,
+          dropdownColor: Get.isDarkMode
+              ? const Color.fromARGB(255, 100, 19, 13)
+              : Colors.grey,
           borderRadius: BorderRadius.circular(15),
         ),
       ),

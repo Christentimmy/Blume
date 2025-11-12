@@ -1,14 +1,17 @@
+import 'package:blume/app/controller/user_controller.dart';
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/widgets/custom_button.dart';
 import 'package:blume/app/widgets/custom_textfield.dart';
+import 'package:blume/app/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ReligionWorkScreen extends StatelessWidget {
-  ReligionWorkScreen({super.key});
+  final VoidCallback? whatNext;
+  ReligionWorkScreen({super.key, this.whatNext});
 
   final List<String> religion = [
     "Agnostic",
@@ -27,8 +30,8 @@ class ReligionWorkScreen extends StatelessWidget {
   final List<String> education = [
     "High school diploma or GED",
     "Some college",
-    "Associate's degree"
-        "Bachelor's degree",
+    "Associate's degree",
+    "Bachelor's degree",
     "Master's degree",
     "Doctorate (PhD, MD, JD, etc.)",
     "Trade/technical/vocational training",
@@ -90,7 +93,10 @@ class ReligionWorkScreen extends StatelessWidget {
   final RxInt selectedWorkOption = (-1).obs;
   final RxInt selectedHeightOption = (-1).obs;
   final RxInt selectedSexualOrientationOption = (-1).obs;
-  final RxInt selectedLanguagesSpokenOption = (-1).obs;
+  final RxList<String> selectedLanguagesSpokenOption = <String>[].obs;
+
+  final occupationController = TextEditingController();
+  final userController = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
@@ -144,6 +150,7 @@ class ReligionWorkScreen extends StatelessWidget {
                 prefixIcon: Icons.work,
                 prefixIconColor: AppColors.primaryColor,
                 hintText: "Occupation",
+                controller: occupationController,
               ),
               SizedBox(height: Get.height * 0.04),
               Expanded(
@@ -180,9 +187,9 @@ class ReligionWorkScreen extends StatelessWidget {
                     SizedBox(height: Get.height * 0.03),
                     buildTitle(title: "Languages Spoken"),
                     SizedBox(height: Get.height * 0.01),
-                    buildOptions(
+                    buildListOptions(
                       options: languagesSpoken,
-                      selectedOption: selectedLanguagesSpokenOption,
+                      selectedOptions: selectedLanguagesSpokenOption,
                     ),
                     SizedBox(height: Get.height * 0.03),
                   ],
@@ -203,8 +210,46 @@ class ReligionWorkScreen extends StatelessWidget {
               ),
               SizedBox(height: 10),
               CustomButton(
-                ontap: () => Get.toNamed(AppRoutes.interest),
-                isLoading: false.obs,
+                ontap: () async {
+                  String occupation = occupationController.text;
+                  if (occupation.isEmpty) {
+                    CustomSnackbar.showErrorToast("Occupation is required");
+                    return;
+                  }
+                  if (selectedReligionOption.value == -1) {
+                    CustomSnackbar.showErrorToast("Religion is required");
+                    return;
+                  }
+
+                  String sReligion = religion[selectedReligionOption.value];
+
+                  // Only include fields that have been selected
+                  String? sEducation = selectedEducationOption.value >= 0
+                      ? education[selectedEducationOption.value]
+                      : null;
+
+                  String? sHeight = selectedHeightOption.value >= 0
+                      ? height[selectedHeightOption.value]
+                      : null;
+
+                  String? sSexualOrientation =
+                      selectedSexualOrientationOption.value >= 0
+                      ? sexualOrientation[selectedSexualOrientationOption.value]
+                      : null;
+
+                  await userController.updateBasic(
+                    occupation: occupation,
+                    religion: sReligion,
+                    whatNext: whatNext,
+                    education: sEducation,
+                    height: sHeight,
+                    sexualOrientation: sSexualOrientation,
+                    languagesSpoken: selectedLanguagesSpokenOption.isNotEmpty
+                        ? selectedLanguagesSpokenOption
+                        : null,
+                  );
+                },
+                isLoading: userController.isloading,
                 child: Text(
                   "Next",
                   style: GoogleFonts.figtree(
@@ -259,6 +304,55 @@ class ReligionWorkScreen extends StatelessWidget {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Wrap buildListOptions({
+    required List<String> options,
+    required RxList selectedOptions,
+  }) {
+    return Wrap(
+      runSpacing: 10,
+      children: List.generate(
+        options.length,
+        (index) => Padding(
+          padding: const EdgeInsets.only(right: 10),
+          child: Obx(() {
+            return InkWell(
+              onTap: () {
+                if (selectedOptions.contains(options[index])) {
+                  selectedOptions.removeAt(selectedOptions.indexOf(options[index]));
+                } else {
+                  selectedOptions.add(options[index]);
+                }
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 15,
+                  vertical: 10,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  border: selectedOptions.contains(options[index])
+                      ? Border.all(color: AppColors.primaryColor)
+                      : Border.all(color: Colors.grey),
+                  color: Colors.transparent,
+                ),
+                child: Text(
+                  options[index],
+                  style: GoogleFonts.figtree(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: selectedOptions.contains(options[index])
+                        ? AppColors.primaryColor
+                        : Get.theme.primaryColor,
+                  ),
+                ),
+              ),
+            );
+          }),
         ),
       ),
     );

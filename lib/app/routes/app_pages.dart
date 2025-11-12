@@ -96,10 +96,26 @@ class AppPages {
       VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
       return LifeStyleScreen(whatNext: whatNext);
     }),
-    GetPage(name: AppRoutes.religionWork, page: () => ReligionWorkScreen()),
-    GetPage(name: AppRoutes.interest, page: () => InterestScreen()),
-    GetPage(name: AppRoutes.addPictures, page: () => AddPicturesScreen()),
-    GetPage(name: AppRoutes.setLocation, page: () => SetLocationScreen()),
+    GetPage(name: AppRoutes.religionWork, page: () {
+      final arguments = Get.arguments ?? {};
+      VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
+      return ReligionWorkScreen(whatNext: whatNext);
+    }),
+    GetPage(name: AppRoutes.interest, page: () {
+      final arguments = Get.arguments ?? {};
+      VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
+      return InterestScreen(whatNext: whatNext);
+    }),
+    GetPage(name: AppRoutes.addPictures, page: () {
+      final arguments = Get.arguments ?? {};
+      VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
+      return AddPicturesScreen(whatNext: whatNext);
+    }),
+    GetPage(name: AppRoutes.setLocation, page: () {
+      final arguments = Get.arguments ?? {};
+      VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
+      return SetLocationScreen(whatNext: whatNext);
+    }),
     GetPage(name: AppRoutes.home, page: () => HomeScreen()),
     GetPage(name: AppRoutes.match, page: () => MatchScreen()),
     GetPage(name: AppRoutes.notification, page: () => NotificationScreen()),

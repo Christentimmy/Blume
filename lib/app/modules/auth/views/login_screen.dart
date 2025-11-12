@@ -1,3 +1,4 @@
+import 'package:blume/app/controller/auth_controller.dart';
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/utils/validator.dart';
@@ -8,7 +9,13 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  LoginScreen({super.key});
+
+  final formKey = GlobalKey<FormState>();
+  final authController = Get.find<AuthController>();
+
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -44,46 +51,56 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: Get.height * 0.1),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 3.0,
-                  vertical: 2,
-                ),
-                child: Text(
-                  "Email",
-                  style: GoogleFonts.figtree(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.primaryColor,
-                  ),
-                ),
-              ),
-              CustomTextField(
-                hintText: "Enter your email",
-                validator: validateEmail,
-                prefixIcon: Icons.email,
-                prefixIconColor: AppColors.primaryColor,
-              ),
+              Form(
+                key: formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 3.0,
+                        vertical: 2,
+                      ),
+                      child: Text(
+                        "Email",
+                        style: GoogleFonts.figtree(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
+                    ),
+                    CustomTextField(
+                      controller: emailController,
+                      hintText: "Enter your email",
+                      validator: validateEmail,
+                      prefixIcon: Icons.email,
+                      prefixIconColor: AppColors.primaryColor,
+                    ),
 
-              SizedBox(height: Get.height * 0.02),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 3.0,
-                  vertical: 2,
+                    SizedBox(height: Get.height * 0.02),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 3.0,
+                        vertical: 2,
+                      ),
+                      child: Text(
+                        "Password",
+                        style: GoogleFonts.figtree(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
+                    ),
+                    CustomTextField(
+                      controller: passwordController,
+                      hintText: "Enter your password",
+                      prefixIcon: Icons.lock,
+                      prefixIconColor: AppColors.primaryColor,
+                    ),
+                  ],
                 ),
-                child: Text(
-                  "Password",
-                  style: GoogleFonts.figtree(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.primaryColor,
-                  ),
-                ),
-              ),
-              CustomTextField(
-                hintText: "Enter your password",
-                prefixIcon: Icons.lock,
-                prefixIconColor: AppColors.primaryColor,
               ),
               SizedBox(height: 5),
               Row(
@@ -100,8 +117,14 @@ class LoginScreen extends StatelessWidget {
               ),
               SizedBox(height: Get.height * 0.05),
               CustomButton(
-                ontap: () => Get.toNamed(AppRoutes.bottomNavigation),
-                isLoading: false.obs,
+                ontap: () async {
+                  if (!formKey.currentState!.validate()) return;
+                  await authController.loginUser(
+                    identifier: emailController.text,
+                    password: passwordController.text,
+                  );
+                },
+                isLoading: authController.isloading,
                 child: Text(
                   "Login",
                   style: Get.textTheme.bodyMedium?.copyWith(
