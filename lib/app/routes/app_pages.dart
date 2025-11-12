@@ -55,7 +55,11 @@ class AppPages {
         return OtpVerifyScreen(email: email, whatNext: whatNext);
       },
     ),
-    GetPage(name: AppRoutes.updateName, page: () => UpdateNameScreen()),
+    GetPage(name: AppRoutes.updateName, page: (){
+      final arguments = Get.arguments ?? {};
+      VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
+      return UpdateNameScreen(whatNext: whatNext);
+    }),
     GetPage(name: AppRoutes.updateDob, page: () => UpdateDobScreen()),
     GetPage(name: AppRoutes.updateGender, page: () => UpdateGenderScreen()),
     GetPage(

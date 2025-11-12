@@ -38,6 +38,7 @@ class CustomTextField extends StatelessWidget {
   FloatingLabelBehavior? floatingLabelBehavior;
   Color? suffixIconcolor;
   TextAlign? textAlign;
+  bool? showError;
 
   CustomTextField({
     super.key,
@@ -73,6 +74,7 @@ class CustomTextField extends StatelessWidget {
     this.contentPadding,
     this.suffixIconcolor,
     this.textAlign,
+    this.showError,
   });
 
   @override
@@ -114,11 +116,19 @@ class CustomTextField extends StatelessWidget {
         decoration: InputDecoration(
           fillColor:
               bgColor ??
-              (Get.isDarkMode ? AppColors.darkButtonColor : AppColors.lightButtonColor),
-          errorText: null,
-          errorStyle: const TextStyle(height: 0, fontSize: 0),
-          errorMaxLines: null,
-          error: null,
+              (Get.isDarkMode
+                  ? AppColors.darkButtonColor
+                  : AppColors.lightButtonColor),
+          // errorText: null,
+          errorStyle: showError == true
+              ? GoogleFonts.roboto(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.red,
+                )
+              : const TextStyle(height: 0, fontSize: 0),
+          // errorMaxLines: null,
+          // error: null,
           filled: true,
           counterText: maxLength != null ? "" : null,
           hintText: hintText,

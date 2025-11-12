@@ -27,7 +27,7 @@ class AuthController extends GetxController {
       if (response == null) return;
       final decoded = json.decode(response.body);
       final message = decoded["message"];
-      if (response.statusCode != 200) {
+      if (response.statusCode != 201) {
         CustomSnackbar.showErrorToast(message);
         return;
       }
@@ -95,13 +95,13 @@ class AuthController extends GetxController {
   }
 
   Future<void> loginUser({
-    required String email,
+    required String identifier,
     required String password,
   }) async {
     isloading.value = true;
     try {
       final response = await authService.loginUser(
-        email: email,
+        identifier: identifier,
         password: password,
       );
       if (response == null) return;

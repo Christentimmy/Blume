@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:blume/app/utils/base_url.dart';
 import 'package:blume/app/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +13,11 @@ class AuthService {
     required String password,
   }) async {
     try {
-      final response = http.post(
+      final response = await http.post(
         Uri.parse("$baseUrl/auth/register"),
-        body: {"email": email, "phone": phone, "password": password},
-      );
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"email": email, "phone": phone, "password": password}),
+      ).timeout(const Duration(seconds: 15));
       return response;
     } on SocketException catch (e) {
       debugPrint("No internet connection $e");
@@ -65,7 +65,7 @@ class AuthService {
   }
 
   Future<http.Response?> loginUser({
-    required String email,
+    required String identifier,
     required String password,
   }) async {
     try {
@@ -73,7 +73,7 @@ class AuthService {
           .post(
             Uri.parse("$baseUrl/auth/login"),
             headers: {"Content-Type": "application/json"},
-            body: jsonEncode({"email": email, "password": password}),
+            body: jsonEncode({"identifier": identifier, "password": password}),
           )
           .timeout(const Duration(seconds: 15));
 

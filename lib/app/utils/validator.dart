@@ -75,7 +75,6 @@ String? validateEmail(String? value) {
   ];
 
   final email = value.trim().toLowerCase();
-  print("Email---$email");
   final domain = email.split('@').length > 1 ? email.split('@').last : '';
   if (blockedDomains.contains(domain)) {
     return 'Disposable email addresses are not allowed';

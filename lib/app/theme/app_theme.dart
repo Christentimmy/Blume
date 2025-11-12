@@ -8,6 +8,10 @@ final ThemeData lightTheme = ThemeData(
   splashColor: Colors.transparent,
   splashFactory: NoSplash.splashFactory,
   scaffoldBackgroundColor: AppColors.lightBackground,
+  textSelectionTheme: const TextSelectionThemeData(
+    cursorColor: AppColors.primaryColor,
+    selectionHandleColor: AppColors.primaryColor,
+  ),
   textTheme: GoogleFonts.figtreeTextTheme().copyWith(
     bodyLarge: GoogleFonts.montserrat(
       fontSize: 20,
@@ -27,13 +31,16 @@ final ThemeData lightTheme = ThemeData(
   ),
 );
 
-
 final ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
   primaryColor: Colors.white,
   splashColor: Colors.transparent,
   splashFactory: NoSplash.splashFactory,
   scaffoldBackgroundColor: AppColors.darkBackground,
+  textSelectionTheme: const TextSelectionThemeData(
+    cursorColor: AppColors.primaryColor,
+    selectionHandleColor: AppColors.primaryColor,
+  ),
   textTheme: GoogleFonts.figtreeTextTheme().copyWith(
     bodyLarge: GoogleFonts.montserrat(
       fontSize: 20,

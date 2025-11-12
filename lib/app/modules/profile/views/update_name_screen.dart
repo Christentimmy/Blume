@@ -1,5 +1,5 @@
+import 'package:blume/app/controller/user_controller.dart';
 import 'package:blume/app/resources/colors.dart';
-import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/widgets/custom_button.dart';
 import 'package:blume/app/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +7,12 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class UpdateNameScreen extends StatelessWidget {
-  const UpdateNameScreen({super.key});
+  final VoidCallback? whatNext;
+  UpdateNameScreen({super.key, this.whatNext});
+
+  final userController = Get.find<UserController>();
+  final formKey = GlobalKey<FormState>();
+  final nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -41,15 +46,39 @@ class UpdateNameScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: Get.height * 0.02),
-              CustomTextField(
-                hintText: "Enter your first name",
-                prefixIcon: Icons.person,
-                prefixIconColor: AppColors.primaryColor,
+              Form(
+                key: formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: CustomTextField(
+                  controller: nameController,
+                  hintText: "Enter your full name",
+                  prefixIcon: Icons.person,
+                  prefixIconColor: AppColors.primaryColor,
+                  showError: true,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Please enter your full name";
+                    }
+                    if (value.split(" ").length < 2) {
+                      return "Please enter your full name";
+                    }
+                    if (value.split(" ")[1].length < 2) {
+                      return "Please enter your full name";
+                    }
+                    return null;
+                  },
+                ),
               ),
               const Spacer(),
               CustomButton(
-                ontap: () => Get.toNamed(AppRoutes.updateDob),
-                isLoading: false.obs,
+                ontap: () async {
+                  if (!formKey.currentState!.validate()) return;
+                  await userController.updateName(
+                    name: nameController.text,
+                    whatNext: whatNext,
+                  );
+                },
+                isLoading: userController.isloading,
                 child: Text(
                   "Next",
                   style: GoogleFonts.figtree(
