@@ -93,4 +93,42 @@ class AuthController extends GetxController {
       isloading.value = false;
     }
   }
+
+  Future<void> loginUser({
+    required String email,
+    required String password,
+  }) async {
+    isloading.value = true;
+    try {
+      final response = await authService.loginUser(
+        email: email,
+        password: password,
+      );
+      if (response == null) return;
+      final decoded = json.decode(response.body);
+      String message = decoded["message"] ?? "";
+      String token = decoded["token"] ?? "";
+
+      final storageController = Get.find<StorageController>();
+      await storageController.storeToken(token);
+
+      if (response.statusCode != 200) {
+        CustomSnackbar.showErrorToast(message);
+        return;
+      }
+      // final userController = Get.find<UserController>();
+      // final storyController = Get.find<StoryController>();
+      // await userController.getUserDetails();
+      // await userController.getPotentialMatches();
+      // final socketController = Get.find<SocketController>();
+      // socketController.initializeSocket();
+      // await handleLoginNavigation();
+      Get.offNamed(AppRoutes.bottomNavigation);
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      isloading.value = false;
+    }
+  }
+
 }
