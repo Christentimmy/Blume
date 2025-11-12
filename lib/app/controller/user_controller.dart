@@ -40,6 +40,67 @@ class UserController extends GetxController {
     }
   }
 
-  
+  Future<void> updateDob({
+    required DateTime dob,
+    VoidCallback? whatNext,
+  }) async {
+    isloading.value = true;
+    try {
+      final storageController = Get.find<StorageController>();
+      final token = await storageController.getToken();
+      if (token == null) return;
+      final response = await userService.updateDob(token: token, dob: dob);
+      if (response == null) return;
+      final decoded = json.decode(response.body);
+      String message = decoded["message"] ?? "";
+      if (response.statusCode != 200) {
+        CustomSnackbar.showErrorToast(message);
+        return;
+      }
+      if (whatNext != null) {
+        whatNext();
+        return;
+      }
+      Get.toNamed(AppRoutes.updateGender);
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      isloading.value = false;
+    }
+  }
+
+  Future<void> updateGender({
+    required String gender,
+    required bool showGender,
+    required VoidCallback? whatNext,
+  }) async {
+    isloading.value = true;
+    try {
+      final storageController = Get.find<StorageController>();
+      final token = await storageController.getToken();
+      if (token == null) return;
+      final response = await userService.updateGender(
+        token: token,
+        gender: gender,
+        showGender: showGender,
+      );
+      if (response == null) return;
+      final decoded = json.decode(response.body);
+      String message = decoded["message"] ?? "";
+      if (response.statusCode != 200) {
+        CustomSnackbar.showErrorToast(message);
+        return;
+      }
+      if (whatNext != null) {
+        whatNext();
+        return;
+      }
+      Get.toNamed(AppRoutes.relationshipPreference);
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      isloading.value = false;
+    }
+  }
 
 }

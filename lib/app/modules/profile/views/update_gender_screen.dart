@@ -1,16 +1,18 @@
+import 'package:blume/app/controller/user_controller.dart';
 import 'package:blume/app/resources/colors.dart';
-import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/widgets/custom_button.dart';
+import 'package:blume/app/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class UpdateGenderScreen extends StatelessWidget {
-  UpdateGenderScreen({super.key});
+  final VoidCallback? whatNext;
+  UpdateGenderScreen({super.key, this.whatNext});
 
   final Rxn<String> selectedGender = Rxn<String>();
-
   final Rx<bool> showGender = false.obs;
+  final userController = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
@@ -127,8 +129,18 @@ class UpdateGenderScreen extends StatelessWidget {
               ),
               SizedBox(height: Get.height * 0.02),
               CustomButton(
-                ontap: () => Get.toNamed(AppRoutes.relationshipPreference),
-                isLoading: false.obs,
+                ontap: () async {
+                  if (selectedGender.value == null) {
+                    CustomSnackbar.showErrorToast("Please select a gender");
+                    return;
+                  }
+                  await userController.updateGender(
+                    gender: selectedGender.value!,
+                    showGender: showGender.value,
+                    whatNext: whatNext,
+                  );
+                },
+                isLoading: userController.isloading,
                 child: Text(
                   "Next",
                   style: GoogleFonts.figtree(

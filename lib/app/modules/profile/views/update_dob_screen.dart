@@ -1,14 +1,16 @@
+import 'package:blume/app/controller/user_controller.dart';
 import 'package:blume/app/modules/profile/widgets/date_widget.dart';
-import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class UpdateDobScreen extends StatelessWidget {
-  UpdateDobScreen({super.key});
+  final VoidCallback? whatNext;
+  UpdateDobScreen({super.key, this.whatNext});
 
   final Rxn<DateTime> selectedDate = Rxn<DateTime>();
+  final userController = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +50,13 @@ class UpdateDobScreen extends StatelessWidget {
               ),
               const Spacer(),
               CustomButton(
-                ontap: () => Get.toNamed(AppRoutes.updateGender),
+                ontap: () async {
+                  if (selectedDate.value == null) return;
+                  await userController.updateDob(
+                    dob: selectedDate.value!,
+                    whatNext: whatNext,
+                  );
+                },
                 isLoading: false.obs,
                 child: Text(
                   "Next",

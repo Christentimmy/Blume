@@ -60,11 +60,23 @@ class AppPages {
       VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
       return UpdateNameScreen(whatNext: whatNext);
     }),
-    GetPage(name: AppRoutes.updateDob, page: () => UpdateDobScreen()),
-    GetPage(name: AppRoutes.updateGender, page: () => UpdateGenderScreen()),
+    GetPage(name: AppRoutes.updateDob, page: () {
+      final arguments = Get.arguments ?? {};
+      VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
+      return UpdateDobScreen(whatNext: whatNext);
+    }),
+    GetPage(name: AppRoutes.updateGender, page: (){
+      final arguments = Get.arguments ?? {};
+      VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
+      return UpdateGenderScreen(whatNext: whatNext);
+    }),
     GetPage(
       name: AppRoutes.relationshipPreference,
-      page: () => RelationshipPreferenceScreen(),
+      page: (){
+        final arguments = Get.arguments ?? {};
+        VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
+        return RelationshipPreferenceScreen(whatNext: whatNext);
+      },
     ),
     GetPage(
       name: AppRoutes.distancePreference,

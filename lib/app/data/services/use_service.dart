@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class UserService {
-
   Future<http.Response?> updateName({
     required String token,
     required String name,
@@ -34,4 +33,56 @@ class UserService {
     return null;
   }
 
+  Future<http.Response?> updateDob({
+    required String token,
+    required DateTime dob,
+  }) async {
+    try {
+      final response = await http
+          .patch(
+            Uri.parse("$baseUrl/user/update-dob"),
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer $token",
+            },
+            body: jsonEncode({"date_of_birth": dob}),
+          )
+          .timeout(const Duration(seconds: 15));
+      return response;
+    } on SocketException catch (e) {
+      debugPrint("No internet connection $e");
+    } on TimeoutException {
+      debugPrint("Request timeout");
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
+
+  Future<http.Response?> updateGender({
+    required String token,
+    required String gender,
+    required bool showGender,
+  }) async {
+    try {
+      final response = await http
+          .patch(
+            Uri.parse("$baseUrl/user/update-gender"),
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer $token",
+            },
+            body: jsonEncode({"gender": gender, "showGender": showGender}),
+          )
+          .timeout(const Duration(seconds: 15));
+      return response;
+    } on SocketException catch (e) {
+      debugPrint("No internet connection $e");
+    } on TimeoutException {
+      debugPrint("Request timeout");
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
 }
