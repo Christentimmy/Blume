@@ -80,10 +80,22 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.distancePreference,
-      page: () => DistancePreferenceScreen(),
+      page: (){
+        final arguments = Get.arguments ?? {};
+        VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
+        return DistancePreferenceScreen(whatNext: whatNext);
+      },
     ),
-    GetPage(name: AppRoutes.education, page: () => EducationScreen()),
-    GetPage(name: AppRoutes.lifestyle, page: () => LifeStyleScreen()),
+    GetPage(name: AppRoutes.education, page: (){
+      final arguments = Get.arguments ?? {};
+      VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
+      return EducationScreen(whatNext: whatNext);
+    }),
+    GetPage(name: AppRoutes.lifestyle, page: () {
+      final arguments = Get.arguments ?? {};
+      VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
+      return LifeStyleScreen(whatNext: whatNext);
+    }),
     GetPage(name: AppRoutes.religionWork, page: () => ReligionWorkScreen()),
     GetPage(name: AppRoutes.interest, page: () => InterestScreen()),
     GetPage(name: AppRoutes.addPictures, page: () => AddPicturesScreen()),

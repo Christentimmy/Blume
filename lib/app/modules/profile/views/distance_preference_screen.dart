@@ -1,5 +1,5 @@
+import 'package:blume/app/controller/user_controller.dart';
 import 'package:blume/app/resources/colors.dart';
-import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,9 +7,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class DistancePreferenceScreen extends StatelessWidget {
-  DistancePreferenceScreen({super.key});
+  final VoidCallback? whatNext;
+  DistancePreferenceScreen({super.key, this.whatNext});
 
   final RxDouble distance = 50.0.obs;
+  final userController = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +53,7 @@ class DistancePreferenceScreen extends StatelessWidget {
               Obx(
                 () => Slider(
                   activeColor: AppColors.primaryColor,
-                  inactiveColor: AppColors.primaryColor.withOpacity(0.3),
+                  inactiveColor: AppColors.primaryColor.withValues(alpha: 0.3),
                   value: distance.value,
                   min: 0,
                   max: 100,
@@ -75,8 +77,13 @@ class DistancePreferenceScreen extends StatelessWidget {
               ),
               SizedBox(height: 10),
               CustomButton(
-                ontap: () => Get.toNamed(AppRoutes.education),
-                isLoading: false.obs,
+                ontap: () async {
+                  await userController.distancePreference(
+                    distance: distance.value,
+                    whatNext: whatNext,
+                  );
+                },
+                isLoading: userController.isloading,
                 child: Text(
                   "Next",
                   style: GoogleFonts.figtree(

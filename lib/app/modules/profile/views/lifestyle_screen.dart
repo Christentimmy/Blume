@@ -1,3 +1,4 @@
+import 'package:blume/app/controller/user_controller.dart';
 import 'package:blume/app/modules/profile/widgets/list_tile_widget.dart';
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/routes/app_routes.dart';
@@ -8,7 +9,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class LifeStyleScreen extends StatelessWidget {
-  LifeStyleScreen({super.key});
+  final VoidCallback? whatNext;
+  LifeStyleScreen({super.key, this.whatNext});
 
   final List<String> drinks = [
     "I don’t drink",
@@ -41,13 +43,15 @@ class LifeStyleScreen extends StatelessWidget {
     "Allergic but still love them",
     "I have a small zoo",
     "No, I hate animals",
-    "No, but I love animals"
+    "No, but I love animals",
   ];
 
   final RxInt selectedDrinkOption = (-1).obs;
   final RxInt selectedSmokeOption = (-1).obs;
   final RxInt selectedWorkoutOption = (-1).obs;
   final RxInt selectedPetOption = (-1).obs;
+
+  final userController = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
@@ -147,8 +151,18 @@ class LifeStyleScreen extends StatelessWidget {
               ),
               SizedBox(height: 10),
               CustomButton(
-                ontap: () => Get.toNamed(AppRoutes.religionWork),
-                isLoading: false.obs,
+                ontap: () async {
+                  String smoking = smoke[selectedSmokeOption.value];
+                  String drinking = drinks[selectedDrinkOption.value];
+                  String work = workout[selectedWorkoutOption.value];
+                  await userController.updateLifestyle(
+                    smoking: smoking,
+                    drinking: drinking,
+                    workout: work,
+                    whatNext: whatNext,
+                  );
+                },
+                isLoading: userController.isloading,
                 child: Text(
                   "Next",
                   style: GoogleFonts.figtree(

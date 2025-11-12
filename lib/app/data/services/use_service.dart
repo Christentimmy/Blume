@@ -85,4 +85,114 @@ class UserService {
     }
     return null;
   }
+
+  Future<http.Response?> updatePreference({
+    required String token,
+    required String preference,
+  }) async {
+    try {
+      final response = await http
+          .patch(
+            Uri.parse("$baseUrl/user/update-preference"),
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer $token",
+            },
+            body: jsonEncode({"relationship_preference": preference}),
+          )
+          .timeout(const Duration(seconds: 15));
+      return response;
+    } on SocketException catch (e) {
+      debugPrint("No internet connection $e");
+    } on TimeoutException {
+      debugPrint("Request timeout");
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
+
+  Future<http.Response?> distancePreference({
+    required String token,
+    required double distance,
+  }) async {
+    try {
+      final response = await http
+          .patch(
+            Uri.parse("$baseUrl/user/update-distance-preference"),
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer $token",
+            },
+            body: jsonEncode({"distance": distance}),
+          )
+          .timeout(const Duration(seconds: 15));
+      return response;
+    } on SocketException catch (e) {
+      debugPrint("No internet connection $e");
+    } on TimeoutException {
+      debugPrint("Request timeout");
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
+
+  Future<http.Response?> updateEducation({
+    required String token,
+    required String education,
+  }) async {
+    try {
+      final response = await http
+          .patch(
+            Uri.parse("$baseUrl/user/update-education"),
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer $token",
+            },
+            body: jsonEncode({"education": education}),
+          )
+          .timeout(const Duration(seconds: 15));
+      return response;
+    } on SocketException catch (e) {
+      debugPrint("No internet connection $e");
+    } on TimeoutException {
+      debugPrint("Request timeout");
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
+
+  Future<http.Response?> updateLifestyle({
+    required String token,
+    required String smoking,
+    required String drinking,
+    required String workout,
+  }) async {
+    try {
+      final response = await http
+          .patch(
+            Uri.parse("$baseUrl/user/update-lifestyle"),
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer $token",
+            },
+            body: jsonEncode({
+              "smoking": smoking,
+              "drinking": drinking,
+              "workout": workout,
+            }),
+          )
+          .timeout(const Duration(seconds: 15));
+      return response;
+    } on SocketException catch (e) {
+      debugPrint("No internet connection $e");
+    } on TimeoutException {
+      debugPrint("Request timeout");
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
 }

@@ -1,5 +1,5 @@
+import 'package:blume/app/controller/user_controller.dart';
 import 'package:blume/app/resources/colors.dart';
-import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,6 +20,7 @@ class RelationshipPreferenceScreen extends StatelessWidget {
   ];
 
   final RxInt selectedIndex = (-1).obs;
+  final userController = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
@@ -105,8 +106,15 @@ class RelationshipPreferenceScreen extends StatelessWidget {
               ),
               SizedBox(height: 10),
               CustomButton(
-                ontap: () => Get.toNamed(AppRoutes.distancePreference),
-                isLoading: false.obs,
+                ontap: () async {
+                  if (selectedIndex.value == -1) return;
+                  String preference = relations[selectedIndex.value];
+                  await userController.updatePreference(
+                    preference: preference,
+                    whatNext: whatNext,
+                  );
+                },
+                isLoading: userController.isloading,
                 child: Text(
                   "Next",
                   style: GoogleFonts.figtree(

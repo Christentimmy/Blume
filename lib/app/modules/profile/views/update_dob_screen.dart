@@ -57,7 +57,7 @@ class UpdateDobScreen extends StatelessWidget {
                     whatNext: whatNext,
                   );
                 },
-                isLoading: false.obs,
+                isLoading: userController.isloading,
                 child: Text(
                   "Next",
                   style: GoogleFonts.figtree(

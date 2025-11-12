@@ -1,3 +1,4 @@
+import 'package:blume/app/controller/user_controller.dart';
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/widgets/custom_button.dart';
@@ -8,7 +9,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class EducationScreen extends StatelessWidget {
-  const EducationScreen({super.key});
+  final VoidCallback? whatNext;
+  EducationScreen({super.key, this.whatNext});
+
+  final userController = Get.find<UserController>();
+  final educationController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -57,10 +63,15 @@ class EducationScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: Get.height * 0.02),
-              CustomTextField(
-                hintText: "Enter your education",
-                prefixIcon: Icons.person,
-                prefixIconColor: AppColors.primaryColor,
+              Form(
+                key: formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: CustomTextField(
+                  controller: educationController,
+                  hintText: "Enter your education",
+                  prefixIcon: Icons.person,
+                  prefixIconColor: AppColors.primaryColor,
+                ),
               ),
               const Spacer(),
               Center(
@@ -77,8 +88,13 @@ class EducationScreen extends StatelessWidget {
               ),
               SizedBox(height: 10),
               CustomButton(
-                ontap: () => Get.toNamed(AppRoutes.lifestyle),
-                isLoading: false.obs,
+                ontap: () async {
+                  if (!formKey.currentState!.validate()) return;
+                  await userController.updateEducation(
+                    education: educationController.text,
+                  );
+                },
+                isLoading: userController.isloading,
                 child: Text(
                   "Next",
                   style: GoogleFonts.figtree(
