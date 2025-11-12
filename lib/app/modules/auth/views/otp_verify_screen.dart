@@ -116,6 +116,7 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
           () => InkWell(
             onTap: () async {
               timerController.startTimer();
+              await authController.sendOtp(email: widget.email);
             },
             child: timerController.secondsRemaining.value == 0
                 ? Text(
