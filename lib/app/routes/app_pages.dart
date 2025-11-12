@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:blume/app/modules/auth/views/login_screen.dart';
 import 'package:blume/app/modules/auth/views/otp_verify_screen.dart';
 import 'package:blume/app/modules/auth/views/signup_screen.dart';
@@ -41,12 +43,29 @@ class AppPages {
     GetPage(name: AppRoutes.onboarding, page: () => OnboardingScreen()),
     GetPage(name: AppRoutes.login, page: () => LoginScreen()),
     GetPage(name: AppRoutes.signup, page: () => SignUpScreen()),
-    GetPage(name: AppRoutes.otpVerify, page: () => OtpVerifyScreen()),
+    GetPage(
+      name: AppRoutes.otpVerify,
+      page: () {
+        final arguments = Get.arguments ?? {};
+        String email = arguments["email"] as String;
+        VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
+        if (email.isEmpty) {
+          throw Exception("Email is required");
+        }
+        return OtpVerifyScreen(email: email, whatNext: whatNext);
+      },
+    ),
     GetPage(name: AppRoutes.updateName, page: () => UpdateNameScreen()),
     GetPage(name: AppRoutes.updateDob, page: () => UpdateDobScreen()),
     GetPage(name: AppRoutes.updateGender, page: () => UpdateGenderScreen()),
-    GetPage(name: AppRoutes.relationshipPreference, page: () => RelationshipPreferenceScreen()),
-    GetPage(name: AppRoutes.distancePreference, page: () => DistancePreferenceScreen()),
+    GetPage(
+      name: AppRoutes.relationshipPreference,
+      page: () => RelationshipPreferenceScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.distancePreference,
+      page: () => DistancePreferenceScreen(),
+    ),
     GetPage(name: AppRoutes.education, page: () => EducationScreen()),
     GetPage(name: AppRoutes.lifestyle, page: () => LifeStyleScreen()),
     GetPage(name: AppRoutes.religionWork, page: () => ReligionWorkScreen()),
@@ -68,8 +87,14 @@ class AppPages {
     GetPage(name: AppRoutes.disclaimer, page: () => DisclaimerScreen()),
     GetPage(name: AppRoutes.verification, page: () => VerificationScreen()),
     GetPage(name: AppRoutes.subscription, page: () => SubscriptionScreen()),
-    GetPage(name: AppRoutes.bottomNavigation, page: () => BottomNavigationWidget()),
+    GetPage(
+      name: AppRoutes.bottomNavigation,
+      page: () => BottomNavigationWidget(),
+    ),
     GetPage(name: AppRoutes.quizMatch, page: () => QuizMatchScreen()),
-    GetPage(name: AppRoutes.chooseBoostPlan, page: () => ChooseBoostPlanScreen()),
+    GetPage(
+      name: AppRoutes.chooseBoostPlan,
+      page: () => ChooseBoostPlanScreen(),
+    ),
   ];
 }

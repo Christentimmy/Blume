@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   appinio_swiper: ^2.1.1
+  cherry_toast: ^1.13.0
   flutter:
     sdk: flutter
   flutter_launcher_icons: ^0.14.4
@@ -15,6 +16,7 @@ dependencies:
   font_awesome_flutter: ^10.9.1
   get: ^4.7.2
   google_fonts: ^6.3.0
+  http: ^1.6.0
   pinput: ^5.0.1
   smooth_page_indicator: ^1.2.1
 

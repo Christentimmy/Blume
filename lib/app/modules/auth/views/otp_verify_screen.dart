@@ -8,7 +8,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
 
 class OtpVerifyScreen extends StatefulWidget {
-  const OtpVerifyScreen({super.key});
+  final String email;
+  final VoidCallback? whatNext;
+  const OtpVerifyScreen({super.key, required this.email, this.whatNext});
 
   @override
   State<OtpVerifyScreen> createState() => _OtpVerifyScreenState();
