@@ -1,4 +1,5 @@
 import 'package:blume/app/resources/colors.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -43,7 +44,7 @@ class CustomButton extends StatelessWidget {
         ),
         child: Obx(() {
           return isLoading.value
-              ? const CircularProgressIndicator(color: Colors.white)
+              ? CupertinoActivityIndicator(color: Colors.white)
               : child ?? Text(text.toString(), style: Get.textTheme.bodyMedium);
         }),
       ),

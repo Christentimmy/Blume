@@ -1,6 +1,6 @@
+import 'package:blume/app/controller/auth_controller.dart';
 import 'package:blume/app/controller/timer_controller.dart';
 import 'package:blume/app/resources/colors.dart';
-import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,6 +18,8 @@ class OtpVerifyScreen extends StatefulWidget {
 
 class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
   final timerController = Get.put(TimerController());
+  final otpController = TextEditingController();
+  final authController = Get.find<AuthController>();
 
   @override
   void initState() {
@@ -64,20 +66,31 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
               Center(
                 child: Pinput(
                   length: 6,
+                  controller: otpController,
                   closeKeyboardWhenCompleted: true,
                   hapticFeedbackType: HapticFeedbackType.lightImpact,
                   submittedPinTheme: submittedPinTheme(),
                   focusedPinTheme: focusedPinTheme(),
                   defaultPinTheme: defaultPinTheme(),
-                  onCompleted: (value) => Get.toNamed(AppRoutes.updateName),
+                  onCompleted: (value) async {
+                    await authController.verifyOtp(
+                      otpCode: value,
+                      email: widget.email,
+                      whatNext: widget.whatNext,
+                    );
+                  },
                 ),
               ),
               SizedBox(height: Get.height * 0.02),
               resendOtpRow(),
               const Spacer(),
               CustomButton(
-                ontap: () => Get.toNamed(AppRoutes.updateName),
-                isLoading: false.obs,
+                ontap: () => authController.verifyOtp(
+                  otpCode: otpController.text,
+                  email: widget.email,
+                  whatNext: widget.whatNext,
+                ),
+                isLoading: authController.isOtpVerifyLoading,
                 child: Text(
                   "Verify",
                   style: GoogleFonts.figtree(
