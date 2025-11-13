@@ -197,27 +197,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  AppinioSwiper buildOldSwiper() {
-    return AppinioSwiper(
-      controller: swiperController,
-      cardCount: 20,
-      backgroundCardCount: 2,
-      backgroundCardOffset: Offset(0, -35),
-      loop: true,
-      swipeOptions: SwipeOptions.only(left: true, right: true),
-      onSwipeEnd: (previousIndex, targetIndex, activity) {
-        if (activity.direction == AxisDirection.right && targetIndex == 3) {
-          Get.toNamed(AppRoutes.match);
-        }
-      },
-      cardBuilder: (context, index) {
-        return SizedBox();
-        // final activeIndex = 0.obs;
-        // return buildCard(activeIndex);
-      },
-    );
-  }
-
   Container buildCard({required RxInt activeIndex, required UserModel user}) {
     List lifestyleAndValues = user.basics?.lifestyleAndValues ?? [];
     List hobbies = user.basics?.hobbies ?? [];
