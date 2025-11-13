@@ -1,12 +1,46 @@
+import 'package:blume/app/controller/user_controller.dart';
+import 'package:blume/app/data/models/user_model.dart';
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/widgets/custom_button.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shimmer/shimmer.dart';
 
-class MatchScreen extends StatelessWidget {
-  const MatchScreen({super.key});
+class MatchScreen extends StatefulWidget {
+  final String targetUserId;
+  const MatchScreen({super.key, required this.targetUserId});
+
+  @override
+  State<MatchScreen> createState() => _MatchScreenState();
+}
+
+class _MatchScreenState extends State<MatchScreen> {
+  final userController = Get.find<UserController>();
+  Rxn<UserModel> targetUser = Rxn<UserModel>();
+  final isloading = true.obs;
+
+  @override
+  void dispose() {
+    targetUser.value = null;
+    super.dispose();
+  }
+
+  Future<void> getTargetUser() async {
+    try {
+      final userId = widget.targetUserId;
+      if (userId.isEmpty) return;
+      final targetUser = await userController.getUserWithId(userId: userId);
+      if (targetUser == null) return;
+      this.targetUser.value = targetUser;
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      isloading.value = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,18 +57,6 @@ class MatchScreen extends StatelessWidget {
                     onPressed: () => Get.back(),
                     icon: Icon(Icons.arrow_back_ios_new),
                   ),
-                  // const Spacer(),
-                  // InkWell(
-                  //   onTap: () => Get.toNamed(AppRoutes.addPictures),
-                  //   child: Text(
-                  //     "Skip",
-                  //     style: GoogleFonts.figtree(
-                  //       fontSize: 16,
-                  //       fontWeight: FontWeight.w600,
-                  //       color: AppColors.primaryColor,
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
               SizedBox(height: Get.height * 0.02),
@@ -50,53 +72,47 @@ class MatchScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: Get.height * 0.05),
-              Center(
-                child: SizedBox(
-                  height: Get.height * 0.4,
-                  width: Get.width,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Transform.rotate(
-                        angle: 0.25,
-                        child: Container(
-                          height: Get.height * 0.34,
-                          width: Get.width * 0.42,
-                          margin: EdgeInsets.only(
-                            left: Get.width * 0.15,
-                            bottom: Get.height * 0.1,
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            image: DecorationImage(
-                              image: AssetImage("assets/images/plm.png"),
-                              fit: BoxFit.cover,
+              Obx(() {
+                return Center(
+                  child: SizedBox(
+                    height: Get.height * 0.4,
+                    width: Get.width,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Transform.rotate(
+                          angle: 0.25,
+                          child: Container(
+                            height: Get.height * 0.34,
+                            width: Get.width * 0.42,
+                            margin: EdgeInsets.only(
+                              left: Get.width * 0.15,
+                              bottom: Get.height * 0.1,
+                            ),
+                            child: buildImage(
+                              imageUrl: targetUser.value?.avatar ?? "",
                             ),
                           ),
                         ),
-                      ),
-                      Transform.rotate(
-                        angle: -0.2,
-                        child: Container(
-                          height: Get.height * 0.34,
-                          width: Get.width * 0.42,
-                          margin: EdgeInsets.only(
-                            top: Get.height * 0.07,
-                            right: Get.width * 0.2,
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            image: DecorationImage(
-                              image: AssetImage("assets/images/frm.png"),
-                              fit: BoxFit.cover,
+                        Transform.rotate(
+                          angle: -0.2,
+                          child: Container(
+                            height: Get.height * 0.34,
+                            width: Get.width * 0.42,
+                            margin: EdgeInsets.only(
+                              top: Get.height * 0.07,
+                              right: Get.width * 0.2,
+                            ),
+                            child: buildImage(
+                              imageUrl: userController.user.value?.avatar ?? "",
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ),
+                );
+              }),
               const Spacer(),
               CustomButton(
                 ontap: () {
@@ -128,6 +144,31 @@ class MatchScreen extends StatelessWidget {
               SizedBox(height: Get.height * 0.05),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  ClipRRect buildImage({required String imageUrl}) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: CachedNetworkImage(
+        imageUrl: imageUrl,
+        fit: BoxFit.cover,
+        placeholder: (context, url) {
+          return Shimmer.fromColors(
+            baseColor: Color(0xFF1A1625),
+            highlightColor: AppColors.primaryColor,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Color(0xFF1A1625),
+              ),
+            ),
+          );
+        },
+        errorWidget: (context, url, error) => const Center(
+          child: Icon(Icons.error, color: AppColors.primaryColor),
         ),
       ),
     );

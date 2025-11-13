@@ -55,24 +55,33 @@ class AppPages {
         return OtpVerifyScreen(email: email, whatNext: whatNext);
       },
     ),
-    GetPage(name: AppRoutes.updateName, page: (){
-      final arguments = Get.arguments ?? {};
-      VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
-      return UpdateNameScreen(whatNext: whatNext);
-    }),
-    GetPage(name: AppRoutes.updateDob, page: () {
-      final arguments = Get.arguments ?? {};
-      VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
-      return UpdateDobScreen(whatNext: whatNext);
-    }),
-    GetPage(name: AppRoutes.updateGender, page: (){
-      final arguments = Get.arguments ?? {};
-      VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
-      return UpdateGenderScreen(whatNext: whatNext);
-    }),
+    GetPage(
+      name: AppRoutes.updateName,
+      page: () {
+        final arguments = Get.arguments ?? {};
+        VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
+        return UpdateNameScreen(whatNext: whatNext);
+      },
+    ),
+    GetPage(
+      name: AppRoutes.updateDob,
+      page: () {
+        final arguments = Get.arguments ?? {};
+        VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
+        return UpdateDobScreen(whatNext: whatNext);
+      },
+    ),
+    GetPage(
+      name: AppRoutes.updateGender,
+      page: () {
+        final arguments = Get.arguments ?? {};
+        VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
+        return UpdateGenderScreen(whatNext: whatNext);
+      },
+    ),
     GetPage(
       name: AppRoutes.relationshipPreference,
-      page: (){
+      page: () {
         final arguments = Get.arguments ?? {};
         VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
         return RelationshipPreferenceScreen(whatNext: whatNext);
@@ -80,44 +89,72 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.distancePreference,
-      page: (){
+      page: () {
         final arguments = Get.arguments ?? {};
         VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
         return DistancePreferenceScreen(whatNext: whatNext);
       },
     ),
-    GetPage(name: AppRoutes.education, page: (){
-      final arguments = Get.arguments ?? {};
-      VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
-      return EducationScreen(whatNext: whatNext);
-    }),
-    GetPage(name: AppRoutes.lifestyle, page: () {
-      final arguments = Get.arguments ?? {};
-      VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
-      return LifeStyleScreen(whatNext: whatNext);
-    }),
-    GetPage(name: AppRoutes.religionWork, page: () {
-      final arguments = Get.arguments ?? {};
-      VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
-      return ReligionWorkScreen(whatNext: whatNext);
-    }),
-    GetPage(name: AppRoutes.interest, page: () {
-      final arguments = Get.arguments ?? {};
-      VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
-      return InterestScreen(whatNext: whatNext);
-    }),
-    GetPage(name: AppRoutes.addPictures, page: () {
-      final arguments = Get.arguments ?? {};
-      VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
-      return AddPicturesScreen(whatNext: whatNext);
-    }),
-    GetPage(name: AppRoutes.setLocation, page: () {
-      final arguments = Get.arguments ?? {};
-      VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
-      return SetLocationScreen(whatNext: whatNext);
-    }),
+    GetPage(
+      name: AppRoutes.education,
+      page: () {
+        final arguments = Get.arguments ?? {};
+        VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
+        return EducationScreen(whatNext: whatNext);
+      },
+    ),
+    GetPage(
+      name: AppRoutes.lifestyle,
+      page: () {
+        final arguments = Get.arguments ?? {};
+        VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
+        return LifeStyleScreen(whatNext: whatNext);
+      },
+    ),
+    GetPage(
+      name: AppRoutes.religionWork,
+      page: () {
+        final arguments = Get.arguments ?? {};
+        VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
+        return ReligionWorkScreen(whatNext: whatNext);
+      },
+    ),
+    GetPage(
+      name: AppRoutes.interest,
+      page: () {
+        final arguments = Get.arguments ?? {};
+        VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
+        return InterestScreen(whatNext: whatNext);
+      },
+    ),
+    GetPage(
+      name: AppRoutes.addPictures,
+      page: () {
+        final arguments = Get.arguments ?? {};
+        VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
+        return AddPicturesScreen(whatNext: whatNext);
+      },
+    ),
+    GetPage(
+      name: AppRoutes.setLocation,
+      page: () {
+        final arguments = Get.arguments ?? {};
+        VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
+        return SetLocationScreen(whatNext: whatNext);
+      },
+    ),
     GetPage(name: AppRoutes.home, page: () => HomeScreen()),
-    GetPage(name: AppRoutes.match, page: () => MatchScreen()),
+    GetPage(
+      name: AppRoutes.match,
+      page: () {
+        final arguments = Get.arguments ?? {};
+        final targetUserId = arguments['targetUserId'] as String;
+        if (targetUserId.isEmpty) {
+          throw Exception("User ID is required");
+        }
+        return MatchScreen(targetUserId: targetUserId);
+      },
+    ),
     GetPage(name: AppRoutes.notification, page: () => NotificationScreen()),
     GetPage(name: AppRoutes.search, page: () => SearchScreen()),
     GetPage(name: AppRoutes.likes, page: () => LikesScreen()),
