@@ -220,7 +220,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Container buildCard({required RxInt activeIndex, required UserModel user}) {
     List lifestyleAndValues = user.basics?.lifestyleAndValues ?? [];
-    List hobbies = user.basics?.hobbies ?? [];  
+    List hobbies = user.basics?.hobbies ?? [];
     List artsAndCreativity = user.basics?.artsAndCreativity ?? [];
     List sportsAndFitness = user.basics?.sportsAndFitness ?? [];
     List music = user.basics?.music ?? [];
@@ -228,7 +228,16 @@ class _HomeScreenState extends State<HomeScreen> {
     List entertainment = user.basics?.entertainment ?? [];
     List foodAndDrink = user.basics?.foodAndDrink ?? [];
 
-    List interests = [...lifestyleAndValues, ...hobbies, ...artsAndCreativity, ...sportsAndFitness, ...music, ...travelAndAdventure, ...entertainment, ...foodAndDrink].take(4).toList();
+    List interests = [
+      ...lifestyleAndValues,
+      ...hobbies,
+      ...artsAndCreativity,
+      ...sportsAndFitness,
+      ...music,
+      ...travelAndAdventure,
+      ...entertainment,
+      ...foodAndDrink,
+    ].take(6).toList();
     return Container(
       margin: EdgeInsets.only(bottom: Get.height * 0.05),
       child: Stack(
@@ -245,7 +254,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   imageUrl: user.photos![index],
                   fit: BoxFit.cover,
                   placeholder: (context, url) {
-                     return Shimmer.fromColors(
+                    return Shimmer.fromColors(
                       baseColor: Color(0xFF1A1625),
                       highlightColor: AppColors.primaryColor,
                       child: Container(
@@ -256,10 +265,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     );
                   },
-                  errorWidget: (context, url, error) => const Icon(
-                    Icons.error,
-                    color: Colors.red,
-                  ),
+                  errorWidget: (context, url, error) =>
+                      const Icon(Icons.error, color: Colors.red),
                 );
               },
             ),
@@ -272,7 +279,7 @@ class _HomeScreenState extends State<HomeScreen> {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: Row(
-                  children: List.generate(images.length, (i) {
+                  children: List.generate(user.photos?.length ?? 0, (i) {
                     return Expanded(
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 350),
@@ -303,7 +310,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                   child: Container(
-                    height: Get.height * 0.18,
+                    height: Get.height * 0.22,
                     color: Colors.black.withOpacity(0),
                   ),
                 ),
@@ -352,20 +359,25 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 // SizedBox(height: Get.height * 0.01),
                 Wrap(
-                  children: interests.map((e) => Chip(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(22),
-                    ),
-                    backgroundColor: Colors.white.withOpacity(0.3),
-                    label: Text(
-                      e,
-                      style: GoogleFonts.figtree(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        // color: Colors.white,
-                      ),
-                    ),
-                  )).toList(),
+                  spacing: 2,
+                  children: interests
+                      .map(
+                        (e) => Chip(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(22),
+                          ),
+                          backgroundColor: Colors.white.withOpacity(0.3),
+                          label: Text(
+                            e,
+                            style: GoogleFonts.figtree(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              
+                            ),
+                          ),
+                        ),
+                      )
+                      .toList(),
                 ),
                 // Row(
                 //   children: [
@@ -430,7 +442,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 //     ),
                 //   ],
                 // ),
-                SizedBox(height: Get.height * 0.03),
+                SizedBox(height: Get.height * 0.014),
               ],
             ),
           ),

@@ -109,17 +109,45 @@ class Basics {
       education: json['education'] ?? "",
       height: json['height'] ?? "",
       sexOrientation: json['sexOrientation'] ?? "",
-      // languages: json['languages'] != null
-      //     ? (json['languages'] as List).map((e) => e.toString()).toList()
-      //     : [],
-      // lifestyleAndValues: json['lifestyleAndValues'] ?? [],
-      // hobbies: json['hobbies'] ?? [],
-      // artsAndCreativity: json['artsAndCreativity'] ?? [],
-      // sportsAndFitness: json['sportsAndFitness'] ?? [],
-      // travelAndAdventure: json['travelAndAdventure'] ?? [],
-      // entertainment: json['entertainment'] ?? [],
-      // music: json['music'] ?? [],
-      // foodAndDrink: json['foodAndDrink'] ?? [],
+      languages: json['languages'] != null
+          ? (json['languages'] as List).map((e) => e.toString()).toList()
+          : [],
+      lifestyleAndValues: json['lifestyleAndValues'] != null
+          ? (json['lifestyleAndValues'] as List)
+              .map((e) => e.toString())
+              .toList()
+          : [],
+      hobbies: json['hobbies'] != null
+          ? (json['hobbies'] as List).map((e) => e.toString()).toList()
+          : [],
+      artsAndCreativity: json['artsAndCreativity'] != null
+          ? (json['artsAndCreativity'] as List)
+              .map((e) => e.toString())
+              .toList()
+          : [],
+      sportsAndFitness: json['sportsAndFitness'] != null
+          ? (json['sportsAndFitness'] as List)
+              .map((e) => e.toString())
+              .toList()
+          : [],
+      travelAndAdventure: json['travelAndAdventure'] != null
+          ? (json['travelAndAdventure'] as List)
+              .map((e) => e.toString())
+              .toList()
+          : [],
+      entertainment: json['entertainment'] != null
+          ? (json['entertainment'] as List)
+              .map((e) => e.toString())
+              .toList()
+          : [],
+      music: json['music'] != null
+          ? (json['music'] as List).map((e) => e.toString()).toList()
+          : [],
+      foodAndDrink: json['foodAndDrink'] != null
+          ? (json['foodAndDrink'] as List)
+              .map((e) => e.toString())
+              .toList()
+          : [],
     );
   }
 }
