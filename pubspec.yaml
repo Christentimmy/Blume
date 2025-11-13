@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   appinio_swiper: ^2.1.1
+  cached_network_image: ^3.4.1
   cherry_toast: ^1.13.0
   flutter:
     sdk: flutter
@@ -24,6 +25,7 @@ dependencies:
   path: ^1.9.1
   path_provider: ^2.1.5
   pinput: ^5.0.1
+  shimmer: ^3.0.0
   smooth_page_indicator: ^1.2.1
   video_compress: ^3.1.4
 

@@ -5,11 +5,13 @@ import 'package:blume/app/data/models/user_model.dart';
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/utils/age_calculator.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shimmer/shimmer.dart';
 // import 'package:appinio_swiper/appinio_swiper.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -239,9 +241,25 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               itemCount: user.photos?.length,
               itemBuilder: (context, index) {
-                return Image.network(
-                  user.photos![index],
+                return CachedNetworkImage(
+                  imageUrl: user.photos![index],
                   fit: BoxFit.cover,
+                  placeholder: (context, url) {
+                     return Shimmer.fromColors(
+                      baseColor: Color(0xFF1A1625),
+                      highlightColor: AppColors.primaryColor,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Color(0xFF1A1625),
+                        ),
+                      ),
+                    );
+                  },
+                  errorWidget: (context, url, error) => const Icon(
+                    Icons.error,
+                    color: Colors.red,
+                  ),
                 );
               },
             ),

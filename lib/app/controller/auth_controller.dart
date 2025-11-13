@@ -179,14 +179,14 @@ class AuthController extends GetxController {
       });
       return;
     }
-    if (userModel.education == null || userModel.education!.isEmpty) {
-      Get.offNamed(AppRoutes.education, arguments: {
-        "whatNext": () async {
-          await handleNavigation();
-        }
-      });
-      return;
-    }
+    // if (userModel.education == null || userModel.education!.isEmpty) {
+    //   Get.offNamed(AppRoutes.education, arguments: {
+    //     "whatNext": () async {
+    //       await handleNavigation();
+    //     }
+    //   });
+    //   return;
+    // }
     if (userModel.photos?.isEmpty ?? true) {
       Get.offNamed(AppRoutes.addPictures, arguments: {
         "whatNext": () async {
