@@ -1,7 +1,7 @@
 import 'package:blume/app/controller/user_controller.dart';
 import 'package:blume/app/data/models/user_model.dart';
 import 'package:blume/app/resources/colors.dart';
-import 'package:blume/app/routes/app_routes.dart';
+// import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/widgets/custom_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +21,14 @@ class _MatchScreenState extends State<MatchScreen> {
   final userController = Get.find<UserController>();
   Rxn<UserModel> targetUser = Rxn<UserModel>();
   final isloading = true.obs;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await getTargetUser();
+    });
+  }
 
   @override
   void dispose() {
@@ -116,7 +124,19 @@ class _MatchScreenState extends State<MatchScreen> {
               const Spacer(),
               CustomButton(
                 ontap: () {
-                  Get.offNamed(AppRoutes.message);
+                  // Get.offNamed(AppRoutes.message);
+                  // userController.getPotentialMatches();
+                  // Get.offNamed(
+                  //   AppRoutes.message,
+                  //   arguments: {
+                  //     "chatHead": ChatListModel(
+                  //       avatar: targetUser.value?.avatar ?? "",
+                  //       fullName: targetUser.value?.fullName ?? "",
+                  //       online: false,
+                  //       userId: targetUser.value?.id ?? "",
+                  //     ),
+                  //   },
+                  // );
                 },
                 isLoading: false.obs,
                 child: Text(
@@ -129,7 +149,10 @@ class _MatchScreenState extends State<MatchScreen> {
               SizedBox(height: 10),
 
               CustomButton(
-                ontap: () => Get.back(),
+                ontap: () async {
+                  Get.back();
+                  await userController.getPotentialMatches();
+                },
                 bgColor: Get.isDarkMode
                     ? AppColors.darkButtonColor
                     : AppColors.lightButtonColor,

@@ -13,11 +13,17 @@ class AuthService {
     required String password,
   }) async {
     try {
-      final response = await http.post(
-        Uri.parse("$baseUrl/auth/register"),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode({"email": email, "phone": phone, "password": password}),
-      ).timeout(const Duration(seconds: 15));
+      final response = await http
+          .post(
+            Uri.parse("$baseUrl/auth/register"),
+            headers: {"Content-Type": "application/json"},
+            body: jsonEncode({
+              "email": email,
+              "phone": phone,
+              "password": password,
+            }),
+          )
+          .timeout(const Duration(seconds: 15));
       return response;
     } on SocketException catch (e) {
       debugPrint("No internet connection $e");
@@ -92,4 +98,26 @@ class AuthService {
       throw Exception("Unexpected error $e");
     }
   }
+
+  Future<http.Response?> logout({required String token}) async {
+    try {
+      final url = Uri.parse("$baseUrl/auth/logout");
+      final response = await http.post(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      );
+      return response;
+    } on SocketException catch (e) {
+      debugPrint("No internet connection $e");
+    } on TimeoutException {
+      debugPrint("Request timeout");
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
+
 }

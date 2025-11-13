@@ -1,3 +1,4 @@
+import 'package:blume/app/controller/auth_controller.dart';
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/widgets/custom_button.dart';
@@ -75,7 +76,9 @@ class SettingsScreen extends StatelessWidget {
                 bgColor: Get.isDarkMode
                     ? AppColors.darkButtonColor
                     : AppColors.lightButtonColor,
-                ontap: () => Get.offAllNamed(AppRoutes.login),
+                ontap: () async {
+                  await Get.find<AuthController>().logout();
+                },
                 isLoading: false.obs,
                 child: Text(
                   'Logout',

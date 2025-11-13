@@ -140,43 +140,59 @@ class AuthController extends GetxController {
       return;
     }
     if (userModel.fullName == null || userModel.fullName!.isEmpty) {
-      Get.offNamed(AppRoutes.updateName, arguments: {
-        "whatNext": () async {
-          await handleNavigation();
-        }
-      });
+      Get.offNamed(
+        AppRoutes.updateName,
+        arguments: {
+          "whatNext": () async {
+            await handleNavigation();
+          },
+        },
+      );
       return;
     }
     if (userModel.dateOfBirth == null || userModel.dateOfBirth!.isEmpty) {
-      Get.offNamed(AppRoutes.updateDob, arguments: {
-        "whatNext": () async {
-          await handleNavigation();
-        }
-      });
+      Get.offNamed(
+        AppRoutes.updateDob,
+        arguments: {
+          "whatNext": () async {
+            await handleNavigation();
+          },
+        },
+      );
       return;
     }
     if (userModel.gender == null || userModel.gender!.isEmpty) {
-      Get.offNamed(AppRoutes.updateGender, arguments: {
-        "whatNext": () async {
-          await handleNavigation();
-        }
-      });
+      Get.offNamed(
+        AppRoutes.updateGender,
+        arguments: {
+          "whatNext": () async {
+            await handleNavigation();
+          },
+        },
+      );
       return;
     }
     if (userModel.interestedIn == null || userModel.interestedIn!.isEmpty) {
-      Get.offNamed(AppRoutes.relationshipPreference, arguments: {
-        "whatNext": () async {
-          await handleNavigation();
-        }
-      });
+      Get.offNamed(
+        AppRoutes.relationshipPreference,
+        arguments: {
+          "whatNext": () async {
+            await handleNavigation();
+          },
+        },
+      );
       return;
     }
-    if (userModel.preference?.maxDistance == null || userModel.preference?.maxDistance == 0) {
-      Get.offNamed(AppRoutes.distancePreference, arguments: {
-        "whatNext": () async {
-          await handleNavigation();
-        }
-      });
+    if (userModel.preference?.maxDistance == null ||
+        userModel.preference?.maxDistance == 0) {
+      Get.offNamed(
+        AppRoutes.distancePreference,
+        arguments: {
+          "whatNext": () async {
+            await handleNavigation();
+          },
+        },
+      );
       return;
     }
     // if (userModel.education == null || userModel.education!.isEmpty) {
@@ -188,22 +204,53 @@ class AuthController extends GetxController {
     //   return;
     // }
     if (userModel.photos?.isEmpty ?? true) {
-      Get.offNamed(AppRoutes.addPictures, arguments: {
-        "whatNext": () async {
-          await handleNavigation();
-        }
-      });
+      Get.offNamed(
+        AppRoutes.addPictures,
+        arguments: {
+          "whatNext": () async {
+            await handleNavigation();
+          },
+        },
+      );
       return;
     }
-    if(userModel.location == null || userModel.location!.isEmpty) {
-      Get.offNamed(AppRoutes.setLocation, arguments: {
-        "whatNext": () async {
-          await handleNavigation();
-        }
-      });
+    if (userModel.location == null || userModel.location!.isEmpty) {
+      Get.offNamed(
+        AppRoutes.setLocation,
+        arguments: {
+          "whatNext": () async {
+            await handleNavigation();
+          },
+        },
+      );
       return;
     }
     Get.offNamed(AppRoutes.bottomNavigation);
   }
 
+  Future<void> logout() async {
+    try {
+      Get.offAllNamed(AppRoutes.login);
+      String? token = await StorageController().getToken();
+      if (token == null) {
+        return;
+      }
+
+      final response = await authService.logout(token: token);
+      if (response == null) return;
+      final data = jsonDecode(response.body);
+      if (response.statusCode != 200) {
+        debugPrint(data["message"].toString());
+        return;
+      }
+
+      Get.find<UserController>().clearUserData();
+      await Get.find<StorageController>().deleteToken();
+      // await Get.find<MessageController>().clearChatHistory();
+      // await Get.find<SubscriptionController>().clearSubscriptionData();
+      // await Get.find<InviteController>().clearInviteData();
+    } catch (error) {
+      debugPrint(error.toString());
+    }
+  }
 }

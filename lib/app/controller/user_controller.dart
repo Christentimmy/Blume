@@ -19,6 +19,8 @@ class UserController extends GetxController {
   RxInt currentPage = 1.obs;
   RxBool hasNextPage = false.obs;
 
+  RxList<UserModel> usersWhoLikesMeList = <UserModel>[].obs;
+
   Future<void> updateName({
     required String name,
     VoidCallback? whatNext,
@@ -574,6 +576,43 @@ class UserController extends GetxController {
     }
     return null;
   }
+
+  Future<void> getUserWhoLikesMe() async {
+    isloading.value = true;
+    try {
+      final storageController = Get.find<StorageController>();
+      String? token = await storageController.getToken();
+      if (token == null || token.isEmpty) return;
+
+      final response = await userService.getUserWhoLikesMe(token: token);
+      if (response == null) return;
+      final decoded = json.decode(response.body);
+      if (response.statusCode != 200) {
+        debugPrint(decoded["message"].toString());
+        return;
+      }
+      List matches = decoded["data"] ?? [];
+      if (matches.isEmpty) return;
+      List<UserModel> mapped = matches
+          .map((e) => UserModel.fromJson(e))
+          .toList();
+      usersWhoLikesMeList.value = mapped;
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      isloading.value = false;
+    }
+  }
+
+    void clearUserData(){
+      user.value = null;
+      potentialMatchesList.clear();
+      usersWhoLikesMeList.clear();
+      currentPage.value = 1;
+      hasNextPage.value = false;
+      
+    }
+
 }
 
 enum SwipeType { pass, superlike, like }

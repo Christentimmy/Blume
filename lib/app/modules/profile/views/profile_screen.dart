@@ -1,3 +1,4 @@
+import 'package:blume/app/controller/user_controller.dart';
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +6,9 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+  ProfileScreen({super.key});
+
+  final userController = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
@@ -108,13 +111,15 @@ class ProfileScreen extends StatelessWidget {
             child: Icon(Icons.arrow_back, size: 28),
           ),
           SizedBox(width: Get.width * 0.03),
-          Text(
-            'Don cullion',
-            style: GoogleFonts.figtree(
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
+          Obx(() {
+            return Text(
+              userController.user.value?.fullName ?? "",
+              style: GoogleFonts.figtree(
+                fontSize: 24,
+                fontWeight: FontWeight.w600,
+              ),
+            );
+          }),
           SizedBox(width: 8),
           Icon(Icons.verified, color: Colors.purple, size: 20),
           const Spacer(),

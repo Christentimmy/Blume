@@ -1,13 +1,40 @@
 import 'dart:ui';
 
+import 'package:blume/app/controller/user_controller.dart';
+import 'package:blume/app/data/models/user_model.dart';
 import 'package:blume/app/resources/colors.dart';
+import 'package:blume/app/utils/age_calculator.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shimmer/shimmer.dart';
 
-class LikesScreen extends StatelessWidget {
-  LikesScreen({super.key});
+class LikesScreen extends StatefulWidget {
+  const LikesScreen({super.key});
+
+  @override
+  State<LikesScreen> createState() => _LikesScreenState();
+}
+
+class _LikesScreenState extends State<LikesScreen> {
+  final userController = Get.find<UserController>();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (userController.usersWhoLikesMeList.isNotEmpty) return;
+      userController.getUserWhoLikesMe();
+    });
+  }
+
+  @override
+  void dispose() {
+    userController.isloading.value = false;
+    super.dispose();
+  }
 
   final List filter = [
     "BIo added",
@@ -27,102 +54,140 @@ class LikesScreen extends StatelessWidget {
     return Scaffold(
       appBar: buildAppBar(),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 0.7,
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
-            ),
-            itemBuilder: (context, index) {
-              return Stack(
-                children: [
-                  Positioned.fill(
-                    child: ClipRRect(
+        child: Obx(() {
+          if (userController.isloading.value) {
+            return Center(
+              child: CircularProgressIndicator(color: AppColors.primaryColor),
+            );
+          }
+          if (userController.usersWhoLikesMeList.isEmpty) {
+            return Center(
+              child: Text(
+                "No users found",
+                style: GoogleFonts.figtree(
+                  fontSize: 22,
+                  color: AppColors.primaryColor,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            );
+          }
+          return buildGridViewer();
+        }),
+      ),
+    );
+  }
+
+  Padding buildGridViewer() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: GridView.builder(
+        itemCount: userController.usersWhoLikesMeList.length,
+        physics: const BouncingScrollPhysics(),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 0.7,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+        ),
+        itemBuilder: (context, index) {
+          final user = userController.usersWhoLikesMeList[index];
+          return buildLikeCard(user: user);
+        },
+      ),
+    );
+  }
+
+  Stack buildLikeCard({required UserModel user}) {
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: CachedNetworkImage(
+              imageUrl: user.avatar ?? "",
+              fit: BoxFit.cover,
+              placeholder: (context, url) {
+                return Shimmer.fromColors(
+                  baseColor: Color(0xFF1A1625),
+                  highlightColor: Color(0xFFD586D3),
+                  child: Container(
+                    decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      child: Image.asset(
-                        "assets/images/plm.png",
-                        fit: BoxFit.cover,
-                      ),
+                      color: Color(0xFF1A1625),
                     ),
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(20),
-                          bottomRight: Radius.circular(20),
-                        ),
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                          child: Container(
-                            height: Get.height * 0.07,
-                            color: Colors.black.withOpacity(0),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 2,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          "Blaire  23",
-                          style: GoogleFonts.figtree(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.location_on,
-                              color: Colors.white,
-                              size: 15,
-                            ),
-                            Text(
-                              "5 miles away",
-                              style: GoogleFonts.figtree(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 6),
-                      ],
-                    ),
-                  ),
-                  Positioned(
-                    top: 10,
-                    right: 10,
-                    child: CircleAvatar(
-                      radius: 20,
-                      backgroundColor: Colors.white.withOpacity(0.2),
-                      child: Icon(
-                        FontAwesomeIcons.solidHeart,
-                        size: 18,
-                        color: Colors.white,
-                      ),
+                );
+              },
+              errorWidget: (context, url, error) => const Center(
+                child: Icon(Icons.error, color: AppColors.primaryColor),
+              ),
+            ),
+          ),
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              ),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: Container(
+                  height: Get.height * 0.07,
+                  color: Colors.black.withValues(alpha: 0),
+                ),
+              ),
+            ),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                "${user.fullName}  ${calculateAge(user.dateOfBirth)}",
+                style: GoogleFonts.figtree(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+              Row(
+                children: [
+                  Icon(Icons.location_on, color: Colors.white, size: 15),
+                  Text(
+                    user.location??"",
+                    style: GoogleFonts.figtree(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
                     ),
                   ),
                 ],
-              );
-            },
+              ),
+              SizedBox(height: 6),
+            ],
           ),
         ),
-      ),
+        Positioned(
+          top: 10,
+          right: 10,
+          child: CircleAvatar(
+            radius: 20,
+            backgroundColor: Colors.white.withValues(alpha: 0.2),
+            child: Icon(
+              FontAwesomeIcons.solidHeart,
+              size: 18,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ],
     );
   }
 
