@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:blume/app/controller/storage_controller.dart';
+import 'package:blume/app/controller/user_controller.dart';
 import 'package:blume/app/data/services/auth_service.dart';
 import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/widgets/snack_bar.dart';
@@ -122,13 +123,87 @@ class AuthController extends GetxController {
       // await userController.getPotentialMatches();
       // final socketController = Get.find<SocketController>();
       // socketController.initializeSocket();
-      // await handleLoginNavigation();
-      Get.offNamed(AppRoutes.bottomNavigation);
+      await handleNavigation();
     } catch (e) {
       debugPrint(e.toString());
     } finally {
       isloading.value = false;
     }
+  }
+
+  Future<void> handleNavigation() async {
+    final userController = Get.find<UserController>();
+    await userController.getUserDetails();
+    final userModel = userController.user.value;
+    if (userModel == null) {
+      Get.offNamed(AppRoutes.onboarding);
+      return;
+    }
+    if (userModel.fullName == null || userModel.fullName!.isEmpty) {
+      Get.offNamed(AppRoutes.updateName, arguments: {
+        "whatNext": () async {
+          await handleNavigation();
+        }
+      });
+      return;
+    }
+    if (userModel.dateOfBirth == null || userModel.dateOfBirth!.isEmpty) {
+      Get.offNamed(AppRoutes.updateDob, arguments: {
+        "whatNext": () async {
+          await handleNavigation();
+        }
+      });
+      return;
+    }
+    if (userModel.gender == null || userModel.gender!.isEmpty) {
+      Get.offNamed(AppRoutes.updateGender, arguments: {
+        "whatNext": () async {
+          await handleNavigation();
+        }
+      });
+      return;
+    }
+    if (userModel.interestedIn == null || userModel.interestedIn!.isEmpty) {
+      Get.offNamed(AppRoutes.relationshipPreference, arguments: {
+        "whatNext": () async {
+          await handleNavigation();
+        }
+      });
+      return;
+    }
+    if (userModel.preference?.maxDistance == null || userModel.preference?.maxDistance == 0) {
+      Get.offNamed(AppRoutes.distancePreference, arguments: {
+        "whatNext": () async {
+          await handleNavigation();
+        }
+      });
+      return;
+    }
+    if (userModel.education == null || userModel.education!.isEmpty) {
+      Get.offNamed(AppRoutes.education, arguments: {
+        "whatNext": () async {
+          await handleNavigation();
+        }
+      });
+      return;
+    }
+    if (userModel.photos?.isEmpty ?? true) {
+      Get.offNamed(AppRoutes.addPictures, arguments: {
+        "whatNext": () async {
+          await handleNavigation();
+        }
+      });
+      return;
+    }
+    if(userModel.location == null || userModel.location!.isEmpty) {
+      Get.offNamed(AppRoutes.setLocation, arguments: {
+        "whatNext": () async {
+          await handleNavigation();
+        }
+      });
+      return;
+    }
+    Get.offNamed(AppRoutes.bottomNavigation);
   }
 
 }

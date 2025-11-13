@@ -18,7 +18,6 @@ class InterestScreen extends StatelessWidget {
     "Spirituality",
     "Minimalism",
     "Mindfulness",
-    "Volunteering",
   ];
 
   final List<String> hobbies = [
@@ -101,14 +100,16 @@ class InterestScreen extends StatelessWidget {
     "Vegan/Vegetarian lifestyle",
   ];
 
-  final RxInt selectedLifestyleOption = (-1).obs;
-  final RxInt selectedHobbiesOption = (-1).obs;
-  final RxInt selectedArtsAndCraftsOption = (-1).obs;
-  final RxInt selectedSportsAndLeisureOption = (-1).obs;
-  final RxInt selectedTravelAndAdventureOption = (-1).obs;
-  final RxInt selectedEntertainmentOption = (-1).obs;
-  final RxInt selectedMusicOption = (-1).obs;
-  final RxInt selectedFoodAndDrinkOption = (-1).obs;
+  
+  final RxList<String> selectedLifestyleOption = <String>[].obs;
+  // final RxInt selectedLifestyleOption = (-1).obs;
+  final RxList<String> selectedHobbiesOption = <String>[].obs;
+  final RxList<String> selectedArtsAndCraftsOption = <String>[].obs;
+  final RxList<String> selectedSportsAndLeisureOption = <String>[].obs;
+  final RxList<String> selectedTravelAndAdventureOption = <String>[].obs;
+  final RxList<String> selectedEntertainmentOption = <String>[].obs;
+  final RxList<String> selectedMusicOption = <String>[].obs;
+  final RxList<String> selectedFoodAndDrinkOption = <String>[].obs;
 
   final userController = Get.find<UserController>();
 
@@ -165,58 +166,58 @@ class InterestScreen extends StatelessWidget {
                   children: [
                     buildTitle(title: "Lifestyle & Values"),
                     SizedBox(height: Get.height * 0.01),
-                    buildOptions(
+                    buildListOptions(
                       options: lifestyle,
-                      selectedOption: selectedLifestyleOption,
+                      selectedOptions: selectedLifestyleOption,
                     ),
                     SizedBox(height: Get.height * 0.03),
                     buildTitle(title: "Learning & Hobbies"),
                     SizedBox(height: Get.height * 0.01),
-                    buildOptions(
+                    buildListOptions(
                       options: hobbies,
-                      selectedOption: selectedHobbiesOption,
+                      selectedOptions: selectedHobbiesOption,
                     ),
                     SizedBox(height: Get.height * 0.03),
                     buildTitle(title: "Arts & Crafts"),
                     SizedBox(height: Get.height * 0.01),
-                    buildOptions(
+                    buildListOptions(
                       options: artsAndCrafts,
-                      selectedOption: selectedArtsAndCraftsOption,
+                      selectedOptions: selectedArtsAndCraftsOption,
                     ),
                     SizedBox(height: Get.height * 0.03),
                     buildTitle(title: "Sports & Fitness"),
                     SizedBox(height: Get.height * 0.01),
-                    buildOptions(
+                    buildListOptions(
                       options: sportsAndLeisure,
-                      selectedOption: selectedSportsAndLeisureOption,
+                      selectedOptions: selectedSportsAndLeisureOption,
                     ),
                     SizedBox(height: Get.height * 0.03),
                     buildTitle(title: "Travel & Adventure"),
                     SizedBox(height: Get.height * 0.01),
-                    buildOptions(
+                    buildListOptions(
                       options: travelAndAdventure,
-                      selectedOption: selectedTravelAndAdventureOption,
+                      selectedOptions: selectedTravelAndAdventureOption,
                     ),
                     SizedBox(height: Get.height * 0.03),
                     buildTitle(title: "Entertainment"),
                     SizedBox(height: Get.height * 0.01),
-                    buildOptions(
+                    buildListOptions(
                       options: entertainment,
-                      selectedOption: selectedEntertainmentOption,
+                      selectedOptions: selectedEntertainmentOption,
                     ),
                     SizedBox(height: Get.height * 0.03),
                     buildTitle(title: "Music"),
                     SizedBox(height: Get.height * 0.01),
-                    buildOptions(
+                    buildListOptions(
                       options: music,
-                      selectedOption: selectedMusicOption,
+                      selectedOptions: selectedMusicOption,
                     ),
                     SizedBox(height: Get.height * 0.03),
                     buildTitle(title: "Food & Drink"),
                     SizedBox(height: Get.height * 0.01),
-                    buildOptions(
+                    buildListOptions(
                       options: foodAndDrink,
-                      selectedOption: selectedFoodAndDrinkOption,
+                      selectedOptions: selectedFoodAndDrinkOption,
                     ),
                     SizedBox(height: Get.height * 0.03),
                   ],
@@ -238,44 +239,38 @@ class InterestScreen extends StatelessWidget {
               SizedBox(height: 10),
               CustomButton(
                 ontap: () async {
-                  String? sLifeStyle;
-                  String? sHobbies;
-                  String? sArtsAndCrafts;
-                  String? sSportsAndLeisure;
-                  String? sTravelAndAdventure;
-                  String? sEntertainment;
-                  String? sMusic;
-                  String? sFoodAndDrink;
+                  List<String>? sLifeStyle;
+                  List<String>? sHobbies;
+                  List<String>? sArtsAndCrafts;
+                  List<String>? sSportsAndLeisure;
+                  List<String>? sTravelAndAdventure;
+                  List<String>? sEntertainment;
+                  List<String>? sMusic;
+                  List<String>? sFoodAndDrink;
 
-                  if (selectedLifestyleOption.value >= 0) {
-                    sLifeStyle = lifestyle[selectedLifestyleOption.value];
+                  if (selectedLifestyleOption.length > 1) {
+                    sLifeStyle = selectedLifestyleOption;
                   }
-                  if (selectedHobbiesOption.value >= 0) {
-                    sHobbies = hobbies[selectedHobbiesOption.value];
+                  if (selectedHobbiesOption.length > 1) {
+                    sHobbies = selectedHobbiesOption;
                   }
-                  if (selectedArtsAndCraftsOption.value >= 0) {
-                    sArtsAndCrafts =
-                        artsAndCrafts[selectedArtsAndCraftsOption.value];
+                  if (selectedArtsAndCraftsOption.length > 1) {
+                    sArtsAndCrafts = selectedArtsAndCraftsOption;
                   }
-                  if (selectedSportsAndLeisureOption.value >= 0) {
-                    sSportsAndLeisure =
-                        sportsAndLeisure[selectedSportsAndLeisureOption.value];
+                  if (selectedSportsAndLeisureOption.length > 1) {
+                    sSportsAndLeisure = selectedSportsAndLeisureOption;
                   }
-                  if (selectedTravelAndAdventureOption.value >= 0) {
-                    sTravelAndAdventure =
-                        travelAndAdventure[selectedTravelAndAdventureOption
-                            .value];
+                  if (selectedTravelAndAdventureOption.length > 1) {
+                    sTravelAndAdventure = selectedTravelAndAdventureOption;
                   }
-                  if (selectedEntertainmentOption.value >= 0) {
-                    sEntertainment =
-                        entertainment[selectedEntertainmentOption.value];
+                  if (selectedEntertainmentOption.length > 1) {
+                    sEntertainment = selectedEntertainmentOption;
                   }
-                  if (selectedMusicOption.value >= 0) {
-                    sMusic = music[selectedMusicOption.value];
+                  if (selectedMusicOption.length > 1) {
+                    sMusic = selectedMusicOption;
                   }
-                  if (selectedFoodAndDrinkOption.value >= 0) {
-                    sFoodAndDrink =
-                        foodAndDrink[selectedFoodAndDrinkOption.value];
+                  if (selectedFoodAndDrinkOption.length > 1) {
+                    sFoodAndDrink = selectedFoodAndDrinkOption;
                   }
 
                   await userController.updateBasic2(

@@ -196,7 +196,7 @@ class _SearchScreenState extends State<SearchScreen>
                         return Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(16),
-                            color: Get.isDarkMode ? Colors.black : Colors.white,
+                            color: Get.isDarkMode ? AppColors.darkButtonColor : Colors.white,
                           ),
                           child: Column(
                             children: [

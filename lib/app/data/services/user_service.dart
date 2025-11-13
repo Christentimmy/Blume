@@ -238,25 +238,32 @@ class UserService {
 
   Future<http.Response?> updateBasic2({
     required String token,
-    String? lifestyleAndValues,
-    String? hobbies,
-    String? artsAndCreativity,
-    String? sportsAndFitness,
-    String? travelAndAdventure,
-    String? entertainment,
-    String? music,
-    String? foodAndDrink,
+    List<String>? lifestyleAndValues,
+    List<String>? hobbies,
+    List<String>? artsAndCreativity,
+    List<String>? sportsAndFitness,
+    List<String>? travelAndAdventure,
+    List<String>? entertainment,
+    List<String>? music,
+    List<String>? foodAndDrink,
   }) async {
     Map body = {};
-    if (lifestyleAndValues != null)
+    if (lifestyleAndValues != null) {
       body["lifestyleAndValues"] = lifestyleAndValues;
+    }
     if (hobbies != null) body["hobbies"] = hobbies;
-    if (artsAndCreativity != null)
+    if (artsAndCreativity != null) {
       body["artsAndCreativity"] = artsAndCreativity;
-    if (sportsAndFitness != null) body["sportsAndFitness"] = sportsAndFitness;
-    if (travelAndAdventure != null)
+    }
+    if (sportsAndFitness != null) {
+      body["sportsAndFitness"] = sportsAndFitness;
+    }
+    if (travelAndAdventure != null) {
       body["travelAndAdventure"] = travelAndAdventure;
-    if (entertainment != null) body["entertainment"] = entertainment;
+    }
+    if (entertainment != null) {
+      body["entertainment"] = entertainment;
+    }
     if (music != null) body["music"] = music;
     if (foodAndDrink != null) body["foodAndDrink"] = foodAndDrink;
     try {
@@ -324,21 +331,22 @@ class UserService {
     required double latitude,
     required double longitude,
     required String address,
-  })async{
+  }) async {
     try {
-      final response = await http.patch(
-        Uri.parse("$baseUrl/user/update-location"),
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
-        },
-        body: jsonEncode({
-          "latitude": latitude,
-          "longitude": longitude,
-          "address": address,
-        }),
-      )
-      .timeout(const Duration(seconds: 15));
+      final response = await http
+          .patch(
+            Uri.parse("$baseUrl/user/update-location"),
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer $token",
+            },
+            body: jsonEncode({
+              "latitude": latitude,
+              "longitude": longitude,
+              "address": address,
+            }),
+          )
+          .timeout(const Duration(seconds: 15));
       return response;
     } on SocketException catch (e) {
       debugPrint("No internet connection $e");
@@ -350,4 +358,99 @@ class UserService {
     return null;
   }
 
+  Future<http.Response?> getUserDetails({required String token}) async {
+    try {
+      final response = await http
+          .get(
+            Uri.parse("$baseUrl/user/get-user-details"),
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer $token",
+            },
+          )
+          .timeout(const Duration(seconds: 10));
+      return response;
+    } on SocketException catch (e) {
+      debugPrint("No internet connection $e");
+    } on TimeoutException {
+      debugPrint("Request timeout");
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
+
+  Future<http.Response?> getMatches({required String token}) async {
+    try {
+      final response = await http
+          .get(
+            Uri.parse("$baseUrl/user/get-matches"),
+            headers: {
+              'Authorization': 'Bearer $token',
+              'Content-Type': 'application/json',
+            },
+          )
+          .timeout(const Duration(seconds: 15));
+      return response;
+    } on SocketException catch (e) {
+      debugPrint("No internet connection $e");
+    } on TimeoutException {
+      debugPrint("Request timeout");
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
+
+  Future<http.Response?> getPotentialMatches({
+    required String token,
+    int? page,
+  }) async {
+    try {
+      final response = await http
+          .get(
+            Uri.parse("$baseUrl/user/get-potential-matches?page=$page"),
+            headers: {
+              'Authorization': 'Bearer $token',
+              'Content-Type': 'application/json',
+            },
+          )
+          .timeout(const Duration(seconds: 15));
+      return response;
+    } on SocketException catch (e) {
+      debugPrint("No internet connection $e");
+    } on TimeoutException {
+      debugPrint("Request timeout");
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
+
+  Future<http.Response?> swipeLike({
+    required String token,
+    required String targetUserId,
+    required String type,
+  }) async {
+    try {
+      final response = await http
+          .post(
+            Uri.parse("$baseUrl/user/swipe-user"),
+            headers: {
+              'Authorization': 'Bearer $token',
+              'Content-Type': 'application/json',
+            },
+            body: jsonEncode({'targetUserId': targetUserId, 'type': type}),
+          )
+          .timeout(const Duration(seconds: 15));
+      return response;
+    } on SocketException catch (e) {
+      debugPrint("No internet connection $e");
+    } on TimeoutException {
+      debugPrint("Request timeout");
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
 }

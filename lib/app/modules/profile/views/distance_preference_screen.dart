@@ -79,7 +79,7 @@ class DistancePreferenceScreen extends StatelessWidget {
               CustomButton(
                 ontap: () async {
                   await userController.distancePreference(
-                    distance: distance.value,
+                    distance: double.parse(distance.value.toStringAsFixed(2)),
                     whatNext: whatNext,
                   );
                 },

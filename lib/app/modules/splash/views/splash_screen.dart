@@ -1,4 +1,5 @@
-
+import 'package:blume/app/controller/auth_controller.dart';
+import 'package:blume/app/controller/storage_controller.dart';
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,14 @@ class _SplashScreenState extends State<SplashScreen>
     );
 
     Future.delayed(const Duration(seconds: 3), () async {
-      Get.offAllNamed(AppRoutes.onboarding);
+      final authController = Get.find<AuthController>();
+      final storageController = Get.find<StorageController>();
+      final token = await storageController.getToken();
+      if (token == null) {
+        Get.offNamed(AppRoutes.onboarding);
+        return;
+      }
+      await authController.handleNavigation();
     });
   }
 

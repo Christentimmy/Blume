@@ -1,7 +1,11 @@
 import 'dart:ui';
 import 'package:appinio_swiper/appinio_swiper.dart';
+import 'package:blume/app/controller/user_controller.dart';
+import 'package:blume/app/data/models/user_model.dart';
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/routes/app_routes.dart';
+import 'package:blume/app/utils/age_calculator.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,9 +24,14 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      QuizMatchDialog.show(context);
+      // QuizMatchDialog.show(context);
+      if (userController.potentialMatchesList.isNotEmpty) return;
+      userController.getPotentialMatches();
     });
   }
+
+  final userController = Get.put(UserController());
+  final appinioSwiperController = AppinioSwiperController();
 
   final List<String> images = [
     "assets/images/plm.png",
@@ -67,24 +76,77 @@ class _HomeScreenState extends State<HomeScreen> {
               Expanded(
                 child: Stack(
                   children: [
-                    AppinioSwiper(
-                      controller: swiperController,
-                      cardCount: 20,
-                      backgroundCardCount: 2,
-                      backgroundCardOffset: Offset(0, -35),
-                      loop: true,
-                      swipeOptions: SwipeOptions.only(left: true, right: true),
-                      onSwipeEnd: (previousIndex, targetIndex, activity) {
-                        if (activity.direction == AxisDirection.right &&
-                            targetIndex == 3) {
-                          Get.toNamed(AppRoutes.match);
-                        }
-                      },
-                      cardBuilder: (context, index) {
-                        final activeIndex = 0.obs;
-                        return buildCard(activeIndex);
-                      },
-                    ),
+                    // buildOldSwiper(),
+                    Obx(() {
+                      if (userController.isloading.value) {
+                        return const Center(
+                          child: CupertinoActivityIndicator(
+                            color: AppColors.primaryColor,
+                          ),
+                        );
+                      }
+                      if (userController.potentialMatchesList.isEmpty) {
+                        return Center(
+                          child: Text(
+                            "No matches found",
+                            style: GoogleFonts.figtree(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.primaryColor,
+                            ),
+                          ),
+                        );
+                      }
+                      final potentialList = userController.potentialMatchesList;
+                      return AppinioSwiper(
+                        controller: appinioSwiperController,
+                        cardCount: potentialList.length,
+                        loop: false,
+                        onEnd: () async {
+                          await userController.getPotentialMatches(
+                            loadMore: true,
+                          );
+                        },
+                        backgroundCardOffset: Offset(0, -45),
+                        onSwipeEnd:
+                            (previousIndex, targetIndex, activity) async {
+                              if (previousIndex == -1) return;
+                              if (previousIndex >=
+                                  userController.potentialMatchesList.length) {
+                                return;
+                              }
+                              final userId = userController
+                                  .potentialMatchesList[previousIndex]
+                                  .id;
+                              if (userId == null) return;
+                              if (activity.direction == AxisDirection.right) {
+                                await userController.swipe(
+                                  userId: userId,
+                                  type: SwipeType.like,
+                                );
+                              }
+                              if (activity.direction == AxisDirection.left) {
+                                await userController.swipe(
+                                  userId: userId,
+                                  type: SwipeType.pass,
+                                );
+                              }
+                              if (activity.direction == AxisDirection.up) {
+                                await userController.swipe(
+                                  userId: userId,
+                                  type: SwipeType.superlike,
+                                );
+                              }
+                            },
+                        cardBuilder: (context, index) {
+                          final activeIndex = 0.obs;
+                          return buildCard(
+                            user: potentialList[index],
+                            activeIndex: activeIndex,
+                          );
+                        },
+                      );
+                    }),
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: Row(
@@ -133,7 +195,38 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Container buildCard(RxInt activeIndex) {
+  AppinioSwiper buildOldSwiper() {
+    return AppinioSwiper(
+      controller: swiperController,
+      cardCount: 20,
+      backgroundCardCount: 2,
+      backgroundCardOffset: Offset(0, -35),
+      loop: true,
+      swipeOptions: SwipeOptions.only(left: true, right: true),
+      onSwipeEnd: (previousIndex, targetIndex, activity) {
+        if (activity.direction == AxisDirection.right && targetIndex == 3) {
+          Get.toNamed(AppRoutes.match);
+        }
+      },
+      cardBuilder: (context, index) {
+        return SizedBox();
+        // final activeIndex = 0.obs;
+        // return buildCard(activeIndex);
+      },
+    );
+  }
+
+  Container buildCard({required RxInt activeIndex, required UserModel user}) {
+    List lifestyleAndValues = user.basics?.lifestyleAndValues ?? [];
+    List hobbies = user.basics?.hobbies ?? [];  
+    List artsAndCreativity = user.basics?.artsAndCreativity ?? [];
+    List sportsAndFitness = user.basics?.sportsAndFitness ?? [];
+    List music = user.basics?.music ?? [];
+    List travelAndAdventure = user.basics?.travelAndAdventure ?? [];
+    List entertainment = user.basics?.entertainment ?? [];
+    List foodAndDrink = user.basics?.foodAndDrink ?? [];
+
+    List interests = [...lifestyleAndValues, ...hobbies, ...artsAndCreativity, ...sportsAndFitness, ...music, ...travelAndAdventure, ...entertainment, ...foodAndDrink].take(4).toList();
     return Container(
       margin: EdgeInsets.only(bottom: Get.height * 0.05),
       child: Stack(
@@ -144,9 +237,12 @@ class _HomeScreenState extends State<HomeScreen> {
               onPageChanged: (value) {
                 activeIndex.value = value;
               },
-              itemCount: images.length,
+              itemCount: user.photos?.length,
               itemBuilder: (context, index) {
-                return Image.asset(images[index], fit: BoxFit.cover);
+                return Image.network(
+                  user.photos![index],
+                  fit: BoxFit.cover,
+                );
               },
             ),
           ),
@@ -204,7 +300,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Row(
                   children: [
                     Text(
-                      "Blaire  23",
+                      "${user.fullName} ${calculateAge(user.dateOfBirth)}",
                       style: GoogleFonts.figtree(
                         fontSize: 25,
                         fontWeight: FontWeight.w600,
@@ -237,69 +333,85 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
                 // SizedBox(height: Get.height * 0.01),
-                Row(
-                  children: [
-                    Chip(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(22),
-                      ),
-                      backgroundColor: Colors.white.withOpacity(0.3),
-                      label: Text(
-                        "Interest",
-                        style: GoogleFonts.figtree(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          // color: Colors.white,
-                        ),
+                Wrap(
+                  children: interests.map((e) => Chip(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(22),
+                    ),
+                    backgroundColor: Colors.white.withOpacity(0.3),
+                    label: Text(
+                      e,
+                      style: GoogleFonts.figtree(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        // color: Colors.white,
                       ),
                     ),
-                    SizedBox(width: 5),
-                    Chip(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(22),
-                      ),
-                      backgroundColor: Colors.white.withOpacity(0.3),
-                      label: Text(
-                        "Music",
-                        style: GoogleFonts.figtree(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          // color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 5),
-                    Chip(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(22),
-                      ),
-                      backgroundColor: Colors.white.withOpacity(0.3),
-                      label: Text(
-                        "Games",
-                        style: GoogleFonts.figtree(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          // color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 5),
-                    Chip(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(22),
-                      ),
-                      backgroundColor: Colors.white.withOpacity(0.3),
-                      label: Text(
-                        "Books",
-                        style: GoogleFonts.figtree(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          // color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
+                  )).toList(),
                 ),
+                // Row(
+                //   children: [
+                //     Chip(
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(22),
+                //       ),
+                //       backgroundColor: Colors.white.withOpacity(0.3),
+                //       label: Text(
+                //         "Interest",
+                //         style: GoogleFonts.figtree(
+                //           fontSize: 13,
+                //           fontWeight: FontWeight.w600,
+                //           // color: Colors.white,
+                //         ),
+                //       ),
+                //     ),
+                //     SizedBox(width: 5),
+                //     Chip(
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(22),
+                //       ),
+                //       backgroundColor: Colors.white.withOpacity(0.3),
+                //       label: Text(
+                //         "Music",
+                //         style: GoogleFonts.figtree(
+                //           fontSize: 13,
+                //           fontWeight: FontWeight.w600,
+                //           // color: Colors.white,
+                //         ),
+                //       ),
+                //     ),
+                //     SizedBox(width: 5),
+                //     Chip(
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(22),
+                //       ),
+                //       backgroundColor: Colors.white.withOpacity(0.3),
+                //       label: Text(
+                //         "Games",
+                //         style: GoogleFonts.figtree(
+                //           fontSize: 13,
+                //           fontWeight: FontWeight.w600,
+                //           // color: Colors.white,
+                //         ),
+                //       ),
+                //     ),
+                //     SizedBox(width: 5),
+                //     Chip(
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(22),
+                //       ),
+                //       backgroundColor: Colors.white.withOpacity(0.3),
+                //       label: Text(
+                //         "Books",
+                //         style: GoogleFonts.figtree(
+                //           fontSize: 13,
+                //           fontWeight: FontWeight.w600,
+                //           // color: Colors.white,
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
                 SizedBox(height: Get.height * 0.03),
               ],
             ),

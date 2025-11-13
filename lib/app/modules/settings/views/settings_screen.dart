@@ -59,7 +59,7 @@ class SettingsScreen extends StatelessWidget {
                     scale: 0.7,
                     child: Switch(
                       value: _isDarkMode.value,
-                      activeColor: AppColors.primaryColor,
+                      activeThumbColor: AppColors.primaryColor,
                       onChanged: (value) {
                         Get.changeThemeMode(
                           value ? ThemeMode.dark : ThemeMode.light,
