@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:appinio_swiper/enums.dart';
 import 'package:blume/app/controller/storage_controller.dart';
 import 'package:blume/app/data/models/user_model.dart';
 import 'package:blume/app/data/services/user_service.dart';
@@ -452,6 +453,7 @@ class UserController extends GetxController {
         currentPage.value = 1;
         potentialMatchesList.clear();
       }
+      await Future.delayed(const Duration(seconds: 1));
 
       final storageController = Get.find<StorageController>();
       String? token = await storageController.getToken();
@@ -491,6 +493,7 @@ class UserController extends GetxController {
 
   Future<void> swipe({required String userId, required SwipeType type}) async {
     try {
+      removeUserFromPotentialList(userId);
       final storageController = Get.find<StorageController>();
       String? token = await storageController.getToken();
       if (token == null || token.isEmpty) return;
@@ -508,7 +511,6 @@ class UserController extends GetxController {
         CustomSnackbar.showErrorToast(decoded["message"]);
         return;
       }
-      removeUserFromPotentialList(userId);
 
       final match = decoded["match"];
       if (match == null) return;
@@ -524,6 +526,28 @@ class UserController extends GetxController {
 
   void removeUserFromPotentialList(String userId) {
     potentialMatchesList.removeWhere((element) => element.id == userId);
+  }
+
+  void onSwipeEnd(
+    int previousIndex,
+    int targetIndex,
+    SwiperActivity activity,
+  ) async {
+    if (previousIndex == -1) return;
+    if (previousIndex >= potentialMatchesList.length) {
+      return;
+    }
+    final userId = potentialMatchesList[previousIndex].id;
+    if (userId == null) return;
+    if (activity.direction == AxisDirection.right) {
+      await swipe(userId: userId, type: SwipeType.like);
+    }
+    if (activity.direction == AxisDirection.left) {
+      await swipe(userId: userId, type: SwipeType.pass);
+    }
+    if (activity.direction == AxisDirection.up) {
+      await swipe(userId: userId, type: SwipeType.superlike);
+    }
   }
 }
 

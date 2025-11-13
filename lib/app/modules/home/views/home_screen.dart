@@ -110,36 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           );
                         },
                         backgroundCardOffset: Offset(0, -45),
-                        onSwipeEnd:
-                            (previousIndex, targetIndex, activity) async {
-                              if (previousIndex == -1) return;
-                              if (previousIndex >=
-                                  userController.potentialMatchesList.length) {
-                                return;
-                              }
-                              final userId = userController
-                                  .potentialMatchesList[previousIndex]
-                                  .id;
-                              if (userId == null) return;
-                              if (activity.direction == AxisDirection.right) {
-                                await userController.swipe(
-                                  userId: userId,
-                                  type: SwipeType.like,
-                                );
-                              }
-                              if (activity.direction == AxisDirection.left) {
-                                await userController.swipe(
-                                  userId: userId,
-                                  type: SwipeType.pass,
-                                );
-                              }
-                              if (activity.direction == AxisDirection.up) {
-                                await userController.swipe(
-                                  userId: userId,
-                                  type: SwipeType.superlike,
-                                );
-                              }
-                            },
+                        onSwipeEnd: userController.onSwipeEnd,
                         cardBuilder: (context, index) {
                           final activeIndex = 0.obs;
                           return buildCard(
@@ -351,7 +322,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             style: GoogleFonts.figtree(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
-                              
                             ),
                           ),
                         ),
