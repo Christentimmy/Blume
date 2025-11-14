@@ -21,6 +21,9 @@ class UserController extends GetxController {
 
   RxList<UserModel> usersWhoLikesMeList = <UserModel>[].obs;
 
+  //matches variables
+  RxList<UserModel> matchesList = <UserModel>[].obs;
+
   Future<void> updateName({
     required String name,
     VoidCallback? whatNext,
@@ -169,7 +172,7 @@ class UserController extends GetxController {
         whatNext();
         return;
       }
-      Get.toNamed(AppRoutes.education);
+      Get.toNamed(AppRoutes.bio);
     } catch (e) {
       debugPrint(e.toString());
     } finally {
@@ -177,8 +180,8 @@ class UserController extends GetxController {
     }
   }
 
-  Future<void> updateEducation({
-    required String education,
+  Future<void> updateBio({
+    required String bio,
     VoidCallback? whatNext,
   }) async {
     isloading.value = true;
@@ -186,9 +189,9 @@ class UserController extends GetxController {
       final storageController = Get.find<StorageController>();
       final token = await storageController.getToken();
       if (token == null) return;
-      final response = await userService.updateEducation(
+      final response = await userService.updateBio(
         token: token,
-        education: education,
+        bio: bio,
       );
       if (response == null) return;
       final decoded = json.decode(response.body);
@@ -604,15 +607,42 @@ class UserController extends GetxController {
     }
   }
 
-    void clearUserData(){
-      user.value = null;
-      potentialMatchesList.clear();
-      usersWhoLikesMeList.clear();
-      currentPage.value = 1;
-      hasNextPage.value = false;
-      
-    }
+  void clearUserData() {
+    user.value = null;
+    potentialMatchesList.clear();
+    usersWhoLikesMeList.clear();
+    currentPage.value = 1;
+    hasNextPage.value = false;
+  }
 
+  Future<void> getMatches() async {
+    isloading.value = true;
+    try {
+      final storageController = Get.find<StorageController>();
+      String? token = await storageController.getToken();
+      if (token == null || token.isEmpty) return;
+
+      final response = await userService.getMatches(token: token);
+
+      if (response == null) return;
+      final decoded = json.decode(response.body);
+      if (response.statusCode != 200) {
+        debugPrint(decoded["message"].toString());
+        return;
+      }
+      List matches = decoded["data"] ?? [];
+      matchesList.clear();
+      if (matches.isEmpty) return;
+      List<UserModel> mapped = matches
+          .map((e) => UserModel.fromJson(e))
+          .toList();
+      matchesList.value = mapped;
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      isloading.value = false;
+    }
+  }
 }
 
 enum SwipeType { pass, superlike, like }

@@ -138,19 +138,19 @@ class UserService {
     return null;
   }
 
-  Future<http.Response?> updateEducation({
+  Future<http.Response?> updateBio({
     required String token,
-    required String education,
+    required String bio,
   }) async {
     try {
       final response = await http
           .patch(
-            Uri.parse("$baseUrl/user/update-education"),
+            Uri.parse("$baseUrl/user/update-bio"),
             headers: {
               "Content-Type": "application/json",
               "Authorization": "Bearer $token",
             },
-            body: jsonEncode({"education": education}),
+            body: jsonEncode({"bio": bio}),
           )
           .timeout(const Duration(seconds: 15));
       return response;
@@ -380,28 +380,6 @@ class UserService {
     return null;
   }
 
-  Future<http.Response?> getMatches({required String token}) async {
-    try {
-      final response = await http
-          .get(
-            Uri.parse("$baseUrl/user/get-matches"),
-            headers: {
-              'Authorization': 'Bearer $token',
-              'Content-Type': 'application/json',
-            },
-          )
-          .timeout(const Duration(seconds: 15));
-      return response;
-    } on SocketException catch (e) {
-      debugPrint("No internet connection $e");
-    } on TimeoutException {
-      debugPrint("Request timeout");
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-    return null;
-  }
-
   Future<http.Response?> getPotentialMatches({
     required String token,
     int? page,
@@ -495,4 +473,27 @@ class UserService {
     }
     return null;
   }
+
+  Future<http.Response?> getMatches({required String token}) async {
+    try {
+      final response = await http
+          .get(
+            Uri.parse("$baseUrl/user/get-matches"),
+            headers: {
+              'Authorization': 'Bearer $token',
+              'Content-Type': 'application/json',
+            },
+          )
+          .timeout(const Duration(seconds: 15));
+      return response;
+    } on SocketException catch (e) {
+      debugPrint("No internet connection $e");
+    } on TimeoutException {
+      debugPrint("Request timeout");
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
+
 }

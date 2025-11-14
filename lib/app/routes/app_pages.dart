@@ -14,9 +14,9 @@ import 'package:blume/app/modules/messages/views/video_call_screen.dart';
 import 'package:blume/app/modules/notification/views/notification_screen.dart';
 import 'package:blume/app/modules/onboarding/views/onboarding_screen.dart';
 import 'package:blume/app/modules/profile/views/add_pictures_screen.dart';
+import 'package:blume/app/modules/profile/views/bio_screen.dart';
 import 'package:blume/app/modules/profile/views/choose_boost_plan_screen.dart';
 import 'package:blume/app/modules/profile/views/distance_preference_screen.dart';
-import 'package:blume/app/modules/profile/views/education_screen.dart';
 import 'package:blume/app/modules/profile/views/interest_screen.dart';
 import 'package:blume/app/modules/profile/views/lifestyle_screen.dart';
 import 'package:blume/app/modules/profile/views/profile_screen.dart';
@@ -96,11 +96,11 @@ class AppPages {
       },
     ),
     GetPage(
-      name: AppRoutes.education,
+      name: AppRoutes.bio,
       page: () {
         final arguments = Get.arguments ?? {};
         VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
-        return EducationScreen(whatNext: whatNext);
+        return BioScreen(whatNext: whatNext);
       },
     ),
     GetPage(

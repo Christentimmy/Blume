@@ -20,6 +20,8 @@ class LikesScreen extends StatefulWidget {
 
 class _LikesScreenState extends State<LikesScreen> {
   final userController = Get.find<UserController>();
+  final pageController = PageController();
+  final index = 0.obs;
 
   @override
   void initState() {
@@ -72,7 +74,13 @@ class _LikesScreenState extends State<LikesScreen> {
               ),
             );
           }
-          return buildGridViewer();
+          return PageView(
+            controller: pageController,
+            onPageChanged: (value) {
+              index.value = value;
+            },
+            children: [buildGridViewer()],
+          );
         }),
       ),
     );
@@ -150,7 +158,7 @@ class _LikesScreenState extends State<LikesScreen> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                "${user.fullName}  ${calculateAge(user.dateOfBirth)}",
+                "${user.fullName?.split(" ").first}  ${calculateAge(user.dateOfBirth)}",
                 style: GoogleFonts.figtree(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
@@ -161,7 +169,7 @@ class _LikesScreenState extends State<LikesScreen> {
                 children: [
                   Icon(Icons.location_on, color: Colors.white, size: 15),
                   Text(
-                    user.location??"",
+                    user.location ?? "",
                     style: GoogleFonts.figtree(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
@@ -195,12 +203,66 @@ class _LikesScreenState extends State<LikesScreen> {
     return AppBar(
       automaticallyImplyLeading: false,
       backgroundColor: Get.theme.scaffoldBackgroundColor,
-      title: Text(
-        "Likes",
-        style: GoogleFonts.figtree(
-          fontSize: 28,
-          fontWeight: FontWeight.w800,
-          color: Get.theme.primaryColor,
+      title: GestureDetector(
+        onTapDown: (details) async {
+          final RenderBox overlay =
+              Overlay.of(context).context.findRenderObject() as RenderBox;
+
+          await showMenu<String>(
+            context: context,
+            position: RelativeRect.fromRect(
+              details.globalPosition & const Size(40, 40),
+              Offset.zero & overlay.size,
+            ),
+            items: [
+              PopupMenuItem(
+                value: "likes",
+                child: Text("Likes"),
+                onTap: () {
+                  pageController.animateToPage(
+                    0,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                },
+              ),
+              PopupMenuItem(
+                value: "myLikes",
+                child: Text("My Likes"),
+                onTap: () {
+                  pageController.animateToPage(
+                    1,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                },
+              ),
+              PopupMenuItem(
+                value: "matches",
+                child: Text("Matches"),
+                onTap: () {
+                  pageController.animateToPage(
+                    2,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                },
+              ),
+            ],
+          );
+        },
+        child: Row(
+          children: [
+            Text(
+              "Likes ",
+              style: GoogleFonts.figtree(
+                fontSize: 22,
+                fontWeight: FontWeight.w600,
+                color: Get.theme.primaryColor,
+              ),
+            ),
+            Icon(Icons.keyboard_arrow_down_rounded),
+          ],
         ),
       ),
       actions: [IconButton(onPressed: () {}, icon: Icon(Icons.notifications))],

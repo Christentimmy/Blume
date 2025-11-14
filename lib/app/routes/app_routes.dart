@@ -9,7 +9,7 @@ class AppRoutes {
   static const updateGender = '/update-gender';
   static const relationshipPreference = '/relationship-preference';
   static const distancePreference = '/distance-preference';
-  static const education = '/education';
+  static const bio = '/bio';
   static const lifestyle = '/lifestyle';
   static const religionWork = '/religion-work';
   static const interest = '/interest';
