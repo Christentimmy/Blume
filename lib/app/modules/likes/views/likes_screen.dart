@@ -20,7 +20,7 @@ class LikesScreen extends StatefulWidget {
 class _LikesScreenState extends State<LikesScreen> {
   final userController = Get.find<UserController>();
   PageController pageController = PageController();
-  final index = 0.obs;
+  final activeIndex = 0.obs;
   RxString title = "Likes".obs;
   final selectedFilter = (-1).obs;
 
@@ -49,12 +49,12 @@ class _LikesScreenState extends State<LikesScreen> {
     // "NearBy",
     "Verified profile",
     "Aligned interests",
-    "Relationship",
+    // "Relationship",
     "Education",
     "Lifestyle",
     "Religion",
     "Work",
-    "Interest",
+    // "Interest",
   ];
 
   @override
@@ -65,7 +65,7 @@ class _LikesScreenState extends State<LikesScreen> {
         child: PageView(
           controller: pageController,
           onPageChanged: (value) {
-            index.value = value;
+            activeIndex.value = value;
           },
           children: [
             buildLikesGridViewer(),
@@ -346,11 +346,13 @@ class _LikesScreenState extends State<LikesScreen> {
                   return InkWell(
                     onTap: () async {
                       if (selectedFilter.value == index) {
+                        await userController.getUserWhoLikesMe();
+                        await userController.getMatches();
                         selectedFilter.value = -1;
                         return;
                       }
                       selectedFilter.value = index;
-                      if (index == 0) {
+                      if (activeIndex.value == 0) {
                         await userController.getUserWhoLikesMe(status: filter);
                       }else{
                         await userController.getMatches(status: filter);

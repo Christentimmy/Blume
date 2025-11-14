@@ -583,7 +583,7 @@ class UserController extends GetxController {
 
       final response = await userService.getUserWhoLikesMe(
         token: token,
-        status: status,
+        status: status?.toLowerCase(),
       );
       if (response == null) return;
       final decoded = json.decode(response.body);
@@ -591,6 +591,7 @@ class UserController extends GetxController {
         debugPrint(decoded["message"].toString());
         return;
       }
+
       List matches = decoded["data"] ?? [];
       if (matches.isEmpty) return;
       List<UserModel> mapped = matches
