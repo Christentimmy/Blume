@@ -32,18 +32,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Get.theme.scaffoldBackgroundColor,
-      appBar: AppBar(
-        backgroundColor: Get.theme.scaffoldBackgroundColor,
-        title: Text(
-          "Chats",
-          style: GoogleFonts.figtree(
-            fontSize: 25,
-            fontWeight: FontWeight.w800,
-            color: Get.theme.primaryColor,
-          ),
-        ),
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.search))],
-      ),
+      appBar: buildAppBar(),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -92,6 +81,21 @@ class _ChatListScreenState extends State<ChatListScreen> {
     );
   }
 
+  AppBar buildAppBar() {
+    return AppBar(
+      backgroundColor: Get.theme.scaffoldBackgroundColor,
+      title: Text(
+        "Chats",
+        style: GoogleFonts.figtree(
+          fontSize: 25,
+          fontWeight: FontWeight.w800,
+          color: Get.theme.primaryColor,
+        ),
+      ),
+      actions: [IconButton(onPressed: () {}, icon: Icon(Icons.search))],
+    );
+  }
+
   Widget _buildEmptyList(bool isDark) {
     return SizedBox(
       height: Get.height * 0.65,
@@ -123,7 +127,9 @@ class _ChatListScreenState extends State<ChatListScreen> {
 
   Widget _buildChatItemSkeleton(bool isDark) {
     return Shimmer.fromColors(
-      baseColor: Color.fromARGB(199, 15, 13, 21),
+      baseColor: Get.isDarkMode
+          ? Color.fromARGB(199, 15, 13, 21)
+          : Colors.grey.shade300,
       highlightColor: AppColors.primaryColor,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
@@ -140,26 +146,34 @@ class _ChatListScreenState extends State<ChatListScreen> {
             width: 50,
             height: 50,
             decoration: BoxDecoration(
-              color: Color.fromARGB(199, 15, 13, 21),
+              color: Get.isDarkMode
+                  ? Color.fromARGB(199, 15, 13, 21)
+                  : Colors.grey.shade300,
               borderRadius: BorderRadius.circular(20),
             ),
           ),
           title: Container(
             width: 100,
             height: 16,
-            color: Color.fromARGB(199, 15, 13, 21),
+            color: Get.isDarkMode
+                ? Color.fromARGB(199, 15, 13, 21)
+                : Colors.grey.shade300,
             margin: const EdgeInsets.only(bottom: 8),
           ),
           subtitle: Container(
             width: 150,
             height: 14,
-            color: Color.fromARGB(199, 15, 13, 21),
+            color: Get.isDarkMode
+                ? Color.fromARGB(199, 15, 13, 21)
+                : Colors.grey.shade300,
           ),
           trailing: Container(
             width: 24,
             height: 24,
             decoration: BoxDecoration(
-              color: Color.fromARGB(199, 15, 13, 21),
+              color: Get.isDarkMode
+                  ? Color.fromARGB(199, 15, 13, 21)
+                  : Colors.grey.shade300,
               borderRadius: BorderRadius.circular(12),
             ),
           ),
@@ -173,7 +187,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
       contentPadding: EdgeInsets.zero,
       horizontalTitleGap: 10,
       onTap: () {
-      Get.toNamed(AppRoutes.message, arguments: {"chatHead": chatHead});
+        Get.toNamed(AppRoutes.message, arguments: {"chatHead": chatHead});
       },
       leading: CircleAvatar(
         radius: 35,
