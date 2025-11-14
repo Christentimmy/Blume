@@ -452,11 +452,14 @@ class UserService {
     return null;
   }
 
-  Future<http.Response?> getUserWhoLikesMe({required String token}) async {
+  Future<http.Response?> getUserWhoLikesMe({
+    required String token,
+    String? status,
+  }) async {
     try {
       final response = await http
           .get(
-            Uri.parse("$baseUrl/user/get-users-who-liked-me"),
+            Uri.parse("$baseUrl/user/get-users-who-liked-me?status=$status"),
             headers: {
               'Authorization': 'Bearer $token',
               'Content-Type': 'application/json',
@@ -474,11 +477,14 @@ class UserService {
     return null;
   }
 
-  Future<http.Response?> getMatches({required String token}) async {
+  Future<http.Response?> getMatches({
+    required String token,
+    String? status,
+  }) async {
     try {
       final response = await http
           .get(
-            Uri.parse("$baseUrl/user/get-matches"),
+            Uri.parse("$baseUrl/user/get-matches?status=$status"),
             headers: {
               'Authorization': 'Bearer $token',
               'Content-Type': 'application/json',
@@ -495,5 +501,4 @@ class UserService {
     }
     return null;
   }
-
 }

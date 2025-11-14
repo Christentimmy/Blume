@@ -180,19 +180,13 @@ class UserController extends GetxController {
     }
   }
 
-  Future<void> updateBio({
-    required String bio,
-    VoidCallback? whatNext,
-  }) async {
+  Future<void> updateBio({required String bio, VoidCallback? whatNext}) async {
     isloading.value = true;
     try {
       final storageController = Get.find<StorageController>();
       final token = await storageController.getToken();
       if (token == null) return;
-      final response = await userService.updateBio(
-        token: token,
-        bio: bio,
-      );
+      final response = await userService.updateBio(token: token, bio: bio);
       if (response == null) return;
       final decoded = json.decode(response.body);
       String message = decoded["message"] ?? "";
@@ -580,14 +574,17 @@ class UserController extends GetxController {
     return null;
   }
 
-  Future<void> getUserWhoLikesMe() async {
+  Future<void> getUserWhoLikesMe({String? status}) async {
     isloading.value = true;
     try {
       final storageController = Get.find<StorageController>();
       String? token = await storageController.getToken();
       if (token == null || token.isEmpty) return;
 
-      final response = await userService.getUserWhoLikesMe(token: token);
+      final response = await userService.getUserWhoLikesMe(
+        token: token,
+        status: status,
+      );
       if (response == null) return;
       final decoded = json.decode(response.body);
       if (response.statusCode != 200) {
@@ -615,14 +612,17 @@ class UserController extends GetxController {
     hasNextPage.value = false;
   }
 
-  Future<void> getMatches() async {
+  Future<void> getMatches({String? status}) async {
     isloading.value = true;
     try {
       final storageController = Get.find<StorageController>();
       String? token = await storageController.getToken();
       if (token == null || token.isEmpty) return;
 
-      final response = await userService.getMatches(token: token);
+      final response = await userService.getMatches(
+        token: token,
+        status: status,
+      );
 
       if (response == null) return;
       final decoded = json.decode(response.body);

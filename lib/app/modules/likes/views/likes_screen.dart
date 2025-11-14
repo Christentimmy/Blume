@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:blume/app/controller/user_controller.dart';
 import 'package:blume/app/data/models/user_model.dart';
 import 'package:blume/app/resources/colors.dart';
@@ -20,27 +19,34 @@ class LikesScreen extends StatefulWidget {
 
 class _LikesScreenState extends State<LikesScreen> {
   final userController = Get.find<UserController>();
-  final pageController = PageController();
+  PageController pageController = PageController();
   final index = 0.obs;
+  RxString title = "Likes".obs;
+  final selectedFilter = (-1).obs;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (userController.usersWhoLikesMeList.isNotEmpty) return;
-      userController.getUserWhoLikesMe();
+      if (userController.matchesList.isEmpty) {
+        userController.getMatches();
+      }
+      if (userController.usersWhoLikesMeList.isEmpty) {
+        userController.getUserWhoLikesMe();
+      }
     });
   }
 
   @override
   void dispose() {
     userController.isloading.value = false;
+    pageController.dispose();
     super.dispose();
   }
 
-  final List filter = [
-    "BIo added",
-    "NearBy",
+  final List filters = [
+    // "BIo added",
+    // "NearBy",
     "Verified profile",
     "Aligned interests",
     "Relationship",
@@ -56,37 +62,61 @@ class _LikesScreenState extends State<LikesScreen> {
     return Scaffold(
       appBar: buildAppBar(),
       body: SafeArea(
-        child: Obx(() {
-          if (userController.isloading.value) {
-            return Center(
-              child: CircularProgressIndicator(color: AppColors.primaryColor),
-            );
-          }
-          if (userController.usersWhoLikesMeList.isEmpty) {
-            return Center(
-              child: Text(
-                "No users found",
-                style: GoogleFonts.figtree(
-                  fontSize: 22,
-                  color: AppColors.primaryColor,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            );
-          }
-          return PageView(
-            controller: pageController,
-            onPageChanged: (value) {
-              index.value = value;
-            },
-            children: [buildGridViewer()],
-          );
-        }),
+        child: PageView(
+          controller: pageController,
+          onPageChanged: (value) {
+            index.value = value;
+          },
+          children: [
+            buildLikesGridViewer(),
+            buildMatchesGridViewer(),
+            // buildMyLikesGridViewer(),
+          ],
+        ),
       ),
     );
   }
 
-  Padding buildGridViewer() {
+  Widget buildLikesGridViewer() {
+    return Obx(() {
+      if (userController.isloading.value) {
+        return Center(
+          child: CircularProgressIndicator(color: AppColors.primaryColor),
+        );
+      }
+      if (userController.usersWhoLikesMeList.isEmpty) {
+        return Center(
+          child: Text(
+            "No users found",
+            style: GoogleFonts.figtree(
+              fontSize: 22,
+              color: AppColors.primaryColor,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        );
+      }
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: GridView.builder(
+          itemCount: userController.usersWhoLikesMeList.length,
+          physics: const BouncingScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 0.7,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+          ),
+          itemBuilder: (context, index) {
+            final user = userController.usersWhoLikesMeList[index];
+            return buildLikeCard(user: user);
+          },
+        ),
+      );
+    });
+  }
+
+  Padding buildMyLikesGridViewer() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: GridView.builder(
@@ -104,6 +134,45 @@ class _LikesScreenState extends State<LikesScreen> {
         },
       ),
     );
+  }
+
+  Widget buildMatchesGridViewer() {
+    return Obx(() {
+      if (userController.isloading.value) {
+        return Center(
+          child: CircularProgressIndicator(color: AppColors.primaryColor),
+        );
+      }
+      if (userController.matchesList.isEmpty) {
+        return Center(
+          child: Text(
+            "No users found",
+            style: GoogleFonts.figtree(
+              fontSize: 22,
+              color: AppColors.primaryColor,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        );
+      }
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: GridView.builder(
+          itemCount: userController.matchesList.length,
+          physics: const BouncingScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 0.7,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+          ),
+          itemBuilder: (context, index) {
+            final user = userController.matchesList[index];
+            return buildLikeCard(user: user);
+          },
+        ),
+      );
+    });
   }
 
   Stack buildLikeCard({required UserModel user}) {
@@ -208,57 +277,44 @@ class _LikesScreenState extends State<LikesScreen> {
           final RenderBox overlay =
               Overlay.of(context).context.findRenderObject() as RenderBox;
 
-          await showMenu<String>(
+          final value = await showMenu<String>(
             context: context,
             position: RelativeRect.fromRect(
               details.globalPosition & const Size(40, 40),
               Offset.zero & overlay.size,
             ),
             items: [
-              PopupMenuItem(
-                value: "likes",
-                child: Text("Likes"),
-                onTap: () {
-                  pageController.animateToPage(
-                    0,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                  );
-                },
-              ),
-              PopupMenuItem(
-                value: "myLikes",
-                child: Text("My Likes"),
-                onTap: () {
-                  pageController.animateToPage(
-                    1,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                  );
-                },
-              ),
-              PopupMenuItem(
-                value: "matches",
-                child: Text("Matches"),
-                onTap: () {
-                  pageController.animateToPage(
-                    2,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                  );
-                },
-              ),
+              PopupMenuItem(value: "likes", child: Text("Likes")),
+              PopupMenuItem(value: "matches", child: Text("Matches")),
             ],
           );
+          print(pageController.hasClients);
+          if (value == null) return;
+          if (!pageController.hasClients) return;
+          if (value == "likes") {
+            title.value = "Likes";
+            pageController.nextPage(
+              duration: Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
+          } else if (value == "matches") {
+            title.value = "Matches";
+            pageController.nextPage(
+              duration: Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
+          }
         },
         child: Row(
           children: [
-            Text(
-              "Likes ",
-              style: GoogleFonts.figtree(
-                fontSize: 22,
-                fontWeight: FontWeight.w600,
-                color: Get.theme.primaryColor,
+            Obx(
+              () => Text(
+                "${title.value} ",
+                style: GoogleFonts.figtree(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600,
+                  color: Get.theme.primaryColor,
+                ),
               ),
             ),
             Icon(Icons.keyboard_arrow_down_rounded),
@@ -266,48 +322,75 @@ class _LikesScreenState extends State<LikesScreen> {
         ),
       ),
       actions: [IconButton(onPressed: () {}, icon: Icon(Icons.notifications))],
-      bottom: PreferredSize(
-        preferredSize: Size.fromHeight(Get.height * 0.05),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          height: Get.height * 0.05,
-          margin: const EdgeInsets.only(bottom: 10),
-          child: Row(
-            children: [
-              Icon(Icons.filter_list_rounded),
-              SizedBox(width: 10),
-              Expanded(
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: filter.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: const EdgeInsets.only(right: 10),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 15,
-                        vertical: 2,
-                      ),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Get.isDarkMode
-                            ? AppColors.darkButtonColor
-                            : AppColors.lightButtonColor,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Text(
-                        filter[index],
-                        style: GoogleFonts.figtree(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Get.theme.primaryColor,
+      bottom: buildBottomFilter(),
+    );
+  }
+
+  PreferredSize buildBottomFilter() {
+    return PreferredSize(
+      preferredSize: Size.fromHeight(Get.height * 0.05),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        height: Get.height * 0.05,
+        margin: const EdgeInsets.only(bottom: 10),
+        child: Row(
+          children: [
+            Icon(Icons.filter_list_rounded),
+            SizedBox(width: 10),
+            Expanded(
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: filters.length,
+                itemBuilder: (context, index) {
+                  String filter = filters[index];
+                  return InkWell(
+                    onTap: () async {
+                      if (selectedFilter.value == index) {
+                        selectedFilter.value = -1;
+                        return;
+                      }
+                      selectedFilter.value = index;
+                      if (index == 0) {
+                        await userController.getUserWhoLikesMe(status: filter);
+                      }else{
+                        await userController.getMatches(status: filter);
+                      }
+                    },
+                    child: Obx(
+                      () => Container(
+                        margin: const EdgeInsets.only(right: 10),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 15,
+                          vertical: 2,
+                        ),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Get.isDarkMode
+                              ? AppColors.darkButtonColor
+                              : AppColors.lightButtonColor,
+                          borderRadius: BorderRadius.circular(16),
+                          border: selectedFilter.value == index
+                              ? Border.all(
+                                  color: AppColors.primaryColor,
+                                  width: 1.5,
+                                )
+                              : null,
+                        ),
+                        child: Text(
+                          filter,
+                          style: GoogleFonts.figtree(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Get.theme.primaryColor,
+                          ),
                         ),
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
