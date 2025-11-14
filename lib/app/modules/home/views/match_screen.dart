@@ -123,7 +123,9 @@ class _MatchScreenState extends State<MatchScreen> {
               }),
               const Spacer(),
               CustomButton(
-                ontap: () {
+                ontap: () async {
+                  Get.back();
+                  await userController.getPotentialMatches();
                   // Get.offNamed(AppRoutes.message);
                   // userController.getPotentialMatches();
                   // Get.offNamed(
