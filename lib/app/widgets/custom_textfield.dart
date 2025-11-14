@@ -39,6 +39,7 @@ class CustomTextField extends StatelessWidget {
   Color? suffixIconcolor;
   TextAlign? textAlign;
   bool? showError;
+  Function()? onPrefixTap;
 
   CustomTextField({
     super.key,
@@ -75,6 +76,7 @@ class CustomTextField extends StatelessWidget {
     this.suffixIconcolor,
     this.textAlign,
     this.showError,
+    this.onPrefixTap,
   });
 
   @override
@@ -145,9 +147,12 @@ class CustomTextField extends StatelessWidget {
           prefix: prefix,
           prefixIcon: prefixIcon == null
               ? null
-              : Icon(
-                  prefixIcon,
-                  color: prefixIconColor ?? const Color(0xff36534F),
+              : IconButton(
+                  onPressed: onPrefixTap,
+                  icon: Icon(
+                    prefixIcon,
+                    color: prefixIconColor ?? const Color(0xff36534F),
+                  ),
                 ),
           suffixIcon: IconButton(
             onPressed: onSuffixTap,

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:blume/app/controller/message_controller.dart';
+import 'package:blume/app/controller/socket_controller.dart';
 import 'package:blume/app/controller/storage_controller.dart';
 import 'package:blume/app/controller/user_controller.dart';
 import 'package:blume/app/data/services/auth_service.dart';
@@ -118,12 +119,12 @@ class AuthController extends GetxController {
         CustomSnackbar.showErrorToast(message);
         return;
       }
-      // final userController = Get.find<UserController>();
+      final userController = Get.find<UserController>();
       // final storyController = Get.find<StoryController>();
-      // await userController.getUserDetails();
-      // await userController.getPotentialMatches();
-      // final socketController = Get.find<SocketController>();
-      // socketController.initializeSocket();
+      await userController.getUserDetails();
+      await userController.getPotentialMatches();
+      final socketController = Get.find<SocketController>();
+      socketController.initializeSocket();
       await handleNavigation();
     } catch (e) {
       debugPrint(e.toString());

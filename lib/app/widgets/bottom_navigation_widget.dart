@@ -1,3 +1,4 @@
+import 'package:blume/app/controller/socket_controller.dart';
 import 'package:blume/app/modules/home/views/home_screen.dart';
 import 'package:blume/app/modules/likes/views/likes_screen.dart';
 import 'package:blume/app/modules/messages/views/chat_list_screen.dart';
@@ -7,9 +8,14 @@ import 'package:blume/app/resources/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class BottomNavigationWidget extends StatelessWidget {
-  BottomNavigationWidget({super.key});
+class BottomNavigationWidget extends StatefulWidget {
+  const BottomNavigationWidget({super.key});
 
+  @override
+  State<BottomNavigationWidget> createState() => _BottomNavigationWidgetState();
+}
+
+class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
   final List<Widget> widgets = [
     const HomeScreen(),
     const SearchScreen(),
@@ -19,6 +25,16 @@ class BottomNavigationWidget extends StatelessWidget {
   ];
 
   final RxInt currentIndex = 0.obs;
+
+  @override
+  void initState() {
+    super.initState();
+    final socketController = Get.find<SocketController>();
+    if (socketController.socket == null ||
+        !socketController.socket!.connected) {
+      socketController.initializeSocket();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

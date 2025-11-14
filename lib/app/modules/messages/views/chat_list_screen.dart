@@ -1,11 +1,32 @@
+import 'package:blume/app/controller/message_controller.dart';
+import 'package:blume/app/data/models/chat_list_model.dart';
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+import 'package:shimmer/shimmer.dart';
 
-class ChatListScreen extends StatelessWidget {
+class ChatListScreen extends StatefulWidget {
   const ChatListScreen({super.key});
+
+  @override
+  State<ChatListScreen> createState() => _ChatListScreenState();
+}
+
+class _ChatListScreenState extends State<ChatListScreen> {
+  final _messageController = Get.find<MessageController>();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_messageController.isChattedListFetched.value) {
+        _messageController.getChatList();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,16 +49,42 @@ class ChatListScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: ListView(
             children: [
-              _buildStory(),
+              // buildStory(),
               SizedBox(height: Get.height * 0.01),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return buildChatTile();
-                },
-              ),
+              // ListView.builder(
+              //   shrinkWrap: true,
+              //   physics: NeverScrollableScrollPhysics(),
+              //   itemCount: 10,
+              //   itemBuilder: (context, index) {
+              //     return buildChatTile();
+              //   },
+              // ),
+              Obx(() {
+                if (_messageController.isChatListLoading.value) {
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: 8,
+                    itemBuilder: (context, index) {
+                      return _buildChatItemSkeleton(true);
+                    },
+                  );
+                }
+
+                if (_messageController.allChattedUserList.isEmpty) {
+                  return _buildEmptyList(true);
+                }
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: _messageController.allChattedUserList.length,
+                  itemBuilder: (context, index) {
+                    final chatHead =
+                        _messageController.allChattedUserList[index];
+                    return buildChatTile(chatHead: chatHead);
+                  },
+                );
+              }),
             ],
           ),
         ),
@@ -45,23 +92,99 @@ class ChatListScreen extends StatelessWidget {
     );
   }
 
-  ListTile buildChatTile() {
+  Widget _buildEmptyList(bool isDark) {
+    return SizedBox(
+      height: Get.height * 0.65,
+      width: Get.width,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text(
+            'No conversations yet',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'Start chatting with your matches!',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: Colors.white,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildChatItemSkeleton(bool isDark) {
+    return Shimmer.fromColors(
+      baseColor: Color.fromARGB(199, 15, 13, 21),
+      highlightColor: AppColors.primaryColor,
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: Colors.transparent,
+        ),
+        child: ListTile(
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 8,
+          ),
+          leading: Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              color: Color.fromARGB(199, 15, 13, 21),
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+          title: Container(
+            width: 100,
+            height: 16,
+            color: Color.fromARGB(199, 15, 13, 21),
+            margin: const EdgeInsets.only(bottom: 8),
+          ),
+          subtitle: Container(
+            width: 150,
+            height: 14,
+            color: Color.fromARGB(199, 15, 13, 21),
+          ),
+          trailing: Container(
+            width: 24,
+            height: 24,
+            decoration: BoxDecoration(
+              color: Color.fromARGB(199, 15, 13, 21),
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  ListTile buildChatTile({required ChatListModel chatHead}) {
     return ListTile(
       contentPadding: EdgeInsets.zero,
       horizontalTitleGap: 10,
       onTap: () {
-        Get.toNamed(AppRoutes.message);
+      Get.toNamed(AppRoutes.message, arguments: {"chatHead": chatHead});
       },
       leading: CircleAvatar(
         radius: 35,
-        backgroundImage: AssetImage("assets/images/frm.png"),
+        backgroundImage: NetworkImage(chatHead.avatar ?? ""),
       ),
       title: Text(
-        "Jessica sent you a text",
+        chatHead.fullName ?? "",
         style: GoogleFonts.figtree(fontSize: 18, fontWeight: FontWeight.w600),
       ),
       subtitle: Text(
-        "2 hours ago",
+        chatHead.lastMessage ?? "",
         style: GoogleFonts.figtree(fontSize: 12, fontWeight: FontWeight.w400),
       ),
       trailing: Column(
@@ -69,7 +192,7 @@ class ChatListScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Text(
-            "22:40",
+            DateFormat('hh:mm a').format(chatHead.timestamp ?? DateTime.now()),
             style: GoogleFonts.figtree(
               fontSize: 16,
               fontWeight: FontWeight.w500,
@@ -81,7 +204,7 @@ class ChatListScreen extends StatelessWidget {
             radius: 10,
             backgroundColor: AppColors.primaryColor,
             child: Text(
-              "2",
+              chatHead.unreadCount.toString(),
               style: GoogleFonts.figtree(
                 fontSize: 9,
                 fontWeight: FontWeight.w600,
@@ -94,7 +217,7 @@ class ChatListScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStory() {
+  Widget buildStory() {
     return Container(
       padding: const EdgeInsets.only(left: 5),
       height: Get.height * 0.088,

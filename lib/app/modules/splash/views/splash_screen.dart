@@ -1,4 +1,5 @@
 import 'package:blume/app/controller/auth_controller.dart';
+import 'package:blume/app/controller/socket_controller.dart';
 import 'package:blume/app/controller/storage_controller.dart';
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/routes/app_routes.dart';
@@ -52,6 +53,8 @@ class _SplashScreenState extends State<SplashScreen>
         Get.offNamed(AppRoutes.onboarding);
         return;
       }
+      final socketController = Get.find<SocketController>();
+      await socketController.initializeSocket();
       await authController.handleNavigation();
     });
   }

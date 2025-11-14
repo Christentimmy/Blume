@@ -7,6 +7,7 @@ class ChatListModel {
   String? lastMessage;
   int? unreadCount;
   bool? online;
+  DateTime? timestamp;
 
   ChatListModel({
     this.userId,
@@ -15,6 +16,7 @@ class ChatListModel {
     this.lastMessage,
     this.unreadCount,
     this.online,
+    this.timestamp,
   });
 
   factory ChatListModel.fromJson(Map<String, dynamic> json) {
@@ -25,6 +27,9 @@ class ChatListModel {
       lastMessage: json["lastMessage"] ?? "",
       unreadCount: json["unreadCount"] ?? 0,
       online: json["online"] ?? false,
+      timestamp: json["timestamp"] != null
+          ? DateTime.parse(json["timestamp"].toString())
+          : null,
     );
   }
 }
