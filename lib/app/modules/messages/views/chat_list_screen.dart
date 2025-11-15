@@ -103,21 +103,21 @@ class _ChatListScreenState extends State<ChatListScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text(
+          Text(
             'No conversations yet',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: Colors.white,
+              color: Get.isDarkMode ? Colors.white : Colors.black,
             ),
           ),
           const SizedBox(height: 8),
-          const Text(
+          Text(
             'Start chatting with your matches!',
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w500,
-              color: Colors.white,
+              color: Get.isDarkMode ? Colors.white : Colors.black,
             ),
           ),
         ],

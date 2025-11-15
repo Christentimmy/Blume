@@ -1,6 +1,5 @@
-// import 'dart:ui';
-import 'dart:ui';
 
+import 'dart:ui';
 import 'package:blume/app/data/models/chat_list_model.dart';
 import 'package:blume/app/data/models/message_model.dart';
 import 'package:blume/app/modules/chat/controller/chat_controller.dart';
@@ -10,8 +9,6 @@ import 'package:blume/app/modules/chat/widgets/sender_card.dart';
 import 'package:blume/app/modules/chat/widgets/textfield/chat_input_field_widget.dart';
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/routes/app_routes.dart';
-import 'package:blume/app/widgets/custom_button.dart';
-import 'package:blume/app/widgets/custom_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -62,44 +59,31 @@ class _MessageScreenState extends State<MessageScreen> {
     return Scaffold(
       backgroundColor: Get.theme.scaffoldBackgroundColor,
       appBar: buildAppBar(),
-      body: Container(
-        // decoration: AuthWidgets().buildBackgroundDecoration(),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 7),
-          child: Column(
-            children: [
-              // Expanded(
-              //   child: ListView(
-              //     children: [
-              // SizedBox(height: Get.height * 0.02),
-              // buildReceiverCard(),
-              // SizedBox(height: Get.height * 0.01),
-              // buildSenderCard(),
-              //     ],
-              //   ),
-              // ),
-              Expanded(
-                child: Stack(
-                  children: [_buildMessageList(), _buildScrollDownButton()],
-                ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 7),
+        child: Column(
+          children: [
+            Expanded(
+              child: Stack(
+                children: [_buildMessageList(), _buildScrollDownButton()],
               ),
-              Obx(() {
-                if (_chatController.mediaController.showMediaPreview.value) {
-                  return MediaPreviewWidget(
-                    controller: _chatController.mediaController,
-                  );
-                }
-                return const SizedBox();
-              }),
-              SizedBox(height: 5),
-              NewChatInputFields(
-                controller: _chatController,
-                chatHead: widget.chatHead,
-              ),
-              // buildTextField(),
-              SizedBox(height: 10),
-            ],
-          ),
+            ),
+            Obx(() {
+              if (_chatController.mediaController.showMediaPreview.value) {
+                return MediaPreviewWidget(
+                  controller: _chatController.mediaController,
+                );
+              }
+              return const SizedBox();
+            }),
+            SizedBox(height: 5),
+            NewChatInputFields(
+              controller: _chatController,
+              chatHead: widget.chatHead,
+            ),
+            // buildTextField(),
+            SizedBox(height: 10),
+          ],
         ),
       ),
     );
@@ -132,10 +116,10 @@ class _MessageScreenState extends State<MessageScreen> {
                   width: 48,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.7),
+                    color: Colors.black.withValues(alpha: 0.7),
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white.withValues(alpha: 0.2),
                       width: 1,
                     ),
                   ),
@@ -163,125 +147,10 @@ class _MessageScreenState extends State<MessageScreen> {
     });
   }
 
-  Row buildTextField() {
-    return Row(
-      children: [
-        Expanded(
-          child: CustomTextField(
-            hintText: "Type something...",
-            suffixIcon: Icons.add,
-            prefixIcon: Icons.card_giftcard_rounded,
-            prefixIconColor: Colors.grey,
-            onPrefixTap: () {
-              Get.bottomSheet(
-                Container(
-                  height: Get.height * 0.35,
-                  width: Get.width,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF1F1B2E),
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(25),
-                    ),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const SizedBox(height: 12),
-                      Container(
-                        width: 40,
-                        height: 4,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.3),
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      Expanded(
-                        child: GridView.builder(
-                          itemCount: giftList.length,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 4,
-                              ),
-                          itemBuilder: (context, index) {
-                            return Column(
-                              children: [
-                                Image.asset(
-                                  giftList[index],
-                                  width: 50,
-                                  height: 50,
-                                ),
-                                // SizedBox(height: 5),
-                                Text(
-                                  "${index + 20} peeks",
-                                  style: GoogleFonts.fredoka(
-                                    fontSize: 12,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          children: [
-                            Text(
-                              "300 peeks",
-                              style: GoogleFonts.fredoka(
-                                fontSize: 17,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const Spacer(),
-                            CustomButton(
-                              ontap: () {},
-                              isLoading: false.obs,
-                              width: Get.width * 0.25,
-                              height: 35,
-                              child: Text(
-                                "Send",
-                                style: GoogleFonts.fredoka(
-                                  fontSize: 12,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                    ],
-                  ),
-                ),
-                backgroundColor: Colors.transparent,
-              );
-            },
-            hintStyle: GoogleFonts.fredoka(fontSize: 14, color: Colors.grey),
-          ),
-        ),
-        SizedBox(width: 5),
-        CircleAvatar(
-          radius: 23,
-          backgroundColor: AppColors.primaryColor,
-          child: Transform.rotate(
-            angle: -0.4,
-            child: IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.send, color: Colors.black),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
   AppBar buildAppBar() {
     return AppBar(
       automaticallyImplyLeading: false,
-      backgroundColor: Color(0xFF1A1625),
+      backgroundColor: Get.theme.scaffoldBackgroundColor,
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -289,14 +158,14 @@ class _MessageScreenState extends State<MessageScreen> {
             children: [
               CircleAvatar(
                 radius: 25,
-                backgroundImage: NetworkImage(widget.chatHead.avatar ?? ""),
+                backgroundImage: AssetImage("assets/images/frm.png"),
               ),
               SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.chatHead.fullName ?? "",
+                    widget.chatHead.fullName?.split(" ").first ?? "",
                     style: GoogleFonts.figtree(
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
@@ -322,115 +191,14 @@ class _MessageScreenState extends State<MessageScreen> {
       actions: [
         IconButton(
           onPressed: () => Get.toNamed(AppRoutes.videoCall),
-          icon: Icon(Icons.video_call, color: Colors.white),
+          icon: Icon(Icons.video_call),
         ),
         IconButton(
           onPressed: () => Get.toNamed(AppRoutes.audioCall),
-          icon: Icon(Icons.call, color: Colors.white),
+          icon: Icon(Icons.call),
         ),
-        IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.more_vert, color: Colors.white),
-        ),
+        IconButton(onPressed: () {}, icon: Icon(Icons.more_vert)),
       ],
-    );
-  }
-
-  Align buildReceiverCard() {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Container(
-        constraints: BoxConstraints(maxWidth: Get.width * 0.7),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CircleAvatar(
-              radius: 25,
-              backgroundImage: AssetImage("assets/images/pic15.jpg"),
-            ),
-            SizedBox(width: 5),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      color: const Color.fromARGB(255, 231, 216, 228),
-                    ),
-                    child: Text(
-                      "Nice! I’m always looking for new spots. What’s the name?",
-                      softWrap: true,
-                      overflow: TextOverflow.visible,
-                      style: GoogleFonts.figtree(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 3),
-                    child: Text(
-                      "22:50",
-                      style: GoogleFonts.figtree(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        color: Get.theme.primaryColor,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Align buildSenderCard() {
-    return Align(
-      alignment: Alignment.centerRight,
-      child: Container(
-        constraints: BoxConstraints(maxWidth: Get.width * 0.7),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                color: AppColors.primaryColor,
-              ),
-              child: Text(
-                "It’s called Pine Ridge, gorgeous views and a waterfall at the end. Totally worth the climb.",
-                softWrap: true,
-                overflow: TextOverflow.visible,
-                style: GoogleFonts.figtree(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            SizedBox(height: 5),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 3),
-              child: Text(
-                "22:50",
-                style: GoogleFonts.figtree(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                  color: Get.theme.primaryColor,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 
@@ -491,8 +259,7 @@ class _MessageScreenState extends State<MessageScreen> {
         final reversedIndex = messages.length - 1 - index;
         final message = messages[reversedIndex];
         final isSender =
-            message.senderId ==
-            _chatController.userController.user.value!.id;
+            message.senderId == _chatController.userController.user.value!.id;
         final bubble = isSender
             ? RepaintBoundary(
                 child: SenderCard(

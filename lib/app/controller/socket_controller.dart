@@ -19,38 +19,46 @@ class SocketController extends GetxController {
   final int _maxReconnectAttempts = 5;
 
   Future<void> initializeSocket() async {
-    String? token = await StorageController().getToken();
-    if (token == null) {
-      return;
-    }
-
-    socket = IO.io("https://falangthai-backend.onrender.com", <String, dynamic>{
-      'transports': ['websocket'],
-      'extraHeaders': {'Authorization': 'Bearer $token'},
-      'reconnection': true,
-      "forceNew": true,
-    });
-
-    socket?.connect();
-
-    socket?.onConnect((_) async {
-      print("Socket connected");
-      getOnlineUser();
-      listenToEvents();
-    });
-
-    socket?.onDisconnect((_) {
-      print("Socket disconnected");
-      scheduleReconnect();
-      if (_reconnectAttempts >= _maxReconnectAttempts) {
-        disConnectListeners();
+    try {
+      String? token = await StorageController().getToken();
+      if (token == null) {
+        return;
       }
-    });
 
-    socket?.on('connect_error', (_) {
-      print("Connection error");
-      scheduleReconnect();
-    });
+      socket = IO.io("http://192.168.1.110:5000", <String, dynamic>{
+        'transports': ['websocket'],
+        'extraHeaders': {'Authorization': 'Bearer $token'},
+        'reconnection': true,
+        "forceNew": true,
+      });
+
+      socket?.onError((error) {
+        debugPrint('Socket error: $error');
+      });
+
+      socket?.connect();
+
+      socket?.onConnect((_) async {
+        debugPrint("Socket connected");
+        getOnlineUser();
+        listenToEvents();
+      });
+
+      socket?.onDisconnect((_) {
+        debugPrint("Socket disconnected");
+        scheduleReconnect();
+        if (_reconnectAttempts >= _maxReconnectAttempts) {
+          disConnectListeners();
+        }
+      });
+
+      socket?.on('connect_error', (_) {
+        debugPrint("Connection error");
+        scheduleReconnect();
+      });
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   void listenToEvents() {
@@ -63,8 +71,9 @@ class SocketController extends GetxController {
       final response = List.from(data);
       Get.find<MessageController>().activeFriends.clear();
       if (response.isEmpty) return;
-      List<ChatListModel> mapped =
-          response.map((e) => ChatListModel.fromJson(e)).toList();
+      List<ChatListModel> mapped = response
+          .map((e) => ChatListModel.fromJson(e))
+          .toList();
       Get.find<MessageController>().activeFriends.value = mapped;
       Get.find<MessageController>().activeFriends.refresh();
     });
@@ -75,13 +84,13 @@ class SocketController extends GetxController {
 
     socket?.on("user-offline", (data) {
       final userId = data["userId"] as String;
-      Get.find<MessageController>()
-          .activeFriends
-          .removeWhere((e) => e.userId == userId);
+      Get.find<MessageController>().activeFriends.removeWhere(
+        (e) => e.userId == userId,
+      );
       Get.find<MessageController>().activeFriends.refresh();
-      final index = Get.find<MessageController>()
-          .allChattedUserList
-          .indexWhere((e) => e.userId == userId);
+      final index = Get.find<MessageController>().allChattedUserList.indexWhere(
+        (e) => e.userId == userId,
+      );
       if (index != -1) {
         Get.find<MessageController>().allChattedUserList[index].online = false;
         Get.find<MessageController>().allChattedUserList.refresh();
@@ -98,8 +107,9 @@ class SocketController extends GetxController {
       final messageController = Get.find<MessageController>();
 
       // Check if the message already exists to avoid duplicates
-      final exists = messageController.chatHistoryAndLiveMessage
-          .any((msg) => msg.id == messageModel.id);
+      final exists = messageController.chatHistoryAndLiveMessage.any(
+        (msg) => msg.id == messageModel.id,
+      );
 
       if (exists) return;
       final index = messageController.chatHistoryAndLiveMessage.indexWhere(
@@ -136,6 +146,7 @@ class SocketController extends GetxController {
   }
 
   void sendMessage({required MessageModel message}) {
+    debugPrint("Sending message: ${message.toJson()}");
     if (socket != null && socket!.connected) {
       socket?.emit("send-message", message.toJson());
     }
@@ -200,7 +211,6 @@ class SocketController extends GetxController {
       socket?.connect();
     });
   }
-
 
   @override
   void onClose() {

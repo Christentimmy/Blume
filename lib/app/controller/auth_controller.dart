@@ -227,6 +227,8 @@ class AuthController extends GetxController {
       );
       return;
     }
+    final socketController = Get.find<SocketController>();
+    await socketController.initializeSocket();
     Get.offNamed(AppRoutes.bottomNavigation);
   }
 

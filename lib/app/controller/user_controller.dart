@@ -644,6 +644,31 @@ class UserController extends GetxController {
       isloading.value = false;
     }
   }
+
+  List getInterests({required UserModel user, int? take}){
+    List lifestyleAndValues = user.basics?.lifestyleAndValues ?? [];
+    List hobbies = user.basics?.hobbies ?? [];
+    List artsAndCreativity = user.basics?.artsAndCreativity ?? [];
+    List sportsAndFitness = user.basics?.sportsAndFitness ?? [];
+    List music = user.basics?.music ?? [];
+    List travelAndAdventure = user.basics?.travelAndAdventure ?? [];
+    List entertainment = user.basics?.entertainment ?? [];
+    List foodAndDrink = user.basics?.foodAndDrink ?? [];
+
+    List interests = [
+      ...lifestyleAndValues,
+      ...hobbies,
+      ...artsAndCreativity,
+      ...sportsAndFitness,
+      ...music,
+      ...travelAndAdventure,
+      ...entertainment,
+      ...foodAndDrink,
+    ].take(take ?? 6).toList();
+
+    return interests;
+  } 
+
 }
 
 enum SwipeType { pass, superlike, like }

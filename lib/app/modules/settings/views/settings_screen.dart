@@ -1,4 +1,5 @@
 import 'package:blume/app/controller/auth_controller.dart';
+import 'package:blume/app/controller/socket_controller.dart';
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/widgets/custom_button.dart';
@@ -77,7 +78,9 @@ class SettingsScreen extends StatelessWidget {
                     ? AppColors.darkButtonColor
                     : AppColors.lightButtonColor,
                 ontap: () async {
-                  await Get.find<AuthController>().logout();
+                  // await Get.find<AuthController>().logout();
+                  final socketController = Get.find<SocketController>();
+                  await socketController.initializeSocket();
                 },
                 isLoading: false.obs,
                 child: Text(

@@ -5,8 +5,6 @@ import 'package:blume/app/modules/chat/widgets/shared/reply_to_content_widget.da
 import 'package:blume/app/modules/chat/widgets/textfield/audio_input_widget.dart';
 import 'package:blume/app/modules/chat/widgets/textfield/input_decoration.dart';
 import 'package:blume/app/resources/colors.dart';
-import 'package:blume/app/widgets/custom_button.dart';
-import 'package:blume/app/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
@@ -82,14 +80,14 @@ class NewChatInputFields extends StatelessWidget {
                             style: GoogleFonts.poppins(
                               fontSize: 12,
                               fontWeight: FontWeight.w400,
-                              color: Colors.white,
+                              color: Get.isDarkMode ? Colors.white : Colors.black,
                             ),
                             decoration: InputDecoration(
                               hintText: "Type a message...",
                               hintStyle: GoogleFonts.poppins(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w400,
-                                color: Colors.grey.shade300,
+                                color: Colors.grey,
                               ),
                               border: InputBorder.none,
                               contentPadding: const EdgeInsets.symmetric(
@@ -141,125 +139,6 @@ class NewChatInputFields extends StatelessWidget {
         // SizedBox(height: 5),
         // Emoji picker
         // _buildEmojiPicker(),
-      ],
-    );
-  }
-
-  Widget buildTextField() {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: CustomTextField(
-                hintText: "Type something...",
-                suffixIcon: Icons.add,
-                prefixIcon: Icons.card_giftcard_rounded,
-                prefixIconColor: Colors.grey,
-                onPrefixTap: () {
-                  Get.bottomSheet(
-                    Container(
-                      height: Get.height * 0.35,
-                      width: Get.width,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFF1F1B2E),
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(25),
-                        ),
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const SizedBox(height: 12),
-                          Container(
-                            width: 40,
-                            height: 4,
-                            decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.3),
-                              borderRadius: BorderRadius.circular(2),
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          Expanded(
-                            child: GridView.builder(
-                              itemCount: giftList.length,
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 4,
-                                  ),
-                              itemBuilder: (context, index) {
-                                return Column(
-                                  children: [
-                                    Image.asset(
-                                      giftList[index],
-                                      width: 50,
-                                      height: 50,
-                                    ),
-                                    // SizedBox(height: 5),
-                                    Text(
-                                      "${index + 20} peeks",
-                                      style: GoogleFonts.fredoka(
-                                        fontSize: 12,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              },
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Row(
-                              children: [
-                                Text(
-                                  "300 peeks",
-                                  style: GoogleFonts.fredoka(
-                                    fontSize: 17,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                const Spacer(),
-                                CustomButton(
-                                  ontap: () {},
-                                  isLoading: false.obs,
-                                  width: Get.width * 0.25,
-                                  height: 35,
-                                  child: Text(
-                                    "Send",
-                                    style: GoogleFonts.fredoka(
-                                      fontSize: 12,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                        ],
-                      ),
-                    ),
-                    backgroundColor: Colors.transparent,
-                  );
-                },
-                hintStyle: GoogleFonts.fredoka(fontSize: 14, color: Colors.grey),
-              ),
-            ),
-            SizedBox(width: 5),
-            CircleAvatar(
-              radius: 23,
-              backgroundColor: AppColors.primaryColor,
-              child: Transform.rotate(
-                angle: -0.4,
-                child: IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.send, color: Colors.black),
-                ),
-              ),
-            ),
-          ],
-        ),
       ],
     );
   }

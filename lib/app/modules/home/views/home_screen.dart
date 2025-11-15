@@ -169,25 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Container buildCard({required RxInt activeIndex, required UserModel user}) {
-    List lifestyleAndValues = user.basics?.lifestyleAndValues ?? [];
-    List hobbies = user.basics?.hobbies ?? [];
-    List artsAndCreativity = user.basics?.artsAndCreativity ?? [];
-    List sportsAndFitness = user.basics?.sportsAndFitness ?? [];
-    List music = user.basics?.music ?? [];
-    List travelAndAdventure = user.basics?.travelAndAdventure ?? [];
-    List entertainment = user.basics?.entertainment ?? [];
-    List foodAndDrink = user.basics?.foodAndDrink ?? [];
-
-    List interests = [
-      ...lifestyleAndValues,
-      ...hobbies,
-      ...artsAndCreativity,
-      ...sportsAndFitness,
-      ...music,
-      ...travelAndAdventure,
-      ...entertainment,
-      ...foodAndDrink,
-    ].take(6).toList();
+    List interests = userController.getInterests(user: user);
     return Container(
       margin: EdgeInsets.only(bottom: Get.height * 0.05),
       child: Stack(

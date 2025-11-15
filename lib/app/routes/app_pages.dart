@@ -1,15 +1,17 @@
 import 'dart:ui';
 
+import 'package:blume/app/data/models/chat_list_model.dart';
 import 'package:blume/app/modules/auth/views/login_screen.dart';
 import 'package:blume/app/modules/auth/views/otp_verify_screen.dart';
 import 'package:blume/app/modules/auth/views/signup_screen.dart';
+import 'package:blume/app/modules/chat/views/message_screen.dart';
 import 'package:blume/app/modules/home/views/home_screen.dart';
 import 'package:blume/app/modules/home/views/match_screen.dart';
 import 'package:blume/app/modules/likes/views/likes_screen.dart';
 import 'package:blume/app/modules/location/views/set_location_screen.dart';
 import 'package:blume/app/modules/messages/views/audio_call_screen.dart';
 import 'package:blume/app/modules/messages/views/chat_list_screen.dart';
-import 'package:blume/app/modules/messages/views/message_screen.dart';
+// import 'package:blume/app/modules/messages/views/message_screen.dart';
 import 'package:blume/app/modules/messages/views/video_call_screen.dart';
 import 'package:blume/app/modules/notification/views/notification_screen.dart';
 import 'package:blume/app/modules/onboarding/views/onboarding_screen.dart';
@@ -160,10 +162,29 @@ class AppPages {
     GetPage(name: AppRoutes.likes, page: () => LikesScreen()),
     GetPage(name: AppRoutes.chatList, page: () => ChatListScreen()),
     GetPage(name: AppRoutes.viewStory, page: () => ViewStoryScreen()),
-    GetPage(name: AppRoutes.message, page: () => MessageScreen()),
+    // GetPage(name: AppRoutes.message, page: () => MessageScreen()),
+    GetPage(
+      name: AppRoutes.message,
+      page: () {
+        final arguments = Get.arguments ?? {};
+        final chatHead = arguments['chatHead'];
+        if (chatHead == null) {
+          throw Exception("Chat head is required");
+        }
+        return MessageScreen(chatHead: chatHead as ChatListModel);
+      },
+    ),
     GetPage(name: AppRoutes.audioCall, page: () => AudioCallScreen()),
     GetPage(name: AppRoutes.videoCall, page: () => VideoCallScreen()),
-    GetPage(name: AppRoutes.profile, page: () => ProfileScreen()),
+    GetPage(
+      name: AppRoutes.profile,
+      page: () {
+        final arguments = Get.arguments ?? {};
+        bool isSwipeProfile = arguments['isSwipeProfile'] ?? false;
+        String? userId = arguments['userId'] as String?;
+        return ProfileScreen(isSwipeProfile: isSwipeProfile, userId: userId);
+      },
+    ),
     GetPage(name: AppRoutes.settings, page: () => SettingsScreen()),
     GetPage(name: AppRoutes.disclaimer, page: () => DisclaimerScreen()),
     GetPage(name: AppRoutes.verification, page: () => VerificationScreen()),

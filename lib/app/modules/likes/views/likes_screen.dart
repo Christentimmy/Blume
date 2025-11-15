@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:blume/app/controller/user_controller.dart';
 import 'package:blume/app/data/models/user_model.dart';
 import 'package:blume/app/resources/colors.dart';
+import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/utils/age_calculator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -175,96 +176,104 @@ class _LikesScreenState extends State<LikesScreen> {
     });
   }
 
-  Stack buildLikeCard({required UserModel user}) {
-    return Stack(
-      children: [
-        Positioned.fill(
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: CachedNetworkImage(
-              imageUrl: user.avatar ?? "",
-              fit: BoxFit.cover,
-              placeholder: (context, url) {
-                return Shimmer.fromColors(
-                  baseColor: Color(0xFF1A1625),
-                  highlightColor: Color(0xFFD586D3),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Color(0xFF1A1625),
+  Widget buildLikeCard({required UserModel user}) {
+    return InkWell(
+      onTap: () {
+        Get.toNamed(
+          AppRoutes.profile,
+          arguments: {'isSwipeProfile': true, 'userId': user.id},
+        );
+      },
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: CachedNetworkImage(
+                imageUrl: user.avatar ?? "",
+                fit: BoxFit.cover,
+                placeholder: (context, url) {
+                  return Shimmer.fromColors(
+                    baseColor: Color(0xFF1A1625),
+                    highlightColor: Color(0xFFD586D3),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Color(0xFF1A1625),
+                      ),
                     ),
-                  ),
-                );
-              },
-              errorWidget: (context, url, error) => const Center(
-                child: Icon(Icons.error, color: AppColors.primaryColor),
-              ),
-            ),
-          ),
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(20),
-                bottomRight: Radius.circular(20),
-              ),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                child: Container(
-                  height: Get.height * 0.07,
-                  color: Colors.black.withValues(alpha: 0),
+                  );
+                },
+                errorWidget: (context, url, error) => const Center(
+                  child: Icon(Icons.error, color: AppColors.primaryColor),
                 ),
               ),
             ),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          ),
+          Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text(
-                "${user.fullName?.split(" ").first}  ${calculateAge(user.dateOfBirth)}",
-                style: GoogleFonts.figtree(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
+              ClipRRect(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20),
+                ),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                  child: Container(
+                    height: Get.height * 0.07,
+                    color: Colors.black.withValues(alpha: 0),
+                  ),
                 ),
               ),
-              Row(
-                children: [
-                  Icon(Icons.location_on, color: Colors.white, size: 15),
-                  Text(
-                    user.location ?? "",
-                    style: GoogleFonts.figtree(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 6),
             ],
           ),
-        ),
-        Positioned(
-          top: 10,
-          right: 10,
-          child: CircleAvatar(
-            radius: 20,
-            backgroundColor: Colors.white.withValues(alpha: 0.2),
-            child: Icon(
-              FontAwesomeIcons.solidHeart,
-              size: 18,
-              color: Colors.white,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  "${user.fullName?.split(" ").first}  ${calculateAge(user.dateOfBirth)}",
+                  style: GoogleFonts.figtree(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+                Row(
+                  children: [
+                    Icon(Icons.location_on, color: Colors.white, size: 15),
+                    Text(
+                      user.location ?? "",
+                      style: GoogleFonts.figtree(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 6),
+              ],
             ),
           ),
-        ),
-      ],
+          Positioned(
+            top: 10,
+            right: 10,
+            child: CircleAvatar(
+              radius: 20,
+              backgroundColor: Colors.white.withValues(alpha: 0.2),
+              child: Icon(
+                FontAwesomeIcons.solidHeart,
+                size: 18,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -354,7 +363,7 @@ class _LikesScreenState extends State<LikesScreen> {
                       selectedFilter.value = index;
                       if (activeIndex.value == 0) {
                         await userController.getUserWhoLikesMe(status: filter);
-                      }else{
+                      } else {
                         await userController.getMatches(status: filter);
                       }
                     },

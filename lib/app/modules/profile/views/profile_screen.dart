@@ -1,100 +1,161 @@
 import 'package:blume/app/controller/user_controller.dart';
+import 'package:blume/app/data/models/chat_list_model.dart';
+import 'package:blume/app/data/models/user_model.dart';
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/routes/app_routes.dart';
+import 'package:blume/app/utils/age_calculator.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shimmer/shimmer.dart';
 
-class ProfileScreen extends StatelessWidget {
-  ProfileScreen({super.key});
+class ProfileScreen extends StatefulWidget {
+  final bool isSwipeProfile;
+  final String? userId;
+  const ProfileScreen({super.key, required this.isSwipeProfile, this.userId});
 
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
   final userController = Get.find<UserController>();
+
+  final isloading = true.obs;
+  final isBioExpanded = false.obs;
+  Rxn<UserModel> userModel = Rxn<UserModel>();
+
+  Future<void> getUserDetails() async {
+    isloading.value = true;
+    try {
+      if (widget.userId == null) {
+        userModel.value = userController.user.value;
+        return;
+      }
+      final user = await userController.getUserWithId(userId: widget.userId!);
+      if (user == null) return;
+      userModel.value = user;
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      isloading.value = false;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getUserDetails();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: Get.height * 0.02),
-              _buildHeader(),
-
-              SizedBox(height: Get.height * 0.03),
-
-              // Profile Avatar and Stats
-              _buildProfileSection(),
-
-              SizedBox(height: Get.height * 0.04),
-
-              // Bio Section
-              _buildBioSection(),
-
-              SizedBox(height: Get.height * 0.04),
-
-              // Profile Boosts
-              _buildProfileBoosts(),
-
-              SizedBox(height: Get.height * 0.04),
-
-              // Profile Details
-              _buildProfileDetails(),
-
-              SizedBox(height: Get.height * 0.02),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Gallery',
-                      style: GoogleFonts.figtree(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const Spacer(),
-                    Text(
-                      'See All',
-                      style: GoogleFonts.figtree(
-                        color: AppColors.primaryColor,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
+          child: Obx(() {
+            if (isloading.value) {
+              return SizedBox(
+                width: Get.width,
+                height: Get.height,
+                child: const Center(
+                  child: CupertinoActivityIndicator(
+                    color: AppColors.primaryColor,
+                  ),
                 ),
-              ),
-              SizedBox(height: Get.height * 0.02),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.asset(
-                          'assets/images/plm.png',
-                          fit: BoxFit.cover,
+              );
+            }
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: Get.height * 0.02),
+                _buildHeader(),
+
+                SizedBox(height: Get.height * 0.03),
+
+                // Profile Avatar and Stats
+                _buildProfileSection(),
+
+                SizedBox(height: Get.height * 0.04),
+
+                // Bio Section
+                _buildBioSection(),
+
+                if (!widget.isSwipeProfile) SizedBox(height: Get.height * 0.04),
+
+                // Profile Boosts
+                if (!widget.isSwipeProfile) _buildProfileBoosts(),
+
+                SizedBox(height: Get.height * 0.04),
+
+                // Profile Details
+                _buildProfileDetails(),
+
+                SizedBox(height: Get.height * 0.02),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Gallery',
+                        style: GoogleFonts.figtree(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                    ),
-                    SizedBox(width: Get.width * 0.02),
-                    Expanded(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.asset(
-                          'assets/images/frm.png',
-                          fit: BoxFit.cover,
+                      const Spacer(),
+                      Text(
+                        'See All',
+                        style: GoogleFonts.figtree(
+                          color: AppColors.primaryColor,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
+                SizedBox(height: Get.height * 0.02),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Obx(
+                            () => Image.network(
+                              userModel.value?.photos?[0] ?? "",
+                              fit: BoxFit.cover,
+                              height: Get.height * 0.35,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: Get.width * 0.02),
+                      Expanded(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Obx(
+                            () => Image.network(
+                              userModel.value?.photos?[1] ?? "",
+                              fit: BoxFit.cover,
+                              height: Get.height * 0.35,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          }),
         ),
       ),
     );
@@ -113,19 +174,35 @@ class ProfileScreen extends StatelessWidget {
           SizedBox(width: Get.width * 0.03),
           Obx(() {
             return Text(
-              userController.user.value?.fullName ?? "",
+              userModel.value?.fullName ?? "",
               style: GoogleFonts.figtree(
                 fontSize: 24,
                 fontWeight: FontWeight.w600,
               ),
             );
           }),
-          SizedBox(width: 8),
-          Icon(Icons.verified, color: Colors.purple, size: 20),
           const Spacer(),
-          Icon(Icons.notifications_outlined, size: 28),
-          SizedBox(width: 16),
-          Icon(Icons.apps, size: 28),
+          if (widget.isSwipeProfile) ...[
+            IconButton(
+              onPressed: () {
+                final chatHead = ChatListModel(
+                  userId: userModel.value?.id,
+                  fullName: userModel.value?.fullName,
+                  avatar: userModel.value?.avatar,
+                  online: false,
+                );
+                Get.toNamed(
+                  AppRoutes.message,
+                  arguments: {"chatHead": chatHead},
+                );
+              },
+              icon: Icon(Icons.message_rounded, size: 28),
+            ),
+          ] else ...[
+            Icon(Icons.notifications_outlined, size: 28),
+            SizedBox(width: 16),
+            Icon(Icons.apps, size: 28),
+          ],
         ],
       ),
     );
@@ -137,25 +214,51 @@ class ProfileScreen extends StatelessWidget {
       child: Row(
         children: [
           // Profile Avatar
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              color: Color(0xFF8B4513),
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Text(
-                'D',
-                style: GoogleFonts.figtree(
-                  color: Colors.white,
-                  fontSize: 36,
-                  fontWeight: FontWeight.bold,
+          Obx(
+            () => ClipRRect(
+              borderRadius: BorderRadius.circular(90),
+              child: CachedNetworkImage(
+                imageUrl: userModel.value?.avatar ?? "",
+                width: 80,
+                height: 80,
+                fit: BoxFit.cover,
+                placeholder: (context, url) {
+                  return Shimmer.fromColors(
+                    baseColor: Color(0xFF1A1625),
+                    highlightColor: Color(0xFFD586D3),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Color(0xFF1A1625),
+                      ),
+                    ),
+                  );
+                },
+                errorWidget: (context, url, error) => const Center(
+                  child: Icon(Icons.error, color: AppColors.primaryColor),
                 ),
               ),
             ),
           ),
 
+          // Container(
+          //   width: 80,
+          //   height: 80,
+          //   decoration: BoxDecoration(
+          //     color: Color(0xFF8B4513),
+          //     shape: BoxShape.circle,
+          //   ),
+          //   child: Center(
+          //     child: Text(
+          //       'D',
+          //       style: GoogleFonts.figtree(
+          //         color: Colors.white,
+          //         fontSize: 36,
+          //         fontWeight: FontWeight.bold,
+          //       ),
+          //     ),
+          //   ),
+          // ),
           SizedBox(width: Get.width * 0.02),
 
           // Stats
@@ -200,7 +303,12 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
           SizedBox(height: 4),
-          Text('Bio goes here', style: GoogleFonts.figtree(fontSize: 16)),
+          Obx(() {
+            return Text(
+              userModel.value?.bio ?? "",
+              style: GoogleFonts.figtree(fontSize: 16),
+            );
+          }),
         ],
       ),
     );
@@ -280,25 +388,24 @@ class ProfileScreen extends StatelessWidget {
   Widget _buildProfileDetails() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: Get.width * 0.04),
-      child: Column(
-        children: [
-          _buildDetailSection('Age', '', true),
-          SizedBox(height: 24),
-          _buildDetailSection(
-            'About',
-            'My name is Jessica and I enjoy meeting new people and finding ways to help them have an uplifting experience. I enjoy reading..',
-            false,
-          ),
-          SizedBox(height: 24),
-          _buildLocationSection(),
-          SizedBox(height: 24),
-          _buildInterestsSection(),
-        ],
+      child: Obx(
+        () => Column(
+          children: [
+            _buildDetailSection(
+              'Age',
+              calculateAge(userModel.value?.dateOfBirth ?? ""),
+            ),
+            SizedBox(height: 15),
+            _buildDetailSection('Location', userModel.value?.location ?? ""),
+            SizedBox(height: 15),
+            _buildInterestsSection(),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildDetailSection(String title, String content, bool isEmpty) {
+  Widget _buildDetailSection(String title, String content) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -312,27 +419,16 @@ class ProfileScreen extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            Icon(Icons.edit, color: Colors.grey[500], size: 20),
+            // Icon(Icons.edit, color: Colors.grey[500], size: 20),
           ],
         ),
-        if (!isEmpty) ...[
-          SizedBox(height: 8),
-          Text(content, style: GoogleFonts.figtree(fontSize: 16, height: 1.4)),
-          SizedBox(height: 8),
-          Text(
-            'Read more',
-            style: GoogleFonts.figtree(
-              color: Colors.red,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
+        SizedBox(height: 4),
+        Text(content, style: GoogleFonts.figtree(fontSize: 16)),
       ],
     );
   }
 
-  Widget _buildLocationSection() {
+  Widget buildLocationSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -386,6 +482,10 @@ class ProfileScreen extends StatelessWidget {
   }
 
   Widget _buildInterestsSection() {
+    List interests = userController.getInterests(
+      user: userModel.value!,
+      take: 7,
+    );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -404,15 +504,18 @@ class ProfileScreen extends StatelessWidget {
         ),
         SizedBox(height: 16),
         Wrap(
-          spacing: 12,
+          spacing: 10,
           runSpacing: 12,
-          children: [
-            _buildInterestChip('Travelling', true),
-            _buildInterestChip('Books', true),
-            _buildInterestChip('Music', false),
-            _buildInterestChip('Dancing', false),
-            _buildInterestChip('Modeling', false),
-          ],
+          children: interests
+              .map((interest) => _buildInterestChip(interest, true))
+              .toList(),
+          // children: [
+          //   _buildInterestChip('Travelling', true),
+          //   _buildInterestChip('Books', true),
+          //   _buildInterestChip('Music', false),
+          //   _buildInterestChip('Dancing', false),
+          //   _buildInterestChip('Modeling', false),
+          // ],
         ),
       ],
     );
@@ -420,7 +523,7 @@ class ProfileScreen extends StatelessWidget {
 
   Widget _buildInterestChip(String label, bool isSelected) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 3),
       decoration: BoxDecoration(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(24),
