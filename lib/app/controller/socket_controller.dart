@@ -25,7 +25,7 @@ class SocketController extends GetxController {
         return;
       }
 
-      socket = IO.io("http://192.168.1.110:5000", <String, dynamic>{
+      socket = IO.io("https://vetted-backend-3-9hun.onrender.com", <String, dynamic>{
         'transports': ['websocket'],
         'extraHeaders': {'Authorization': 'Bearer $token'},
         'reconnection': true,

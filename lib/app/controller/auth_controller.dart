@@ -251,6 +251,7 @@ class AuthController extends GetxController {
       Get.find<UserController>().clearUserData();
       await Get.find<StorageController>().deleteToken();
       await Get.find<MessageController>().clearChatHistory();
+      Get.find<SocketController>().disconnectSocket();
       // await Get.find<SubscriptionController>().clearSubscriptionData();
       // await Get.find<InviteController>().clearInviteData();
     } catch (error) {

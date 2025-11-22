@@ -609,6 +609,7 @@ class UserController extends GetxController {
     user.value = null;
     potentialMatchesList.clear();
     usersWhoLikesMeList.clear();
+    matchesList.clear();
     currentPage.value = 1;
     hasNextPage.value = false;
   }

@@ -8,7 +8,7 @@ import 'package:blume/app/modules/chat/widgets/receiver_card.dart';
 import 'package:blume/app/modules/chat/widgets/sender_card.dart';
 import 'package:blume/app/modules/chat/widgets/textfield/chat_input_field_widget.dart';
 import 'package:blume/app/resources/colors.dart';
-import 'package:blume/app/routes/app_routes.dart';
+// import 'package:blume/app/routes/app_routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -189,14 +189,14 @@ class _MessageScreenState extends State<MessageScreen> {
         ],
       ),
       actions: [
-        IconButton(
-          onPressed: () => Get.toNamed(AppRoutes.videoCall),
-          icon: Icon(Icons.video_call),
-        ),
-        IconButton(
-          onPressed: () => Get.toNamed(AppRoutes.audioCall),
-          icon: Icon(Icons.call),
-        ),
+        // IconButton(
+        //   onPressed: () => Get.toNamed(AppRoutes.videoCall),
+        //   icon: Icon(Icons.video_call),
+        // ),
+        // IconButton(
+        //   onPressed: () => Get.toNamed(AppRoutes.audioCall),
+        //   icon: Icon(Icons.call),
+        // ),
         IconButton(onPressed: () {}, icon: Icon(Icons.more_vert)),
       ],
     );

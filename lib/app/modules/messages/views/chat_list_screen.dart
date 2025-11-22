@@ -208,24 +208,30 @@ class _ChatListScreenState extends State<ChatListScreen> {
           Text(
             DateFormat('hh:mm a').format(chatHead.timestamp ?? DateTime.now()),
             style: GoogleFonts.figtree(
-              fontSize: 16,
+              fontSize: 12,
               fontWeight: FontWeight.w500,
               color: Get.theme.primaryColor,
+              fontStyle: FontStyle.italic,
             ),
           ),
           SizedBox(height: 2),
-          CircleAvatar(
-            radius: 10,
-            backgroundColor: AppColors.primaryColor,
-            child: Text(
-              chatHead.unreadCount.toString(),
-              style: GoogleFonts.figtree(
-                fontSize: 9,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-              ),
-            ),
-          ),
+          chatHead.unreadCount != null && chatHead.unreadCount! > 0
+              ? CircleAvatar(
+                  radius: 10,
+                  backgroundColor: AppColors.primaryColor,
+                  child: Text(
+                    chatHead.unreadCount.toString(),
+                    style: GoogleFonts.figtree(
+                      fontSize: 9,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                )
+              : CircleAvatar(
+                  radius: 10,
+                  backgroundColor: Colors.transparent,
+                ),
         ],
       ),
     );
