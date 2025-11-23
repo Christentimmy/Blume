@@ -501,4 +501,32 @@ class UserService {
     }
     return null;
   }
+
+  Future<http.Response?> searchUser({
+    required String token,
+    required String search,
+    required int page,
+  }) async {
+    try {
+      final url = "$baseUrl/user/search-user?search=$search&page=$page";
+      final response = await http
+          .get(
+            Uri.parse(url),
+            headers: {
+              'Authorization': 'Bearer $token',
+              'Content-Type': 'application/json',
+            },
+          )
+          .timeout(const Duration(seconds: 30));
+      return response;
+    } on SocketException catch (e) {
+      debugPrint("No internet connection $e");
+    } on TimeoutException {
+      debugPrint("Request timeout");
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
+
 }

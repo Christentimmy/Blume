@@ -24,6 +24,11 @@ class UserController extends GetxController {
   //matches variables
   RxList<UserModel> matchesList = <UserModel>[].obs;
 
+  //search variables
+  RxInt searchPage = 1.obs;
+  RxBool searchHasNextPage = false.obs;
+  RxList<UserModel> searchResults = <UserModel>[].obs;
+
   Future<void> updateName({
     required String name,
     VoidCallback? whatNext,
@@ -612,6 +617,9 @@ class UserController extends GetxController {
     matchesList.clear();
     currentPage.value = 1;
     hasNextPage.value = false;
+    searchResults.clear();
+    searchPage.value = 1;
+    searchHasNextPage.value = false;
   }
 
   Future<void> getMatches({String? status}) async {
@@ -646,7 +654,7 @@ class UserController extends GetxController {
     }
   }
 
-  List getInterests({required UserModel user, int? take}){
+  List getInterests({required UserModel user, int? take}) {
     List lifestyleAndValues = user.basics?.lifestyleAndValues ?? [];
     List hobbies = user.basics?.hobbies ?? [];
     List artsAndCreativity = user.basics?.artsAndCreativity ?? [];
@@ -668,7 +676,47 @@ class UserController extends GetxController {
     ].take(take ?? 6).toList();
 
     return interests;
-  } 
+  }
+
+  Future<void> searchUser({
+    required String search,
+    bool loadMore = false,
+  }) async {
+    try {
+      final storageController = Get.find<StorageController>();
+      String? token = await storageController.getToken();
+      if (token == null || token.isEmpty) return;
+
+      if (loadMore && searchHasNextPage.value) {
+        searchPage.value++;
+      }
+
+      final response = await userService.searchUser(
+        token: token,
+        search: search,
+        page: searchPage.value,
+      );
+      if (response == null) return;
+      final decoded = json.decode(response.body);
+      final message = decoded["message"] ?? "";
+      if (response.statusCode != 200) {
+        CustomSnackbar.showErrorToast(message);
+        return;
+      }
+      List users = decoded["users"] as List;
+      if (users.isEmpty) return;
+      List<UserModel> mappedUsers = users.map((e)=> UserModel.fromJson(e)).toList();
+      if(loadMore && searchHasNextPage.value){
+        searchResults.addAll(mappedUsers);
+      }else{
+        searchResults.clear();
+        searchResults.addAll(mappedUsers);
+      }
+      searchHasNextPage.value = decoded["hasNextPage"];
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
 
 }
 

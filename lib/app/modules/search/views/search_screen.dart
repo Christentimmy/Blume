@@ -196,7 +196,9 @@ class _SearchScreenState extends State<SearchScreen>
                         return Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(16),
-                            color: Get.isDarkMode ? AppColors.darkButtonColor : Colors.white,
+                            color: Get.isDarkMode
+                                ? AppColors.darkButtonColor
+                                : Colors.white,
                           ),
                           child: Column(
                             children: [
@@ -249,9 +251,13 @@ class _SearchScreenState extends State<SearchScreen>
                         color: Get.theme.primaryColor,
                       ),
                     ),
-                    
+
                     SizedBox(height: Get.height * 0.02),
-                    Image.asset("assets/icons/bMap.png"),
+                    Image.asset(
+                      "assets/icons/bMap.png",
+                      width: Get.width,
+                      fit: BoxFit.cover,  
+                    ),
                     SizedBox(height: Get.height * 0.03),
                   ],
                 ),
@@ -265,7 +271,7 @@ class _SearchScreenState extends State<SearchScreen>
 
   Widget buildAppBar() {
     return SizedBox(
-      height: Get.height * 0.14,
+      height: Get.height * 0.15,
       width: Get.width,
       child: Column(
         children: [
