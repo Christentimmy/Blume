@@ -1,4 +1,5 @@
 import 'package:blume/app/controller/user_controller.dart';
+import 'package:blume/app/data/models/user_model.dart';
 import 'package:blume/app/modules/profile/widgets/list_tile_widget.dart';
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/routes/app_routes.dart';
@@ -8,10 +9,16 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class InterestScreen extends StatelessWidget {
+class InterestScreen extends StatefulWidget {
   final VoidCallback? whatNext;
-  InterestScreen({super.key, this.whatNext});
+  final Basics? basics;
+  const InterestScreen({super.key, this.whatNext, this.basics});
 
+  @override
+  State<InterestScreen> createState() => _InterestScreenState();
+}
+
+class _InterestScreenState extends State<InterestScreen> {
   final List<String> lifestyle = [
     "Volunteering",
     "Sustainability",
@@ -35,8 +42,8 @@ class InterestScreen extends StatelessWidget {
     "Photography",
     "Fashion",
     "Music",
-    "Crafts/DIY"
-        "Dancing",
+    "Crafts/DIY",
+    "Dancing",
   ];
 
   final List<String> sportsAndLeisure = [
@@ -100,18 +107,44 @@ class InterestScreen extends StatelessWidget {
     "Vegan/Vegetarian lifestyle",
   ];
 
-  
   final RxList<String> selectedLifestyleOption = <String>[].obs;
+
   // final RxInt selectedLifestyleOption = (-1).obs;
   final RxList<String> selectedHobbiesOption = <String>[].obs;
+
   final RxList<String> selectedArtsAndCraftsOption = <String>[].obs;
+
   final RxList<String> selectedSportsAndLeisureOption = <String>[].obs;
+
   final RxList<String> selectedTravelAndAdventureOption = <String>[].obs;
+
   final RxList<String> selectedEntertainmentOption = <String>[].obs;
+
   final RxList<String> selectedMusicOption = <String>[].obs;
+
   final RxList<String> selectedFoodAndDrinkOption = <String>[].obs;
 
   final userController = Get.find<UserController>();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      print(widget.basics?.lifestyleAndValues);
+      if (widget.basics == null) return;
+      selectedLifestyleOption.value = widget.basics?.lifestyleAndValues ?? [];
+      selectedHobbiesOption.value = widget.basics?.hobbies ?? [];
+      selectedArtsAndCraftsOption.value =
+          widget.basics?.artsAndCreativity ?? [];
+      selectedSportsAndLeisureOption.value =
+          widget.basics?.sportsAndFitness ?? [];
+      selectedTravelAndAdventureOption.value =
+          widget.basics?.travelAndAdventure ?? [];
+      selectedEntertainmentOption.value = widget.basics?.entertainment ?? [];
+      selectedMusicOption.value = widget.basics?.music ?? [];
+      selectedFoodAndDrinkOption.value = widget.basics?.foodAndDrink ?? [];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -282,12 +315,12 @@ class InterestScreen extends StatelessWidget {
                     entertainment: sEntertainment,
                     music: sMusic,
                     foodAndDrink: sFoodAndDrink,
-                    whatNext: whatNext,
+                    whatNext: widget.whatNext,
                   );
                 },
                 isLoading: userController.isloading,
                 child: Text(
-                  "Next",
+                  widget.basics == null ? "Next" : "Save",
                   style: GoogleFonts.figtree(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,

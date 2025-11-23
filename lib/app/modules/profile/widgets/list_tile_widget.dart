@@ -61,31 +61,40 @@ Wrap buildListOptions({
       (index) => Padding(
         padding: const EdgeInsets.only(right: 10),
         child: Obx(() {
+          final option = options[index];
+          final optionKey = option.toLowerCase();
+
+          final hasOption = selectedOptions
+              .map((e) => e.toString().toLowerCase())
+              .contains(optionKey);
+
           return InkWell(
             onTap: () {
-              if (selectedOptions.contains(options[index])) {
-                selectedOptions.removeAt(
-                  selectedOptions.indexOf(options[index]),
+              // toggle using the original option string
+              if (hasOption) {
+                final idx = selectedOptions.indexWhere(
+                  (e) => e.toString().toLowerCase() == optionKey,
                 );
+                if (idx != -1) selectedOptions.removeAt(idx);
               } else {
-                selectedOptions.add(options[index]);
+                selectedOptions.add(option);
               }
             },
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
-                border: selectedOptions.contains(options[index])
+                border: hasOption
                     ? Border.all(color: AppColors.primaryColor)
                     : Border.all(color: Colors.grey),
                 color: Colors.transparent,
               ),
               child: Text(
-                options[index],
+                option,
                 style: GoogleFonts.figtree(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: selectedOptions.contains(options[index])
+                  color: hasOption
                       ? AppColors.primaryColor
                       : Get.theme.primaryColor,
                 ),

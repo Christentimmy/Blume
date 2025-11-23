@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:blume/app/data/models/chat_list_model.dart';
+import 'package:blume/app/data/models/user_model.dart';
 import 'package:blume/app/modules/auth/views/login_screen.dart';
 import 'package:blume/app/modules/auth/views/otp_verify_screen.dart';
 import 'package:blume/app/modules/auth/views/signup_screen.dart';
@@ -126,7 +127,8 @@ class AppPages {
       page: () {
         final arguments = Get.arguments ?? {};
         VoidCallback? whatNext = arguments["whatNext"] as VoidCallback?;
-        return InterestScreen(whatNext: whatNext);
+        Basics? basics = arguments["basics"] as Basics?;
+        return InterestScreen(whatNext: whatNext, basics: basics);
       },
     ),
     GetPage(

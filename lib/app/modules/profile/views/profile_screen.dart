@@ -198,72 +198,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  void showEditInterestsSheet() {
-    // You'll need to implement interest selection logic
-    Get.bottomSheet(
-      Container(
-        padding: EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Get.isDarkMode ? Color(0xFF1A1625) : Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Edit Interests',
-                  style: GoogleFonts.figtree(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () => Get.back(),
-                  icon: Icon(Icons.close),
-                ),
-              ],
-            ),
-            SizedBox(height: 16),
-            Text(
-              'Select your interests (You can implement a list of selectable interests here)',
-              style: GoogleFonts.figtree(fontSize: 14),
-            ),
-            SizedBox(height: 16),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  // updateUserProfile({'interests': selectedInterests});
-                  Get.back();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryColor,
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Text(
-                  'Save',
-                  style: GoogleFonts.figtree(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      isScrollControlled: true,
-    );
-  }
-
   @override
   void initState() {
     super.initState();
@@ -661,7 +595,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildInterestsSection() {
     List interests = userController.getInterests(
       user: userModel.value!,
-      take: 7,
+      take: 15,
     );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -678,7 +612,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             if (isOwnProfile)
               IconButton(
-                onPressed: showEditInterestsSheet,
+                onPressed: () {
+                  Get.toNamed(
+                    AppRoutes.interest,
+                    arguments: {
+                      "whatNext": () => Get.back(),
+                      "basics": userModel.value?.basics,
+                    },
+                  );
+                },
                 icon: Icon(Icons.edit, size: 20),
                 padding: EdgeInsets.zero,
                 constraints: BoxConstraints(),
