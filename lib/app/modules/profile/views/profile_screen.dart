@@ -1,3 +1,4 @@
+import 'package:blume/app/controller/location_controller.dart';
 import 'package:blume/app/controller/user_controller.dart';
 import 'package:blume/app/data/models/chat_list_model.dart';
 import 'package:blume/app/data/models/user_model.dart';
@@ -31,10 +32,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   // Controllers for editing
   final bioController = TextEditingController();
-  final locationController = TextEditingController();
 
   bool get isOwnProfile =>
       widget.userId == null || widget.userId == userController.user.value?.id;
+
+  final locationController = Get.find<LocationController>();
 
   Future<void> getUserDetails() async {
     isloading.value = true;
@@ -105,7 +107,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SizedBox(height: 16),
 
             CustomButton(
-              ontap: () {},
+              ontap: () async {
+                if (bioController.text.isEmpty) return;
+                await userController.updateBio(bio: bioController.text);
+              },
               isLoading: false.obs,
               child: Text(
                 'Save',
@@ -124,9 +129,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void showEditLocationSheet() {
-    locationController.text = userModel.value?.location ?? '';
-
     Get.bottomSheet(
+      isScrollControlled: true,
       Container(
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
@@ -155,9 +159,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             SizedBox(height: 16),
             TextField(
-              controller: locationController,
+              style: GoogleFonts.poppins(fontSize: 12),
               decoration: InputDecoration(
-                hintText: 'Enter your location',
+                hintText: userModel.value?.location ?? "",
                 prefixIcon: Icon(Icons.location_on),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -169,34 +173,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             SizedBox(height: 16),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  updateUserProfile({'location': locationController.text});
-                  Get.back();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryColor,
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Text(
-                  'Save',
-                  style: GoogleFonts.figtree(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
+            CustomButton(
+              ontap: () async {
+                await locationController.getCurrentCity(
+                  nextScreen: () async {
+                    await userController.getUserDetails();
+                    Get.back();
+                  },
+                );
+              },
+              isLoading: locationController.isloading,
+              child: Text(
+                'Save',
+                style: GoogleFonts.figtree(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
                 ),
               ),
             ),
           ],
         ),
       ),
-      isScrollControlled: true,
     );
   }
 
@@ -285,113 +283,93 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Obx(() {
-                if (isloading.value) {
-                  return SizedBox(
-                    width: Get.width,
-                    height: Get.height,
-                    child: const Center(
-                      child: CupertinoActivityIndicator(
-                        color: AppColors.primaryColor,
-                      ),
-                    ),
-                  );
-                }
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: Get.height * 0.02),
-                    _buildHeader(),
-                    SizedBox(height: Get.height * 0.03),
-                    _buildProfileSection(),
-                    SizedBox(height: Get.height * 0.04),
-                    _buildBioSection(),
-                    if (!widget.isSwipeProfile)
-                      SizedBox(height: Get.height * 0.04),
-                    if (!widget.isSwipeProfile) _buildProfileBoosts(),
-                    SizedBox(height: Get.height * 0.04),
-                    _buildProfileDetails(),
-                    SizedBox(height: Get.height * 0.02),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Gallery',
-                            style: GoogleFonts.figtree(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const Spacer(),
-                          Text(
-                            'See All',
-                            style: GoogleFonts.figtree(
-                              color: AppColors.primaryColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: Get.height * 0.02),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: Obx(
-                                () => Image.network(
-                                  userModel.value?.photos?[0] ?? "",
-                                  fit: BoxFit.cover,
-                                  height: Get.height * 0.35,
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: Get.width * 0.02),
-                          Expanded(
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: Obx(
-                                () => Image.network(
-                                  userModel.value?.photos?[1] ?? "",
-                                  fit: BoxFit.cover,
-                                  height: Get.height * 0.35,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                );
-              }),
-            ),
-            // Loading overlay
-            Obx(() {
-              if (isUpdating.value) {
-                return Container(
-                  color: Colors.black54,
-                  child: Center(
-                    child: CupertinoActivityIndicator(
-                      color: AppColors.primaryColor,
-                      radius: 20,
-                    ),
+        child: SingleChildScrollView(
+          child: Obx(() {
+            if (isloading.value) {
+              return SizedBox(
+                width: Get.width,
+                height: Get.height,
+                child: const Center(
+                  child: CupertinoActivityIndicator(
+                    color: AppColors.primaryColor,
                   ),
-                );
-              }
-              return SizedBox.shrink();
-            }),
-          ],
+                ),
+              );
+            }
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: Get.height * 0.02),
+                _buildHeader(),
+                SizedBox(height: Get.height * 0.03),
+                _buildProfileSection(),
+                SizedBox(height: Get.height * 0.04),
+                _buildBioSection(),
+                if (!widget.isSwipeProfile) SizedBox(height: Get.height * 0.04),
+                if (!widget.isSwipeProfile) _buildProfileBoosts(),
+                SizedBox(height: Get.height * 0.04),
+                _buildProfileDetails(),
+                SizedBox(height: Get.height * 0.02),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Gallery',
+                        style: GoogleFonts.figtree(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        'See All',
+                        style: GoogleFonts.figtree(
+                          color: AppColors.primaryColor,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: Get.height * 0.02),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Obx(
+                            () => Image.network(
+                              userModel.value?.photos?[0] ?? "",
+                              fit: BoxFit.cover,
+                              height: Get.height * 0.35,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: Get.width * 0.02),
+                      Expanded(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Obx(
+                            () => Image.network(
+                              userModel.value?.photos?[1] ?? "",
+                              fit: BoxFit.cover,
+                              height: Get.height * 0.35,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          }),
         ),
       ),
     );
