@@ -4,6 +4,7 @@ import 'package:blume/app/data/models/user_model.dart';
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/utils/age_calculator.dart';
+import 'package:blume/app/widgets/custom_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   final isloading = true.obs;
   final isBioExpanded = false.obs;
+  final isUpdating = false.obs;
   Rxn<UserModel> userModel = Rxn<UserModel>();
+
+  // Controllers for editing
+  final bioController = TextEditingController();
+  final locationController = TextEditingController();
+
+  bool get isOwnProfile =>
+      widget.userId == null || widget.userId == userController.user.value?.id;
 
   Future<void> getUserDetails() async {
     isloading.value = true;
@@ -44,6 +53,219 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  Future<void> updateUserProfile(Map<String, dynamic> data) async {}
+
+  void showEditBioSheet() {
+    bioController.text = userModel.value?.bio ?? '';
+
+    Get.bottomSheet(
+      Container(
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Get.isDarkMode ? Color(0xFF1A1625) : Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Edit Bio',
+                  style: GoogleFonts.figtree(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () => Get.back(),
+                  icon: Icon(Icons.close),
+                ),
+              ],
+            ),
+            SizedBox(height: 16),
+            TextField(
+              controller: bioController,
+              style: GoogleFonts.poppins(fontSize: 12),
+              maxLines: 5,
+              maxLength: 500,
+              decoration: InputDecoration(
+                hintText: 'Tell us about yourself...',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: AppColors.primaryColor),
+                ),
+              ),
+            ),
+            SizedBox(height: 16),
+
+            CustomButton(
+              ontap: () {},
+              isLoading: false.obs,
+              child: Text(
+                'Save',
+                style: GoogleFonts.figtree(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      isScrollControlled: true,
+    );
+  }
+
+  void showEditLocationSheet() {
+    locationController.text = userModel.value?.location ?? '';
+
+    Get.bottomSheet(
+      Container(
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Get.isDarkMode ? Color(0xFF1A1625) : Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Edit Location',
+                  style: GoogleFonts.figtree(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () => Get.back(),
+                  icon: Icon(Icons.close),
+                ),
+              ],
+            ),
+            SizedBox(height: 16),
+            TextField(
+              controller: locationController,
+              decoration: InputDecoration(
+                hintText: 'Enter your location',
+                prefixIcon: Icon(Icons.location_on),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: AppColors.primaryColor),
+                ),
+              ),
+            ),
+            SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  updateUserProfile({'location': locationController.text});
+                  Get.back();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primaryColor,
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text(
+                  'Save',
+                  style: GoogleFonts.figtree(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      isScrollControlled: true,
+    );
+  }
+
+  void showEditInterestsSheet() {
+    // You'll need to implement interest selection logic
+    Get.bottomSheet(
+      Container(
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Get.isDarkMode ? Color(0xFF1A1625) : Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Edit Interests',
+                  style: GoogleFonts.figtree(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () => Get.back(),
+                  icon: Icon(Icons.close),
+                ),
+              ],
+            ),
+            SizedBox(height: 16),
+            Text(
+              'Select your interests (You can implement a list of selectable interests here)',
+              style: GoogleFonts.figtree(fontSize: 14),
+            ),
+            SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  // updateUserProfile({'interests': selectedInterests});
+                  Get.back();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primaryColor,
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text(
+                  'Save',
+                  style: GoogleFonts.figtree(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      isScrollControlled: true,
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -53,109 +275,123 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   @override
+  void dispose() {
+    bioController.dispose();
+    locationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Obx(() {
-            if (isloading.value) {
-              return SizedBox(
-                width: Get.width,
-                height: Get.height,
-                child: const Center(
-                  child: CupertinoActivityIndicator(
-                    color: AppColors.primaryColor,
-                  ),
-                ),
-              );
-            }
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: Get.height * 0.02),
-                _buildHeader(),
-
-                SizedBox(height: Get.height * 0.03),
-
-                // Profile Avatar and Stats
-                _buildProfileSection(),
-
-                SizedBox(height: Get.height * 0.04),
-
-                // Bio Section
-                _buildBioSection(),
-
-                if (!widget.isSwipeProfile) SizedBox(height: Get.height * 0.04),
-
-                // Profile Boosts
-                if (!widget.isSwipeProfile) _buildProfileBoosts(),
-
-                SizedBox(height: Get.height * 0.04),
-
-                // Profile Details
-                _buildProfileDetails(),
-
-                SizedBox(height: Get.height * 0.02),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Gallery',
-                        style: GoogleFonts.figtree(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                        ),
+        child: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Obx(() {
+                if (isloading.value) {
+                  return SizedBox(
+                    width: Get.width,
+                    height: Get.height,
+                    child: const Center(
+                      child: CupertinoActivityIndicator(
+                        color: AppColors.primaryColor,
                       ),
-                      const Spacer(),
-                      Text(
-                        'See All',
-                        style: GoogleFonts.figtree(
-                          color: AppColors.primaryColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: Get.height * 0.02),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Obx(
-                            () => Image.network(
-                              userModel.value?.photos?[0] ?? "",
-                              fit: BoxFit.cover,
-                              height: Get.height * 0.35,
+                    ),
+                  );
+                }
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: Get.height * 0.02),
+                    _buildHeader(),
+                    SizedBox(height: Get.height * 0.03),
+                    _buildProfileSection(),
+                    SizedBox(height: Get.height * 0.04),
+                    _buildBioSection(),
+                    if (!widget.isSwipeProfile)
+                      SizedBox(height: Get.height * 0.04),
+                    if (!widget.isSwipeProfile) _buildProfileBoosts(),
+                    SizedBox(height: Get.height * 0.04),
+                    _buildProfileDetails(),
+                    SizedBox(height: Get.height * 0.02),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Gallery',
+                            style: GoogleFonts.figtree(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
-                        ),
-                      ),
-                      SizedBox(width: Get.width * 0.02),
-                      Expanded(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Obx(
-                            () => Image.network(
-                              userModel.value?.photos?[1] ?? "",
-                              fit: BoxFit.cover,
-                              height: Get.height * 0.35,
+                          const Spacer(),
+                          Text(
+                            'See All',
+                            style: GoogleFonts.figtree(
+                              color: AppColors.primaryColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
+                    ),
+                    SizedBox(height: Get.height * 0.02),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Obx(
+                                () => Image.network(
+                                  userModel.value?.photos?[0] ?? "",
+                                  fit: BoxFit.cover,
+                                  height: Get.height * 0.35,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: Get.width * 0.02),
+                          Expanded(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Obx(
+                                () => Image.network(
+                                  userModel.value?.photos?[1] ?? "",
+                                  fit: BoxFit.cover,
+                                  height: Get.height * 0.35,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              }),
+            ),
+            // Loading overlay
+            Obx(() {
+              if (isUpdating.value) {
+                return Container(
+                  color: Colors.black54,
+                  child: Center(
+                    child: CupertinoActivityIndicator(
+                      color: AppColors.primaryColor,
+                      radius: 20,
+                    ),
                   ),
-                ),
-              ],
-            );
-          }),
+                );
+              }
+              return SizedBox.shrink();
+            }),
+          ],
         ),
       ),
     );
@@ -213,7 +449,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       padding: EdgeInsets.symmetric(horizontal: Get.width * 0.04),
       child: Row(
         children: [
-          // Profile Avatar
           Obx(
             () => ClipRRect(
               borderRadius: BorderRadius.circular(90),
@@ -240,28 +475,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
           ),
-
-          // Container(
-          //   width: 80,
-          //   height: 80,
-          //   decoration: BoxDecoration(
-          //     color: Color(0xFF8B4513),
-          //     shape: BoxShape.circle,
-          //   ),
-          //   child: Center(
-          //     child: Text(
-          //       'D',
-          //       style: GoogleFonts.figtree(
-          //         color: Colors.white,
-          //         fontSize: 36,
-          //         fontWeight: FontWeight.bold,
-          //       ),
-          //     ),
-          //   ),
-          // ),
           SizedBox(width: Get.width * 0.02),
-
-          // Stats
           Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -295,18 +509,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Bio',
-            style: GoogleFonts.figtree(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Bio',
+                style: GoogleFonts.figtree(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              if (isOwnProfile)
+                IconButton(
+                  onPressed: showEditBioSheet,
+                  icon: Icon(Icons.edit, size: 20),
+                  padding: EdgeInsets.zero,
+                  constraints: BoxConstraints(),
+                ),
+            ],
           ),
           SizedBox(height: 4),
           Obx(() {
             return Text(
-              userModel.value?.bio ?? "",
-              style: GoogleFonts.figtree(fontSize: 16),
+              userModel.value?.bio ?? "Add a bio to tell others about yourself",
+              style: GoogleFonts.figtree(
+                fontSize: 16,
+                color: userModel.value?.bio == null ? Colors.grey : null,
+              ),
             );
           }),
         ],
@@ -394,9 +623,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
             _buildDetailSection(
               'Age',
               calculateAge(userModel.value?.dateOfBirth ?? ""),
+              canEdit: false,
             ),
             SizedBox(height: 15),
-            _buildDetailSection('Location', userModel.value?.location ?? ""),
+            _buildDetailSection(
+              'Location',
+              userModel.value?.location ?? "Add your location",
+              canEdit: true,
+              onEdit: showEditLocationSheet,
+            ),
             SizedBox(height: 15),
             _buildInterestsSection(),
           ],
@@ -405,7 +640,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildDetailSection(String title, String content) {
+  Widget _buildDetailSection(
+    String title,
+    String content, {
+    bool canEdit = false,
+    VoidCallback? onEdit,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -419,63 +659,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            // Icon(Icons.edit, color: Colors.grey[500], size: 20),
+            if (canEdit && isOwnProfile)
+              IconButton(
+                onPressed: onEdit,
+                icon: Icon(Icons.edit, size: 20),
+                padding: EdgeInsets.zero,
+                constraints: BoxConstraints(),
+              ),
           ],
         ),
         SizedBox(height: 4),
-        Text(content, style: GoogleFonts.figtree(fontSize: 16)),
-      ],
-    );
-  }
-
-  Widget buildLocationSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Location',
-              style: GoogleFonts.figtree(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            Icon(Icons.edit, size: 20),
-          ],
-        ),
-        SizedBox(height: 8),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Chicago, IL United States',
-              style: GoogleFonts.figtree(fontSize: 16),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: Colors.red.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.location_on, color: Colors.red, size: 16),
-                  SizedBox(width: 4),
-                  Text(
-                    '1 km',
-                    style: GoogleFonts.figtree(
-                      color: Colors.red,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+        Text(
+          content,
+          style: GoogleFonts.figtree(
+            fontSize: 16,
+            color: content.startsWith('Add') ? Colors.grey : null,
+          ),
         ),
       ],
     );
@@ -499,23 +698,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            Icon(Icons.edit, size: 20),
+            if (isOwnProfile)
+              IconButton(
+                onPressed: showEditInterestsSheet,
+                icon: Icon(Icons.edit, size: 20),
+                padding: EdgeInsets.zero,
+                constraints: BoxConstraints(),
+              ),
           ],
         ),
         SizedBox(height: 16),
         Wrap(
           spacing: 10,
           runSpacing: 12,
-          children: interests
-              .map((interest) => _buildInterestChip(interest, true))
-              .toList(),
-          // children: [
-          //   _buildInterestChip('Travelling', true),
-          //   _buildInterestChip('Books', true),
-          //   _buildInterestChip('Music', false),
-          //   _buildInterestChip('Dancing', false),
-          //   _buildInterestChip('Modeling', false),
-          // ],
+          children: interests.isNotEmpty
+              ? interests
+                    .map((interest) => _buildInterestChip(interest, true))
+                    .toList()
+              : [
+                  Text(
+                    'Add interests to help others know you better',
+                    style: GoogleFonts.figtree(
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
         ),
       ],
     );

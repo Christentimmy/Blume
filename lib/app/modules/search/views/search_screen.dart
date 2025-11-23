@@ -1,3 +1,5 @@
+import 'package:blume/app/controller/user_controller.dart';
+import 'package:blume/app/modules/likes/views/likes_screen.dart';
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
@@ -26,37 +28,15 @@ class _SearchScreenState extends State<SearchScreen>
     "Interest",
   ];
 
-  final List interests = [
-    "Art & Design 🎨",
-    "Video games 🎮",
-    "Music 🎶",
-    "Culture 🪭",
-    "Movies 🎥",
-    "Traveling ✈️",
-    "Camping 🏕️",
-    "People nearby 📍",
-    "Most compatible 🔗",
-  ];
-
-  final List goalDrivenDating = [
-    {"title": "Serious Dater", "image": "assets/icons/love.png"},
-    {"title": "Short-term fun", "image": "assets/icons/flash.png"},
-    {"title": "New friends", "image": "assets/icons/sun-setting.png"},
-    {"title": "Free tonight", "image": "assets/icons/stars-03.png"},
-
-    {"title": "Lesbian", "image": "assets/icons/lesbian.png"},
-    {"title": "Gay", "image": "assets/icons/gay.png"},
-    {"title": "Transgender", "image": "assets/icons/transgender.png"},
-    {"title": "Queer", "image": "assets/icons/q.png"},
-  ];
-
   late AnimationController _animationController;
   late Animation<double> _searchWidthAnimation;
   late Animation<double> _titleOpacityAnimation;
   late Animation<double> _arrowOpacityAnimation;
   bool _isSearchActive = false;
-  final TextEditingController _searchController = TextEditingController();
+  // final TextEditingController _searchController = TextEditingController();
   final FocusNode _searchFocusNode = FocusNode();
+  final userController = Get.find<UserController>();
+  final searchText = "".obs;
 
   @override
   void initState() {
@@ -84,6 +64,12 @@ class _SearchScreenState extends State<SearchScreen>
         curve: Interval(0.5, 1.0, curve: Curves.easeIn),
       ),
     );
+
+    debounce<String>(searchText, (_) {
+      final query = searchText.value.trim();
+      if (query.isEmpty) return;
+      userController.searchUser(search: query, loadMore: false);
+    }, time: const Duration(milliseconds: 400));
   }
 
   void _toggleSearch() {
@@ -100,14 +86,14 @@ class _SearchScreenState extends State<SearchScreen>
     } else {
       _animationController.reverse();
       _searchFocusNode.unfocus();
-      _searchController.clear();
+      searchText.value = "";
     }
   }
 
   @override
   void dispose() {
     _animationController.dispose();
-    _searchController.dispose();
+    searchText.value = "";
     _searchFocusNode.dispose();
     super.dispose();
   }
@@ -123,145 +109,12 @@ class _SearchScreenState extends State<SearchScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               buildAppBar(),
-              Expanded(
-                child: ListView(
-                  children: [
-                    Text(
-                      "Interest",
-                      style: GoogleFonts.figtree(
-                        fontSize: 28,
-                        fontWeight: FontWeight.w600,
-                        color: Get.theme.primaryColor,
-                      ),
-                    ),
-                    Text(
-                      "People with similar interest around you",
-                      style: GoogleFonts.figtree(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                        color: Get.theme.primaryColor,
-                      ),
-                    ),
-                    SizedBox(height: Get.height * 0.02),
-                    Wrap(
-                      runSpacing: 2,
-                      spacing: 5,
-                      children: List.generate(
-                        interests.length,
-                        (index) => Chip(
-                          side: BorderSide(color: Colors.transparent),
-                          backgroundColor: Get.isDarkMode
-                              ? AppColors.darkButtonColor
-                              : AppColors.lightButtonColor,
-                          label: Text(
-                            interests[index],
-                            style: GoogleFonts.figtree(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: Get.theme.primaryColor,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: Get.height * 0.025),
-                    Text(
-                      "Goal-driven dating",
-                      style: GoogleFonts.figtree(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                        color: Get.theme.primaryColor,
-                      ),
-                    ),
-                    Text(
-                      "People with similar relationship goals",
-                      style: GoogleFonts.figtree(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                        color: Get.theme.primaryColor,
-                      ),
-                    ),
-                    SizedBox(height: Get.height * 0.03),
-                    GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: goalDrivenDating.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                      ),
-                      itemBuilder: (context, index) {
-                        final item = goalDrivenDating[index];
-                        return Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            color: Get.isDarkMode
-                                ? AppColors.darkButtonColor
-                                : Colors.white,
-                          ),
-                          child: Column(
-                            children: [
-                              Container(
-                                height: 45,
-                                alignment: Alignment.center,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(16),
-                                    topRight: Radius.circular(16),
-                                  ),
-                                  color: Get.isDarkMode
-                                      ? AppColors.darkButtonColor
-                                      : AppColors.lightButtonColor,
-                                ),
-                                child: Text(
-                                  item["title"],
-                                  style: GoogleFonts.figtree(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    color: Get.theme.primaryColor,
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Center(
-                                  child: Image.asset(item["image"], height: 50),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                    SizedBox(height: Get.height * 0.03),
-                    Text(
-                      "Around me",
-                      style: GoogleFonts.figtree(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                        color: Get.theme.primaryColor,
-                      ),
-                    ),
-                    Text(
-                      "People with “Music” interest around you",
-                      style: GoogleFonts.figtree(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                        color: Get.theme.primaryColor,
-                      ),
-                    ),
-
-                    SizedBox(height: Get.height * 0.02),
-                    Image.asset(
-                      "assets/icons/bMap.png",
-                      width: Get.width,
-                      fit: BoxFit.cover,  
-                    ),
-                    SizedBox(height: Get.height * 0.03),
-                  ],
-                ),
-              ),
+              Obx(() {
+                if (searchText.isNotEmpty) {
+                  return buildSearchResult();
+                }
+                return BuildSearchStaticData();
+              }),
             ],
           ),
         ),
@@ -335,6 +188,8 @@ class _SearchScreenState extends State<SearchScreen>
                                 child: CustomTextField(
                                   hintText: "Search",
                                   suffixIcon: Icons.search,
+                                  onChanged: (value) =>
+                                      searchText.value = value,
                                 ),
                               )
                             : SizedBox.shrink();
@@ -403,6 +258,201 @@ class _SearchScreenState extends State<SearchScreen>
               ],
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildSearchResult() {
+    return Obx(() {
+      if (userController.searchResults.isEmpty) {
+        return Expanded(child: Center(child: Text("Empty")));
+      }
+      return Expanded(
+        child: GridView.builder(
+          itemCount: userController.searchResults.length,
+          physics: const BouncingScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 0.7,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+          ),
+          itemBuilder: (context, index) {
+            final user = userController.searchResults[index];
+            return buildLikeCard(user: user);
+          },
+        ),
+      );
+    });
+  }
+}
+
+class BuildSearchStaticData extends StatelessWidget {
+  BuildSearchStaticData({super.key});
+
+  final List interests = [
+    "Art & Design 🎨",
+    "Video games 🎮",
+    "Music 🎶",
+    "Culture 🪭",
+    "Movies 🎥",
+    "Traveling ✈️",
+    "Camping 🏕️",
+    "People nearby 📍",
+    "Most compatible 🔗",
+  ];
+
+  final List goalDrivenDating = [
+    {"title": "Serious Dater", "image": "assets/icons/love.png"},
+    {"title": "Short-term fun", "image": "assets/icons/flash.png"},
+    {"title": "New friends", "image": "assets/icons/sun-setting.png"},
+    {"title": "Free tonight", "image": "assets/icons/stars-03.png"},
+
+    {"title": "Lesbian", "image": "assets/icons/lesbian.png"},
+    {"title": "Gay", "image": "assets/icons/gay.png"},
+    {"title": "Transgender", "image": "assets/icons/transgender.png"},
+    {"title": "Queer", "image": "assets/icons/q.png"},
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: ListView(
+        children: [
+          Text(
+            "Interest",
+            style: GoogleFonts.figtree(
+              fontSize: 28,
+              fontWeight: FontWeight.w600,
+              color: Get.theme.primaryColor,
+            ),
+          ),
+          Text(
+            "People with similar interest around you",
+            style: GoogleFonts.figtree(
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+              color: Get.theme.primaryColor,
+            ),
+          ),
+          SizedBox(height: Get.height * 0.02),
+          Wrap(
+            runSpacing: 2,
+            spacing: 5,
+            children: List.generate(
+              interests.length,
+              (index) => Chip(
+                side: BorderSide(color: Colors.transparent),
+                backgroundColor: Get.isDarkMode
+                    ? AppColors.darkButtonColor
+                    : AppColors.lightButtonColor,
+                label: Text(
+                  interests[index],
+                  style: GoogleFonts.figtree(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Get.theme.primaryColor,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: Get.height * 0.025),
+          Text(
+            "Goal-driven dating",
+            style: GoogleFonts.figtree(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              color: Get.theme.primaryColor,
+            ),
+          ),
+          Text(
+            "People with similar relationship goals",
+            style: GoogleFonts.figtree(
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+              color: Get.theme.primaryColor,
+            ),
+          ),
+          SizedBox(height: Get.height * 0.03),
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: goalDrivenDating.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+            ),
+            itemBuilder: (context, index) {
+              final item = goalDrivenDating[index];
+              return Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: Get.isDarkMode
+                      ? AppColors.darkButtonColor
+                      : Colors.white,
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      height: 45,
+                      alignment: Alignment.center,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16),
+                          topRight: Radius.circular(16),
+                        ),
+                        color: Get.isDarkMode
+                            ? AppColors.darkButtonColor
+                            : AppColors.lightButtonColor,
+                      ),
+                      child: Text(
+                        item["title"],
+                        style: GoogleFonts.figtree(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Get.theme.primaryColor,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: Image.asset(item["image"], height: 50),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          SizedBox(height: Get.height * 0.03),
+          Text(
+            "Around me",
+            style: GoogleFonts.figtree(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              color: Get.theme.primaryColor,
+            ),
+          ),
+          Text(
+            "People with “Music” interest around you",
+            style: GoogleFonts.figtree(
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+              color: Get.theme.primaryColor,
+            ),
+          ),
+
+          SizedBox(height: Get.height * 0.02),
+          Image.asset(
+            "assets/icons/bMap.png",
+            width: Get.width,
+            fit: BoxFit.cover,
+          ),
+          SizedBox(height: Get.height * 0.03),
         ],
       ),
     );
