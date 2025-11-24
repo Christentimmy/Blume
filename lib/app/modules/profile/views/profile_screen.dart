@@ -90,8 +90,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   isSwipeProfile: widget.isSwipeProfile,
                   onBack: Get.back,
                 ),
-                SizedBox(height: Get.height * 0.03),
-                ProfileAvatarStats(user: userModel),
+                // SizedBox(height: Get.height * 0.03),
+                // ProfileAvatarStats(user: userModel),
                 SizedBox(height: Get.height * 0.04),
                 ProfileBioSection(
                   user: userModel,

@@ -61,9 +61,12 @@ class ProfileHeader extends StatelessWidget {
               icon: const Icon(Icons.message_rounded, size: 28),
             ),
           ] else ...[
-            const Icon(Icons.notifications_outlined, size: 28),
-            const SizedBox(width: 16),
-            const Icon(Icons.apps, size: 28),
+            InkWell(
+              onTap: () => Get.toNamed(AppRoutes.notification),
+              child: const Icon(Icons.notifications_outlined, size: 28),
+            ),
+            // const SizedBox(width: 16),
+            // const Icon(Icons.apps, size: 28),
           ],
         ],
       ),
