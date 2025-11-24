@@ -1,17 +1,12 @@
-import 'package:blume/app/controller/location_controller.dart';
 import 'package:blume/app/controller/user_controller.dart';
-import 'package:blume/app/data/models/chat_list_model.dart';
 import 'package:blume/app/data/models/user_model.dart';
+import 'package:blume/app/modules/profile/widgets/profile_widget.dart';
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/routes/app_routes.dart';
-import 'package:blume/app/utils/age_calculator.dart';
-import 'package:blume/app/widgets/custom_button.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shimmer/shimmer.dart';
 
 class ProfileScreen extends StatefulWidget {
   final bool isSwipeProfile;
@@ -27,7 +22,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   final isloading = true.obs;
   final isBioExpanded = false.obs;
-  final isUpdating = false.obs;
+  // final isUpdating = false.obs;
   Rxn<UserModel> userModel = Rxn<UserModel>();
 
   // Controllers for editing
@@ -35,8 +30,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   bool get isOwnProfile =>
       widget.userId == null || widget.userId == userController.user.value?.id;
-
-  final locationController = Get.find<LocationController>();
 
   Future<void> getUserDetails() async {
     isloading.value = true;
@@ -55,149 +48,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  Future<void> updateUserProfile(Map<String, dynamic> data) async {}
-
-  void showEditBioSheet() {
-    bioController.text = userModel.value?.bio ?? '';
-
-    Get.bottomSheet(
-      Container(
-        padding: EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Get.isDarkMode ? Color(0xFF1A1625) : Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Edit Bio',
-                  style: GoogleFonts.figtree(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () => Get.back(),
-                  icon: Icon(Icons.close),
-                ),
-              ],
-            ),
-            SizedBox(height: 16),
-            TextField(
-              controller: bioController,
-              style: GoogleFonts.poppins(fontSize: 12),
-              maxLines: 5,
-              maxLength: 500,
-              decoration: InputDecoration(
-                hintText: 'Tell us about yourself...',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: AppColors.primaryColor),
-                ),
-              ),
-            ),
-            SizedBox(height: 16),
-
-            CustomButton(
-              ontap: () async {
-                if (bioController.text.isEmpty) return;
-                await userController.updateBio(bio: bioController.text);
-              },
-              isLoading: false.obs,
-              child: Text(
-                'Save',
-                style: GoogleFonts.figtree(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      isScrollControlled: true,
-    );
-  }
-
-  void showEditLocationSheet() {
-    Get.bottomSheet(
-      isScrollControlled: true,
-      Container(
-        padding: EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Get.isDarkMode ? Color(0xFF1A1625) : Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Edit Location',
-                  style: GoogleFonts.figtree(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () => Get.back(),
-                  icon: Icon(Icons.close),
-                ),
-              ],
-            ),
-            SizedBox(height: 16),
-            TextField(
-              style: GoogleFonts.poppins(fontSize: 12),
-              decoration: InputDecoration(
-                hintText: userModel.value?.location ?? "",
-                prefixIcon: Icon(Icons.location_on),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: AppColors.primaryColor),
-                ),
-              ),
-            ),
-            SizedBox(height: 16),
-            CustomButton(
-              ontap: () async {
-                await locationController.getCurrentCity(
-                  nextScreen: () async {
-                    await userController.getUserDetails();
-                    Get.back();
-                  },
-                );
-              },
-              isLoading: locationController.isloading,
-              child: Text(
-                'Save',
-                style: GoogleFonts.figtree(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   void initState() {
     super.initState();
@@ -209,7 +59,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void dispose() {
     bioController.dispose();
-    locationController.dispose();
     super.dispose();
   }
 
@@ -234,15 +83,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: Get.height * 0.02),
-                _buildHeader(),
+                ProfileHeader(
+                  user: userModel,
+                  isSwipeProfile: widget.isSwipeProfile,
+                  onBack: Get.back,
+                ),
                 SizedBox(height: Get.height * 0.03),
-                _buildProfileSection(),
+                ProfileAvatarStats(user: userModel),
                 SizedBox(height: Get.height * 0.04),
-                _buildBioSection(),
+                ProfileBioSection(
+                  user: userModel,
+                  isOwnProfile: isOwnProfile,
+                  onEditBio: () => showEditBioSheet(userModel: userModel),
+                ),
                 if (!widget.isSwipeProfile) SizedBox(height: Get.height * 0.04),
-                if (!widget.isSwipeProfile) _buildProfileBoosts(),
+                if (!widget.isSwipeProfile) const ProfileBoostsSection(),
                 SizedBox(height: Get.height * 0.04),
-                _buildProfileDetails(),
+                ProfileDetailsSection(
+                  user: userModel,
+                  isOwnProfile: isOwnProfile,
+                  onEditLocation: () =>
+                      showEditLocationSheet(userModel: userModel),
+                  onEditInterests: () {
+                    Get.toNamed(
+                      AppRoutes.interest,
+                      arguments: {
+                        "whatNext": () => Get.back(),
+                        "basics": userModel.value?.basics,
+                      },
+                    );
+                  },
+                ),
                 SizedBox(height: Get.height * 0.02),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -257,12 +128,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                       const Spacer(),
-                      Text(
-                        'See All',
-                        style: GoogleFonts.figtree(
-                          color: AppColors.primaryColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
+                      InkWell(
+                        onTap: () => Get.toNamed(AppRoutes.addPictures),
+                        child: Text(
+                          'See All',
+                          style: GoogleFonts.figtree(
+                            color: AppColors.primaryColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ],
@@ -305,375 +179,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             );
           }),
         ),
-      ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: Get.width * 0.04),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          InkWell(
-            onTap: () => Get.back(),
-            child: Icon(Icons.arrow_back, size: 28),
-          ),
-          SizedBox(width: Get.width * 0.03),
-          Obx(() {
-            return Text(
-              userModel.value?.fullName ?? "",
-              style: GoogleFonts.figtree(
-                fontSize: 24,
-                fontWeight: FontWeight.w600,
-              ),
-            );
-          }),
-          const Spacer(),
-          if (widget.isSwipeProfile) ...[
-            IconButton(
-              onPressed: () {
-                final chatHead = ChatListModel(
-                  userId: userModel.value?.id,
-                  fullName: userModel.value?.fullName,
-                  avatar: userModel.value?.avatar,
-                  online: false,
-                );
-                Get.toNamed(
-                  AppRoutes.message,
-                  arguments: {"chatHead": chatHead},
-                );
-              },
-              icon: Icon(Icons.message_rounded, size: 28),
-            ),
-          ] else ...[
-            Icon(Icons.notifications_outlined, size: 28),
-            SizedBox(width: 16),
-            Icon(Icons.apps, size: 28),
-          ],
-        ],
-      ),
-    );
-  }
-
-  Widget _buildProfileSection() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: Get.width * 0.04),
-      child: Row(
-        children: [
-          Obx(
-            () => ClipRRect(
-              borderRadius: BorderRadius.circular(90),
-              child: CachedNetworkImage(
-                imageUrl: userModel.value?.avatar ?? "",
-                width: 80,
-                height: 80,
-                fit: BoxFit.cover,
-                placeholder: (context, url) {
-                  return Shimmer.fromColors(
-                    baseColor: Color(0xFF1A1625),
-                    highlightColor: Color(0xFFD586D3),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Color(0xFF1A1625),
-                      ),
-                    ),
-                  );
-                },
-                errorWidget: (context, url, error) => const Center(
-                  child: Icon(Icons.error, color: AppColors.primaryColor),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(width: Get.width * 0.02),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildStatItem('3', 'Matches'),
-                _buildStatItem('242', 'Likes'),
-                _buildStatItem('10', 'Friends'),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatItem(String number, String label) {
-    return Column(
-      children: [
-        Text(
-          number,
-          style: GoogleFonts.figtree(fontSize: 32, fontWeight: FontWeight.bold),
-        ),
-        Text(label, style: GoogleFonts.figtree(fontSize: 16)),
-      ],
-    );
-  }
-
-  Widget _buildBioSection() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: Get.width * 0.04),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Bio',
-                style: GoogleFonts.figtree(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              if (isOwnProfile)
-                IconButton(
-                  onPressed: showEditBioSheet,
-                  icon: Icon(Icons.edit, size: 20),
-                  padding: EdgeInsets.zero,
-                  constraints: BoxConstraints(),
-                ),
-            ],
-          ),
-          SizedBox(height: 4),
-          Obx(() {
-            return Text(
-              userModel.value?.bio ?? "Add a bio to tell others about yourself",
-              style: GoogleFonts.figtree(
-                fontSize: 16,
-                color: userModel.value?.bio == null ? Colors.grey : null,
-              ),
-            );
-          }),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildProfileBoosts() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: Get.width * 0.04),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Profile boosts',
-            style: GoogleFonts.figtree(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          SizedBox(height: 4),
-          Text(
-            'Boost your profile for more visibility',
-            style: GoogleFonts.figtree(fontSize: 16),
-          ),
-          SizedBox(height: 16),
-          Row(
-            children: [
-              _buildBoostCard('\$2', '1 boost'),
-              SizedBox(width: 16),
-              _buildBoostCard('\$5', '5 boosts'),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBoostCard(String price, String description) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: () => Get.toNamed(AppRoutes.chooseBoostPlan),
-        child: Container(
-          padding: EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: Get.isDarkMode
-                ? AppColors.darkButtonColor
-                : AppColors.lightButtonColor,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                price,
-                style: GoogleFonts.figtree(
-                  color: AppColors.primaryColor,
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 4),
-              Text(
-                description,
-                style: GoogleFonts.figtree(
-                  color: AppColors.primaryColor,
-                  fontSize: 16,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildProfileDetails() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: Get.width * 0.04),
-      child: Obx(
-        () => Column(
-          children: [
-            _buildDetailSection(
-              'Age',
-              calculateAge(userModel.value?.dateOfBirth ?? ""),
-              canEdit: false,
-            ),
-            SizedBox(height: 15),
-            _buildDetailSection(
-              'Location',
-              userModel.value?.location ?? "Add your location",
-              canEdit: true,
-              onEdit: showEditLocationSheet,
-            ),
-            SizedBox(height: 15),
-            _buildInterestsSection(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDetailSection(
-    String title,
-    String content, {
-    bool canEdit = false,
-    VoidCallback? onEdit,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              title,
-              style: GoogleFonts.figtree(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            if (canEdit && isOwnProfile)
-              IconButton(
-                onPressed: onEdit,
-                icon: Icon(Icons.edit, size: 20),
-                padding: EdgeInsets.zero,
-                constraints: BoxConstraints(),
-              ),
-          ],
-        ),
-        SizedBox(height: 4),
-        Text(
-          content,
-          style: GoogleFonts.figtree(
-            fontSize: 16,
-            color: content.startsWith('Add') ? Colors.grey : null,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildInterestsSection() {
-    List interests = userController.getInterests(
-      user: userModel.value!,
-      take: 15,
-    );
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Interests',
-              style: GoogleFonts.figtree(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            if (isOwnProfile)
-              IconButton(
-                onPressed: () {
-                  Get.toNamed(
-                    AppRoutes.interest,
-                    arguments: {
-                      "whatNext": () => Get.back(),
-                      "basics": userModel.value?.basics,
-                    },
-                  );
-                },
-                icon: Icon(Icons.edit, size: 20),
-                padding: EdgeInsets.zero,
-                constraints: BoxConstraints(),
-              ),
-          ],
-        ),
-        SizedBox(height: 16),
-        Wrap(
-          spacing: 10,
-          runSpacing: 12,
-          children: interests.isNotEmpty
-              ? interests
-                    .map((interest) => _buildInterestChip(interest, true))
-                    .toList()
-              : [
-                  Text(
-                    'Add interests to help others know you better',
-                    style: GoogleFonts.figtree(
-                      fontSize: 16,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildInterestChip(String label, bool isSelected) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 3),
-      decoration: BoxDecoration(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: isSelected ? Colors.red : Colors.grey[600]!,
-          width: 1.5,
-        ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (isSelected) Icon(Icons.check, color: Colors.red, size: 16),
-          if (isSelected) SizedBox(width: 6),
-          Text(
-            label,
-            style: GoogleFonts.figtree(
-              color: isSelected ? Colors.red : null,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
       ),
     );
   }
