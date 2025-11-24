@@ -1,5 +1,3 @@
-
-
 import 'dart:io';
 import 'package:blume/app/controller/user_controller.dart';
 import 'package:blume/app/resources/colors.dart';
@@ -29,24 +27,37 @@ class PhotoItem {
   bool get hasContent => !isEmpty && !isDeleted;
 }
 
-class GalleryScreen extends StatelessWidget {
-  GalleryScreen({super.key});
+class GalleryScreen extends StatefulWidget {
+  const GalleryScreen({super.key});
 
+  @override
+  State<GalleryScreen> createState() => _GalleryScreenState();
+}
+
+class _GalleryScreenState extends State<GalleryScreen> {
   final userController = Get.find<UserController>();
+
   final RxList<PhotoItem> photos = <PhotoItem>[].obs;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (photos.isEmpty) {
+        final userPhotos = userController.user.value?.photos ?? [];
+        photos.value = List.generate(6, (index) {
+          if (index < userPhotos.length) {
+            return PhotoItem(url: userPhotos[index]);
+          }
+          return PhotoItem();
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     // Initialize photos from user data
-    if (photos.isEmpty) {
-      final userPhotos = userController.user.value?.photos ?? [];
-      photos.value = List.generate(6, (index) {
-        if (index < userPhotos.length) {
-          return PhotoItem(url: userPhotos[index]);
-        }
-        return PhotoItem();
-      });
-    }
 
     return Scaffold(
       backgroundColor: Get.theme.scaffoldBackgroundColor,
@@ -266,15 +277,10 @@ class GalleryScreen extends StatelessWidget {
         .map((p) => p.url!)
         .toList();
 
-    print("newFiles: $newFiles");
-    print("existingUrls: $existingUrls");
-    print("deletedUrls: $deletedUrls");
-
-    // Call the controller method with categorized data
-    // await userController.updateGallery(
-    //   newFiles: newFiles,
-    //   existingUrls: existingUrls,
-    //   deletedUrls: deletedUrls,
-    // );
+    await userController.updateGallery(
+      newFiles: newFiles,
+      existingUrls: existingUrls,
+      deletedUrls: deletedUrls,
+    );
   }
 }

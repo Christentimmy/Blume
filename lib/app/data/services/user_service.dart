@@ -328,7 +328,9 @@ class UserService {
 
   Future<http.Response?> updateGallery({
     required String token,
-    required List<File> imageFiles,
+    required List<File> newFiles,
+    required List<String> existingUrls,
+    required List<String> deletedUrls,
   }) async {
     try {
       var uri = Uri.parse("$baseUrl/user/update-gallery");
@@ -337,8 +339,16 @@ class UserService {
         ..headers['Authorization'] = 'Bearer $token'
         ..headers['Content-Type'] = 'multipart/form-data';
 
+      if (existingUrls.isNotEmpty) {
+        request.fields['existingUrls'] = jsonEncode(existingUrls);
+      }
+
+      if (deletedUrls.isNotEmpty) {
+        request.fields['deletedUrls'] = jsonEncode(deletedUrls);
+      }
+
       final multipartFiles = await Future.wait(
-        imageFiles.map(
+        newFiles.map(
           (file) async =>
               await http.MultipartFile.fromPath('newFiles', file.path),
         ),
@@ -566,5 +576,4 @@ class UserService {
     }
     return null;
   }
-
 }

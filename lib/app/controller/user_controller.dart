@@ -705,10 +705,12 @@ class UserController extends GetxController {
       }
       List users = decoded["users"] as List;
       if (users.isEmpty) return;
-      List<UserModel> mappedUsers = users.map((e)=> UserModel.fromJson(e)).toList();
-      if(loadMore && searchHasNextPage.value){
+      List<UserModel> mappedUsers = users
+          .map((e) => UserModel.fromJson(e))
+          .toList();
+      if (loadMore && searchHasNextPage.value) {
         searchResults.addAll(mappedUsers);
-      }else{
+      } else {
         searchResults.clear();
         searchResults.addAll(mappedUsers);
       }
@@ -718,6 +720,38 @@ class UserController extends GetxController {
     }
   }
 
+  Future<void> updateGallery({
+    required List<File> newFiles,
+    required List<String> existingUrls,
+    required List<String> deletedUrls,
+  }) async {
+    isloading.value = true;
+    try {
+      final storageController = Get.find<StorageController>();
+      String? token = await storageController.getToken();
+      if (token == null || token.isEmpty) return;
+
+      final response = await userService.updateGallery(
+        token: token,
+        newFiles: newFiles,
+        existingUrls: existingUrls,
+        deletedUrls: deletedUrls,
+      );
+      if (response == null) return;
+      final decoded = json.decode(response.body);
+      final message = decoded["message"] ?? "";
+      if (response.statusCode != 200) {
+        CustomSnackbar.showErrorToast(message);
+        return;
+      }
+      await getUserDetails();
+      Get.offAllNamed(AppRoutes.bottomNavigation);
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      isloading.value = false;
+    }
+  }
 }
 
 enum SwipeType { pass, superlike, like }
