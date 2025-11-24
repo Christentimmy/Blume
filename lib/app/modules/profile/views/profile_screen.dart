@@ -102,17 +102,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ProfileDetailsSection(
                   user: userModel,
                   isOwnProfile: isOwnProfile,
-                  onEditLocation: () =>
-                      showEditLocationSheet(userModel: userModel),
-                  onEditInterests: () {
-                    Get.toNamed(
-                      AppRoutes.interest,
-                      arguments: {
-                        "whatNext": () => Get.back(),
-                        "basics": userModel.value?.basics,
-                      },
-                    );
-                  },
                 ),
                 SizedBox(height: Get.height * 0.02),
                 Padding(

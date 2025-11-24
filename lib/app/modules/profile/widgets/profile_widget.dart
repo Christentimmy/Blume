@@ -285,15 +285,11 @@ class _BoostCard extends StatelessWidget {
 class ProfileDetailsSection extends StatelessWidget {
   final Rxn<UserModel> user;
   final bool isOwnProfile;
-  final VoidCallback onEditLocation;
-  final VoidCallback onEditInterests;
 
   const ProfileDetailsSection({
     super.key,
     required this.user,
     required this.isOwnProfile,
-    required this.onEditLocation,
-    required this.onEditInterests,
   });
 
   @override
@@ -316,13 +312,21 @@ class ProfileDetailsSection extends StatelessWidget {
               content: currentUser?.location ?? 'Add your location',
               canEdit: true,
               isOwnProfile: isOwnProfile,
-              onEdit: onEditLocation,
+              onEdit: () => showEditLocationSheet(userModel: user),
             ),
             const SizedBox(height: 15),
             _InterestsSection(
               user: currentUser,
               isOwnProfile: isOwnProfile,
-              onEditInterests: onEditInterests,
+              onEditInterests: () {
+                Get.toNamed(
+                  AppRoutes.interest,
+                  arguments: {
+                    "whatNext": () => Get.back(),
+                    "basics": user.value?.basics,
+                  },
+                );
+              },
             ),
           ],
         );
