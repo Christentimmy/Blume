@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ProfileHeader extends StatelessWidget {
   final Rxn<UserModel> user;
@@ -635,6 +636,46 @@ void showEditLocationSheet({required Rxn<UserModel> userModel}) {
           ),
         ],
       ),
+    ),
+  );
+}
+
+void displayAllPicturesInDialog({required Rxn<UserModel> userModel}) {
+  RxInt activeIndex = 0.obs;
+  Get.dialog(
+    Stack(
+      children: [
+        PageView.builder(
+          onPageChanged: (index) {
+            activeIndex.value = index;
+          },
+          itemCount: userModel.value?.photos?.length ?? 0,
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (context, index) {
+            return Image.network(
+              userModel.value?.photos?[index] ?? "",
+              fit: BoxFit.cover,
+            );
+          },
+        ),
+        Obx(() {
+          return Positioned(
+            bottom: Get.height * 0.1,
+            left: Get.width * 0.45,
+            right: Get.width * 0.45,
+            child: AnimatedSmoothIndicator(
+              activeIndex: activeIndex.value,
+              count: userModel.value?.photos?.length ?? 0,
+              effect: const WormEffect(
+                dotWidth: 10,
+                dotHeight: 10,
+                dotColor: Colors.grey,
+                activeDotColor: AppColors.primaryColor,
+              ),
+            ),
+          );
+        }),
+      ],
     ),
   );
 }

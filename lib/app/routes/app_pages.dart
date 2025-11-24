@@ -20,6 +20,7 @@ import 'package:blume/app/modules/profile/views/add_pictures_screen.dart';
 import 'package:blume/app/modules/profile/views/bio_screen.dart';
 import 'package:blume/app/modules/profile/views/choose_boost_plan_screen.dart';
 import 'package:blume/app/modules/profile/views/distance_preference_screen.dart';
+import 'package:blume/app/modules/profile/views/gallery_screen.dart';
 import 'package:blume/app/modules/profile/views/interest_screen.dart';
 import 'package:blume/app/modules/profile/views/lifestyle_screen.dart';
 import 'package:blume/app/modules/profile/views/profile_screen.dart';
@@ -200,5 +201,6 @@ class AppPages {
       name: AppRoutes.chooseBoostPlan,
       page: () => ChooseBoostPlanScreen(),
     ),
+    GetPage(name: AppRoutes.gallery, page: () => GalleryScreen()),
   ];
 }

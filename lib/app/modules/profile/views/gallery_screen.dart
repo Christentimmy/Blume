@@ -1,4 +1,3 @@
-
 import 'dart:io';
 import 'package:blume/app/controller/user_controller.dart';
 import 'package:blume/app/resources/colors.dart';
@@ -22,7 +21,7 @@ class GalleryScreen extends StatelessWidget {
     if (image == null) return;
     images[index] = image;
     images.refresh();
-  }
+  } 
 
   @override
   Widget build(BuildContext context) {

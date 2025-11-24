@@ -3,10 +3,12 @@ import 'package:blume/app/data/models/user_model.dart';
 import 'package:blume/app/modules/profile/widgets/profile_widget.dart';
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/routes/app_routes.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ProfileScreen extends StatefulWidget {
   final bool isSwipeProfile;
@@ -118,7 +120,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       const Spacer(),
                       InkWell(
-                        onTap: () => Get.toNamed(AppRoutes.addPictures),
+                        onTap: () {
+                          if (isOwnProfile) {
+                            Get.toNamed(AppRoutes.gallery);
+                            return;
+                          }
+                          displayAllPicturesInDialog(userModel: userModel);
+                        },
                         child: Text(
                           'See All',
                           style: GoogleFonts.figtree(
@@ -140,11 +148,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: Obx(
-                            () => Image.network(
-                              userModel.value?.photos?[0] ?? "",
+                            () => CachedNetworkImage(
+                              imageUrl: userModel.value?.photos?[0] ?? "",
                               fit: BoxFit.cover,
                               height: Get.height * 0.35,
+                              placeholder: (context, url) => shimmerEffect(),
+                              errorWidget: (context, url, error) => const Center(
+                                child: Icon(Icons.error, color: AppColors.primaryColor),
+                              ),
                             ),
+                            // Image.network(
+                            //   userModel.value?.photos?[0] ?? "",
+                            //   fit: BoxFit.cover,
+                            //   height: Get.height * 0.35,
+                            // ),
                           ),
                         ),
                       ),
@@ -153,10 +170,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: Obx(
-                            () => Image.network(
-                              userModel.value?.photos?[1] ?? "",
+                            () => CachedNetworkImage(
+                              imageUrl: userModel.value?.photos?[1] ?? "",
                               fit: BoxFit.cover,
                               height: Get.height * 0.35,
+                              placeholder: (context, url) => shimmerEffect(),
+                              errorWidget: (context, url, error) => const Center(
+                                child: Icon(Icons.error, color: AppColors.primaryColor),
+                              ),
                             ),
                           ),
                         ),
@@ -167,6 +188,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             );
           }),
+        ),
+      ),
+    );
+  }
+
+  Shimmer shimmerEffect() {
+    return Shimmer.fromColors(
+      baseColor: Color(0xFF1A1625),
+      highlightColor: Color(0xFFD586D3),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: Color(0xFF1A1625),
         ),
       ),
     );
