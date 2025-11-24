@@ -326,6 +326,44 @@ class UserService {
     return null;
   }
 
+  Future<http.Response?> updateGallery({
+    required String token,
+    required List<File> imageFiles,
+  }) async {
+    try {
+      var uri = Uri.parse("$baseUrl/user/update-gallery");
+
+      var request = http.MultipartRequest('PUT', uri)
+        ..headers['Authorization'] = 'Bearer $token'
+        ..headers['Content-Type'] = 'multipart/form-data';
+
+      final multipartFiles = await Future.wait(
+        imageFiles.map(
+          (file) async =>
+              await http.MultipartFile.fromPath('newFiles', file.path),
+        ),
+      );
+
+      request.files.addAll(multipartFiles);
+
+      var response = await request.send().timeout(const Duration(seconds: 20));
+      return await http.Response.fromStream(response);
+    } on SocketException catch (e) {
+      CustomSnackbar.showErrorToast("Check internet connection, $e");
+      debugPrint("No internet connection");
+      return null;
+    } on TimeoutException {
+      CustomSnackbar.showErrorToast(
+        "Request timeout, probably bad network, try again",
+      );
+      debugPrint("Request timeout");
+      return null;
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
+
   Future<http.Response?> updateLocation({
     required String token,
     required double latitude,
