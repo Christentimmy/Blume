@@ -576,4 +576,41 @@ class UserService {
     }
     return null;
   }
+
+  Future<http.Response?> applyVerification({
+    required String token,
+    required List<File?> imageFiles,
+  }) async {
+    try {
+      final uri = Uri.parse("$baseUrl/user/apply-selfie-verification");
+      final request = http.MultipartRequest("POST", uri)
+        ..headers['Authorization'] = 'Bearer $token'
+        ..headers['Content-Type'] = 'multipart/form-data';
+
+      final multipartFiles = await Future.wait(
+        imageFiles.map(
+          (file) async =>
+              await http.MultipartFile.fromPath('files', file!.path),
+        ),
+      );
+
+      request.files.addAll(multipartFiles);
+
+      var response = await request.send().timeout(const Duration(seconds: 20));
+      return await http.Response.fromStream(response);
+    } on SocketException catch (e) {
+      CustomSnackbar.showErrorToast("Check internet connection, $e");
+      debugPrint("No internet connection");
+      return null;
+    } on TimeoutException {
+      CustomSnackbar.showErrorToast(
+        "Request timeout, probably bad network, try again",
+      );
+      debugPrint("Request timeout");
+      return null;
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
 }

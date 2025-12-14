@@ -752,6 +752,35 @@ class UserController extends GetxController {
       isloading.value = false;
     }
   }
+
+  Future<void> applyVerification({required List<File?> imageFiles}) async {
+    isloading.value = true;
+    try {
+      final storageController = Get.find<StorageController>();
+      String? token = await storageController.getToken();
+      if (token == null || token.isEmpty) return;
+
+      final response = await userService.applyVerification(
+        token: token,
+        imageFiles: imageFiles,
+      );
+      if (response == null) return;
+
+      final decoded = json.decode(response.body);
+      final message = decoded["message"] ?? "";
+      if (response.statusCode != 201) {
+        CustomSnackbar.showErrorToast(message);
+        return;
+      }
+
+      CustomSnackbar.showErrorToast(message);
+      Get.offAllNamed(AppRoutes.bottomNavigation);
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      isloading.value = false;
+    }
+  }
 }
 
 enum SwipeType { pass, superlike, like }
