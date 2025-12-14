@@ -129,7 +129,7 @@ class VerificationScreen extends StatelessWidget {
                   CustomSnackbar.showErrorToast("Only Upload 3 images");
                   return;
                 }
-                await userController.applyVerification(imageFiles: images.value );
+                await userController.applyVerification(imageFiles: images );
               },
               isLoading: userController.isloading,
               child: Text(
