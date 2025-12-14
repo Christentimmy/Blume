@@ -32,20 +32,20 @@ class SettingsScreen extends StatelessWidget {
                 icon: Icons.person_2_outlined,
                 ontap: () => Get.toNamed(AppRoutes.profile),
               ),
-              buildSettingTile(
-                title: 'App Settings',
-                icon: Icons.settings_outlined,
-              ),
-              buildSettingTile(title: 'Discovery settings', icon: Icons.map),
+              // buildSettingTile(
+              //   title: 'App Settings',
+              //   icon: Icons.settings_outlined,
+              // ),
+              // buildSettingTile(title: 'Discovery settings', icon: Icons.map),
               buildSettingTile(
                 title: 'Subscriptions',
                 icon: Icons.wallet_outlined,
                 ontap: () => Get.toNamed(AppRoutes.subscription),
               ),
-              buildSettingTile(
-                title: 'Contact',
-                icon: Icons.help_outline_outlined,
-              ),
+              // buildSettingTile(
+              //   title: 'Contact',
+              //   icon: Icons.help_outline_outlined,
+              // ),
               buildSettingTile(
                 title: 'Selfie verification',
                 icon: Icons.person_outline_outlined,
