@@ -119,7 +119,7 @@ class VerificationScreen extends StatelessWidget {
             SizedBox(height: 20),
             CustomButton(
               ontap: () async {
-                if (images.isNotEmpty) {
+                if (images.isEmpty) {
                   CustomSnackbar.showErrorToast(
                     "Upload all 3 required pictures",
                   );

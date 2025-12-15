@@ -773,7 +773,7 @@ class UserController extends GetxController {
         return;
       }
 
-      CustomSnackbar.showErrorToast(message);
+      CustomSnackbar.showSuccessToast(message);
       Get.offAllNamed(AppRoutes.bottomNavigation);
     } catch (e) {
       debugPrint(e.toString());
