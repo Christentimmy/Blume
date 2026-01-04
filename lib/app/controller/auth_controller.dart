@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:blume/app/controller/message_controller.dart';
 import 'package:blume/app/controller/socket_controller.dart';
 import 'package:blume/app/controller/storage_controller.dart';
@@ -268,7 +267,7 @@ class AuthController extends GetxController {
     // final text = AppLocalizations.of(Get.context!)!;
     Get.dialog(
       AlertDialog(
-        backgroundColor: const Color(0xFF2D2438),
+        backgroundColor: Get.theme.scaffoldBackgroundColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
           side: BorderSide(color: Colors.white.withOpacity(0.2)),
