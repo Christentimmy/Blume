@@ -4,6 +4,7 @@ import 'package:blume/app/data/models/chat_list_model.dart';
 import 'package:blume/app/data/models/user_model.dart';
 import 'package:blume/app/modules/auth/views/login_screen.dart';
 import 'package:blume/app/modules/auth/views/otp_verify_screen.dart';
+import 'package:blume/app/modules/auth/views/reset_password_screen.dart';
 import 'package:blume/app/modules/auth/views/signup_screen.dart';
 import 'package:blume/app/modules/chat/views/message_screen.dart';
 import 'package:blume/app/modules/home/views/home_screen.dart';
@@ -202,5 +203,13 @@ class AppPages {
       page: () => ChooseBoostPlanScreen(),
     ),
     GetPage(name: AppRoutes.gallery, page: () => GalleryScreen()),
+    GetPage(
+      name: AppRoutes.resetPassword,
+      page: () {
+        final arguments = Get.arguments ?? {};
+        String email = arguments["email"] as String;
+        return ResetPasswordScreen(email: email);
+      },
+    ),
   ];
 }

@@ -16,7 +16,7 @@ class AuthController extends GetxController {
   final isloading = false.obs;
   final isOtpVerifyLoading = false.obs;
 
-    final TextEditingController emailController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
 
   Future<void> register({
     required String email,
@@ -201,11 +201,14 @@ class AuthController extends GetxController {
       return;
     }
     if (userModel.bio == null || userModel.bio!.isEmpty) {
-      Get.offNamed(AppRoutes.bio, arguments: {
-        "whatNext": () async {
-          await handleNavigation();
-        }
-      });
+      Get.offNamed(
+        AppRoutes.bio,
+        arguments: {
+          "whatNext": () async {
+            await handleNavigation();
+          },
+        },
+      );
       return;
     }
     if (userModel.photos?.isEmpty ?? true) {
@@ -262,9 +265,7 @@ class AuthController extends GetxController {
     }
   }
 
-
-   void showForgotPasswordDialog() {
-    // final text = AppLocalizations.of(Get.context!)!;
+  void showForgotPasswordDialog() {
     Get.dialog(
       AlertDialog(
         backgroundColor: Get.theme.scaffoldBackgroundColor,
@@ -314,23 +315,25 @@ class AuthController extends GetxController {
             child: CustomButton(
               ontap: () async {
                 if (emailController.text.isEmpty) {
-                  CustomSnackbar.showErrorToast("Please enter your email address");
+                  CustomSnackbar.showErrorToast(
+                    "Please enter your email address",
+                  );
                   return;
                 }
-                // await authController.sendOtp(email: emailController.text);
-                // Get.toNamed(
-                //   AppRoutes.otpVerify,
-                //   arguments: {
-                //     "email": emailController.text,
-                //     "onVerifiedCallBack": () async {
-                //       Get.toNamed(
-                //         AppRoutes.res,
-                //         arguments: {"email": emailController.text},
-                //       );
-                //     },
-                //     "showEditDetails": false,
-                //   },
-                // );
+                await sendOtp(email: emailController.text);
+                Get.toNamed(
+                  AppRoutes.otpVerify,
+                  arguments: {
+                    "email": emailController.text,
+                    "onVerifiedCallBack": () async {
+                      Get.toNamed(
+                        AppRoutes.resetPassword,
+                        arguments: {"email": emailController.text},
+                      );
+                    },
+                    "showEditDetails": false,
+                  },
+                );
               },
               isLoading: isloading,
               child: Text(
@@ -348,4 +351,58 @@ class AuthController extends GetxController {
     );
   }
 
+  Future<void> changePassword({
+    required String oldPassword,
+    required String newPassword,
+  }) async {
+    isloading.value = true;
+    try {
+      final storageController = Get.find<StorageController>();
+      final String? token = await storageController.getToken();
+      if (token == null) return;
+
+      final response = await authService.changePassword(
+        token: token,
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+      );
+      if (response == null) return;
+      final decoded = json.decode(response.body);
+      String message = decoded["message"] ?? "";
+      if (response.statusCode != 200) {
+        CustomSnackbar.showErrorToast(message);
+        return;
+      }
+      await logout();
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      isloading.value = false;
+    }
+  }
+
+  Future<void> resetPassword({
+    required String email,
+    required String password,
+  }) async {
+    isloading.value = true;
+    try {
+      final response = await authService.resetPassword(
+        email: email,
+        password: password,
+      );
+      if (response == null) return;
+      final decoded = json.decode(response.body);
+      String message = decoded["message"] ?? "";
+      if (response.statusCode != 200) {
+        CustomSnackbar.showErrorToast(message);
+        return;
+      }
+      Get.offAllNamed(AppRoutes.login);
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      isloading.value = false;
+    }
+  }
 }
