@@ -16,6 +16,7 @@ class SignUpScreen extends StatelessWidget {
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
   final passwordController = TextEditingController();
+  final isPasswordVisible = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -116,11 +117,21 @@ class SignUpScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    CustomTextField(
-                      hintText: "Enter your password",
-                      prefixIcon: Icons.lock,
-                      prefixIconColor: AppColors.primaryColor,
-                      controller: passwordController,
+                    Obx(
+                      () => CustomTextField(
+                        hintText: "Enter your password",
+                        prefixIcon: Icons.lock,
+                        prefixIconColor: AppColors.primaryColor,
+                        controller: passwordController,
+                        isObscure: !isPasswordVisible.value,
+                        suffixIcon: isPasswordVisible.value
+                            ? Icons.remove_red_eye
+                            : Icons.remove_red_eye_outlined,
+                        suffixIconcolor: AppColors.primaryColor,
+                        onSuffixTap: () {
+                          isPasswordVisible.value = !isPasswordVisible.value;
+                        },
+                      ),
                     ),
                   ],
                 ),

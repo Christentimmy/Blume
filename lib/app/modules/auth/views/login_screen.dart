@@ -13,6 +13,7 @@ class LoginScreen extends StatelessWidget {
 
   final formKey = GlobalKey<FormState>();
   final authController = Get.find<AuthController>();
+  final isPasswordVisible = false.obs;
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -93,11 +94,22 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    CustomTextField(
-                      controller: passwordController,
-                      hintText: "Enter your password",
-                      prefixIcon: Icons.lock,
-                      prefixIconColor: AppColors.primaryColor,
+                    Obx(
+                      () => CustomTextField(
+                        controller: passwordController,
+                        hintText: "Enter your password",
+                        prefixIcon: Icons.lock,
+                        prefixIconColor: AppColors.primaryColor,
+                        isObscure: !isPasswordVisible.value,
+                        suffixIcon: isPasswordVisible.value
+                            ? Icons.remove_red_eye
+                            : Icons.remove_red_eye_outlined,
+                        suffixIconcolor: AppColors.primaryColor,
+                        // suffixIconColor: AppColors.primaryColor,
+                        onSuffixTap: () {
+                          isPasswordVisible.value = !isPasswordVisible.value;
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -106,11 +118,16 @@ class LoginScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text(
-                    "Forgot Password?",
-                    style: Get.textTheme.bodyMedium?.copyWith(
-                      color: AppColors.primaryColor,
-                      fontWeight: FontWeight.bold,
+                  InkWell(
+                    onTap: () {
+                      authController.showForgotPasswordDialog();
+                    },
+                    child: Text(
+                      "Forgot Password?",
+                      style: Get.textTheme.bodyMedium?.copyWith(
+                        color: AppColors.primaryColor,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],

@@ -6,14 +6,18 @@ import 'package:blume/app/controller/storage_controller.dart';
 import 'package:blume/app/controller/user_controller.dart';
 import 'package:blume/app/data/services/auth_service.dart';
 import 'package:blume/app/routes/app_routes.dart';
+import 'package:blume/app/widgets/custom_button.dart';
 import 'package:blume/app/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AuthController extends GetxController {
   AuthService authService = AuthService();
   final isloading = false.obs;
   final isOtpVerifyLoading = false.obs;
+
+    final TextEditingController emailController = TextEditingController();
 
   Future<void> register({
     required String email,
@@ -257,6 +261,92 @@ class AuthController extends GetxController {
     } catch (error) {
       debugPrint(error.toString());
     }
+  }
+
+
+   void showForgotPasswordDialog() {
+    // final text = AppLocalizations.of(Get.context!)!;
+    Get.dialog(
+      AlertDialog(
+        backgroundColor: const Color(0xFF2D2438),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: BorderSide(color: Colors.white.withOpacity(0.2)),
+        ),
+        title: Text(
+          "Forgot Password?",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "Enter your email address and we'll send you an OTP to reset your password.",
+              style: GoogleFonts.fredoka(color: Colors.white.withOpacity(0.8)),
+            ),
+            const SizedBox(height: 20),
+            TextFormField(
+              style: GoogleFonts.fredoka(color: Colors.white),
+              controller: emailController,
+              decoration: InputDecoration(
+                hintText: "email",
+                hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+                fillColor: Colors.white.withOpacity(0.1),
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text(
+              "cancel",
+              style: TextStyle(color: Colors.white.withOpacity(0.7)),
+            ),
+          ),
+          SizedBox(
+            height: 45,
+            width: 140,
+            child: CustomButton(
+              ontap: () async {
+                if (emailController.text.isEmpty) {
+                  CustomSnackbar.showErrorToast("Please enter your email address");
+                  return;
+                }
+                // await authController.sendOtp(email: emailController.text);
+                // Get.toNamed(
+                //   AppRoutes.otpVerify,
+                //   arguments: {
+                //     "email": emailController.text,
+                //     "onVerifiedCallBack": () async {
+                //       Get.toNamed(
+                //         AppRoutes.res,
+                //         arguments: {"email": emailController.text},
+                //       );
+                //     },
+                //     "showEditDetails": false,
+                //   },
+                // );
+              },
+              isLoading: isloading,
+              child: Text(
+                "Send",
+                style: GoogleFonts.fredoka(
+                  color: Colors.white,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
 }
