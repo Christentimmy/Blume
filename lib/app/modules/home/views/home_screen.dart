@@ -35,12 +35,12 @@ class _HomeScreenState extends State<HomeScreen> {
   final userController = Get.put(UserController());
   final appinioSwiperController = AppinioSwiperController();
 
-  final List<String> images = [
-    "assets/images/plm.png",
-    "assets/images/frm.png",
-    "assets/images/plm.png",
-    "assets/images/frm.png",
-  ];
+  // final List<String> images = [
+  //   "assets/images/plm.png",
+  //   "assets/images/frm.png",
+  //   "assets/images/plm.png",
+  //   "assets/images/frm.png",
+  // ];
 
   final swiperController = AppinioSwiperController();
 
@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Get.theme.scaffoldBackgroundColor,
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+          padding: EdgeInsets.symmetric(horizontal: 5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -74,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: Get.height * 0.05),
+              SizedBox(height: Get.height * 0.02),
               Expanded(
                 child: Stack(
                   children: [
