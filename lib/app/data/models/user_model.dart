@@ -16,6 +16,7 @@ class UserModel {
   final List<String>? photos;
   final Preference? preference;
   final Subscription? subscription;
+  final String? plan;
 
   UserModel({
     this.id,
@@ -34,6 +35,7 @@ class UserModel {
     this.photos,
     this.preference,
     this.subscription,
+    this.plan,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -58,6 +60,7 @@ class UserModel {
           ? Preference.fromJson(json['preferences'])
           : Preference(),
       subscription: Subscription.fromJson(json['subscription'] ?? {}),
+      plan: json['plan'] ?? "",
     );
   }
 }

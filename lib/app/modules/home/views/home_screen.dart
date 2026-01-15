@@ -128,20 +128,21 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           buildActionButton(
                             icon: FontAwesomeIcons.arrowsRotate,
-                            onTap: () {
+                            onTap: () async {
+                              if(userController.user.value?.plan == "free") return;
                               swiperController.unswipe();
                             },
                           ),
                           buildActionButton(
                             size: 75,
                             icon: FontAwesomeIcons.xmark,
-                            onTap: () {
+                            onTap: () async {
                               swiperController.swipeLeft();
                             },
                           ),
                           buildActionButton(
                             icon: FontAwesomeIcons.solidHeart,
-                            onTap: () {
+                            onTap: () async {
                               swiperController.swipeRight();
                             },
                             size: 75,
@@ -149,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                           buildActionButton(
                             icon: FontAwesomeIcons.paperPlane,
-                            onTap: () {
+                            onTap: () async {
                               swiperController.swipeRight();
                             },
                           ),
