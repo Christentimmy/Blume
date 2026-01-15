@@ -320,139 +320,139 @@ class BuildSearchStaticData extends StatelessWidget {
     return Expanded(
       child: ListView(
         children: [
-          Text(
-            "Interest",
-            style: GoogleFonts.figtree(
-              fontSize: 28,
-              fontWeight: FontWeight.w600,
-              color: Get.theme.primaryColor,
-            ),
-          ),
-          Text(
-            "People with similar interest around you",
-            style: GoogleFonts.figtree(
-              fontSize: 15,
-              fontWeight: FontWeight.w400,
-              color: Get.theme.primaryColor,
-            ),
-          ),
-          SizedBox(height: Get.height * 0.02),
-          Wrap(
-            runSpacing: 2,
-            spacing: 5,
-            children: List.generate(
-              interests.length,
-              (index) => Chip(
-                side: BorderSide(color: Colors.transparent),
-                backgroundColor: Get.isDarkMode
-                    ? AppColors.darkButtonColor
-                    : AppColors.lightButtonColor,
-                label: Text(
-                  interests[index],
-                  style: GoogleFonts.figtree(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Get.theme.primaryColor,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(height: Get.height * 0.025),
-          Text(
-            "Goal-driven dating",
-            style: GoogleFonts.figtree(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              color: Get.theme.primaryColor,
-            ),
-          ),
-          Text(
-            "People with similar relationship goals",
-            style: GoogleFonts.figtree(
-              fontSize: 15,
-              fontWeight: FontWeight.w400,
-              color: Get.theme.primaryColor,
-            ),
-          ),
-          SizedBox(height: Get.height * 0.03),
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: goalDrivenDating.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-            ),
-            itemBuilder: (context, index) {
-              final item = goalDrivenDating[index];
-              return Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: Get.isDarkMode
-                      ? AppColors.darkButtonColor
-                      : Colors.white,
-                ),
-                child: Column(
-                  children: [
-                    Container(
-                      height: 45,
-                      alignment: Alignment.center,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(16),
-                          topRight: Radius.circular(16),
-                        ),
-                        color: Get.isDarkMode
-                            ? AppColors.darkButtonColor
-                            : AppColors.lightButtonColor,
-                      ),
-                      child: Text(
-                        item["title"],
-                        style: GoogleFonts.figtree(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Get.theme.primaryColor,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Center(
-                        child: Image.asset(item["image"], height: 50),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-          SizedBox(height: Get.height * 0.03),
-          Text(
-            "Around me",
-            style: GoogleFonts.figtree(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              color: Get.theme.primaryColor,
-            ),
-          ),
-          Text(
-            "People with “Music” interest around you",
-            style: GoogleFonts.figtree(
-              fontSize: 15,
-              fontWeight: FontWeight.w400,
-              color: Get.theme.primaryColor,
-            ),
-          ),
+          // Text(
+          //   "Interest",
+          //   style: GoogleFonts.figtree(
+          //     fontSize: 28,
+          //     fontWeight: FontWeight.w600,
+          //     color: Get.theme.primaryColor,
+          //   ),
+          // ),
+          // Text(
+          //   "People with similar interest around you",
+          //   style: GoogleFonts.figtree(
+          //     fontSize: 15,
+          //     fontWeight: FontWeight.w400,
+          //     color: Get.theme.primaryColor,
+          //   ),
+          // ),
+          // SizedBox(height: Get.height * 0.02),
+          // Wrap(
+          //   runSpacing: 2,
+          //   spacing: 5,
+          //   children: List.generate(
+          //     interests.length,
+          //     (index) => Chip(
+          //       side: BorderSide(color: Colors.transparent),
+          //       backgroundColor: Get.isDarkMode
+          //           ? AppColors.darkButtonColor
+          //           : AppColors.lightButtonColor,
+          //       label: Text(
+          //         interests[index],
+          //         style: GoogleFonts.figtree(
+          //           fontSize: 16,
+          //           fontWeight: FontWeight.w600,
+          //           color: Get.theme.primaryColor,
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
+          // SizedBox(height: Get.height * 0.025),
+          // Text(
+          //   "Goal-driven dating",
+          //   style: GoogleFonts.figtree(
+          //     fontSize: 20,
+          //     fontWeight: FontWeight.w700,
+          //     color: Get.theme.primaryColor,
+          //   ),
+          // ),
+          // Text(
+          //   "People with similar relationship goals",
+          //   style: GoogleFonts.figtree(
+          //     fontSize: 15,
+          //     fontWeight: FontWeight.w400,
+          //     color: Get.theme.primaryColor,
+          //   ),
+          // ),
+          // SizedBox(height: Get.height * 0.03),
+          // GridView.builder(
+          //   shrinkWrap: true,
+          //   physics: const NeverScrollableScrollPhysics(),
+          //   itemCount: goalDrivenDating.length,
+          //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          //     crossAxisCount: 2,
+          //     crossAxisSpacing: 10,
+          //     mainAxisSpacing: 10,
+          //   ),
+          //   itemBuilder: (context, index) {
+          //     final item = goalDrivenDating[index];
+          //     return Container(
+          //       decoration: BoxDecoration(
+          //         borderRadius: BorderRadius.circular(16),
+          //         color: Get.isDarkMode
+          //             ? AppColors.darkButtonColor
+          //             : Colors.white,
+          //       ),
+          //       child: Column(
+          //         children: [
+          //           Container(
+          //             height: 45,
+          //             alignment: Alignment.center,
+          //             width: double.infinity,
+          //             decoration: BoxDecoration(
+          //               borderRadius: BorderRadius.only(
+          //                 topLeft: Radius.circular(16),
+          //                 topRight: Radius.circular(16),
+          //               ),
+          //               color: Get.isDarkMode
+          //                   ? AppColors.darkButtonColor
+          //                   : AppColors.lightButtonColor,
+          //             ),
+          //             child: Text(
+          //               item["title"],
+          //               style: GoogleFonts.figtree(
+          //                 fontSize: 16,
+          //                 fontWeight: FontWeight.w600,
+          //                 color: Get.theme.primaryColor,
+          //               ),
+          //             ),
+          //           ),
+          //           Expanded(
+          //             child: Center(
+          //               child: Image.asset(item["image"], height: 50),
+          //             ),
+          //           ),
+          //         ],
+          //       ),
+          //     );
+          //   },
+          // ),
+          // SizedBox(height: Get.height * 0.03),
+          // Text(
+          //   "Around me",
+          //   style: GoogleFonts.figtree(
+          //     fontSize: 20,
+          //     fontWeight: FontWeight.w700,
+          //     color: Get.theme.primaryColor,
+          //   ),
+          // ),
+          // Text(
+          //   "People with “Music” interest around you",
+          //   style: GoogleFonts.figtree(
+          //     fontSize: 15,
+          //     fontWeight: FontWeight.w400,
+          //     color: Get.theme.primaryColor,
+          //   ),
+          // ),
 
-          SizedBox(height: Get.height * 0.02),
-          Image.asset(
-            "assets/icons/bMap.png",
-            width: Get.width,
-            fit: BoxFit.cover,
-          ),
-          SizedBox(height: Get.height * 0.03),
+          // SizedBox(height: Get.height * 0.02),
+          // Image.asset(
+          //   "assets/icons/bMap.png",
+          //   width: Get.width,
+          //   fit: BoxFit.cover,
+          // ),
+          // SizedBox(height: Get.height * 0.03),
         ],
       ),
     );

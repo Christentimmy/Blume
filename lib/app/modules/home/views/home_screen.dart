@@ -129,7 +129,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           buildActionButton(
                             icon: FontAwesomeIcons.arrowsRotate,
                             onTap: () async {
-                              if(userController.user.value?.plan == "free") return;
+                              if (userController.user.value?.plan == "free")
+                                return;
                               swiperController.unswipe();
                             },
                           ),
@@ -258,13 +259,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 Row(
                   children: [
                     Text(
-                      "${user.fullName} ${calculateAge(user.dateOfBirth)}",
+                      "${user.fullName?.split(" ").first} ${calculateAge(user.dateOfBirth)}",
                       style: GoogleFonts.figtree(
                         fontSize: 25,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
                       ),
                     ),
+                    const SizedBox(width: 10),
+                    user.isVerified == true
+                        ? Icon(Icons.verified, size: 20, color: Colors.blue)
+                        : SizedBox.shrink(),
                     const Spacer(),
                     CircleAvatar(
                       radius: 20,

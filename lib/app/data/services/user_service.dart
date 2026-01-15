@@ -613,4 +613,77 @@ class UserService {
     }
     return null;
   }
+
+  Future<http.Response?> saveUserOneSignalId({
+    required String token,
+    required String id,
+  }) async {
+    try {
+      final response = await http
+          .post(
+            Uri.parse("$baseUrl/user/save-one-signal/$id"),
+            headers: {
+              "Authorization": "Bearer $token",
+              "Content-Type": "application/json",
+            },
+            body: jsonEncode({"oneSignalId": id}),
+          )
+          .timeout(const Duration(seconds: 15));
+      return response;
+    } on SocketException catch (e) {
+      debugPrint("No internet connection $e");
+    } on TimeoutException {
+      debugPrint("Request timeout");
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
+
+  Future<http.Response?> getNotification({required String token}) async {
+    try {
+      final response = await http
+          .get(
+            Uri.parse("$baseUrl/user/get-user-notifications"),
+            headers: {
+              "Authorization": "Bearer $token",
+              "Content-Type": "application/json",
+            },
+          )
+          .timeout(const Duration(seconds: 60));
+      return response;
+    } on SocketException catch (e) {
+      debugPrint("No internet connection $e");
+    } on TimeoutException {
+      debugPrint("Request timeout");
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
+
+  Future<http.Response?> markNotificationAsRead({
+    required String token,
+    required List<String> ids,
+  }) async {
+    try {
+      final response = await http.patch(
+        Uri.parse("$baseUrl/user//mark-notifications-read"),
+        headers: {
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode({"notificationIds": ids}),
+      );
+      return response;
+    } on SocketException catch (e) {
+      debugPrint("No internet connection $e");
+    } on TimeoutException {
+      debugPrint("Request timeout");
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
+
 }
