@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:appinio_swiper/enums.dart';
 import 'package:blume/app/controller/storage_controller.dart';
+import 'package:blume/app/data/models/notification_model.dart';
 import 'package:blume/app/data/models/user_model.dart';
 import 'package:blume/app/data/services/user_service.dart';
 import 'package:blume/app/routes/app_routes.dart';
@@ -28,6 +29,9 @@ class UserController extends GetxController {
   RxInt searchPage = 1.obs;
   RxBool searchHasNextPage = false.obs;
   RxList<UserModel> searchResults = <UserModel>[].obs;
+
+  //notification
+  RxList<NotificationModel> notificationList = <NotificationModel>[].obs;
 
   Future<void> updateName({
     required String name,
@@ -780,6 +784,56 @@ class UserController extends GetxController {
 
       CustomSnackbar.showSuccessToast(message);
       Get.offAllNamed(AppRoutes.bottomNavigation);
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      isloading.value = false;
+    }
+  }
+
+  Future<void> getNotifications({bool showLoader = true}) async {
+    isloading.value = showLoader;
+    try {
+      final storageController = Get.find<StorageController>();
+      final token = await storageController.getToken();
+      if (token == null) return;
+      final response = await userService.getNotification(token: token);
+      if (response == null) return;
+      final decoded = json.decode(response.body);
+      String message = decoded["message"] ?? "";
+      if (response.statusCode != 200) {
+        CustomSnackbar.showErrorToast(message);
+        return;
+      }
+      List<dynamic> data = decoded["notifications"] ?? [];
+      final notifications = data
+          .map((e) => NotificationModel.fromJson(e))
+          .toList();
+      notificationList.value = notifications;
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      isloading.value = false;
+    }
+  }
+
+  Future<void> markNotificationAsRead({required List<String> ids}) async {
+    try {
+      if (ids.isEmpty) return;
+      final storageController = Get.find<StorageController>();
+      final token = await storageController.getToken();
+      if (token == null) return;
+      final response = await userService.markNotificationAsRead(
+        token: token,
+        ids: ids,
+      );
+      if (response == null) return;
+      final decoded = json.decode(response.body);
+      String message = decoded["message"] ?? "";
+      if (response.statusCode != 200) {
+        CustomSnackbar.showErrorToast(message);
+        return;
+      }
     } catch (e) {
       debugPrint(e.toString());
     } finally {

@@ -1,10 +1,30 @@
+import 'package:blume/app/controller/user_controller.dart';
+import 'package:blume/app/data/models/notification_model.dart';
 import 'package:blume/app/resources/colors.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
-class NotificationScreen extends StatelessWidget {
+class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
+
+  @override
+  State<NotificationScreen> createState() => _NotificationScreenState();
+}
+
+class _NotificationScreenState extends State<NotificationScreen> {
+  final userController = Get.find<UserController>();
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (userController.notificationList.isNotEmpty) return;
+      userController.getNotifications();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +48,7 @@ class NotificationScreen extends StatelessWidget {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
           child: Column(
             children: [
               Expanded(
@@ -41,71 +61,75 @@ class NotificationScreen extends StatelessWidget {
                         : AppColors.lightBackground,
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: Column(
-                    children: [
-                      ListTile(
-                        horizontalTitleGap: 10,
-                        leading: CircleAvatar(
-                          radius: 35,
-                          backgroundColor: Color(0xFF542C13),
-                          child: Text(
-                            "B",
-                            style: GoogleFonts.figtree(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                            ),
-                          ),
+                  child: Obx(() {
+                    if (userController.isloading.value) {
+                      return Center(
+                        child: CupertinoActivityIndicator(
+                          color: AppColors.primaryColor,
                         ),
-                        title: Text(
-                          "Your account has been verified",
+                      );
+                    }
+                    if (userController.notificationList.isEmpty) {
+                      return Center(
+                        child: Text(
+                          "No notifications",
                           style: GoogleFonts.figtree(
-                            fontSize: 18,
+                            fontSize: 16,
                             fontWeight: FontWeight.w600,
+                            color: AppColors.primaryColor,
                           ),
                         ),
-                        subtitle: Text(
-                          "2 hours ago",
-                          style: GoogleFonts.figtree(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        trailing: Icon(Icons.verified, color: Colors.blue),
-                      ),
-                      ListTile(
-                        horizontalTitleGap: 10,
-                        leading: CircleAvatar(
-                          radius: 35,
-                          backgroundImage: AssetImage("assets/images/frm.png"),
-                        ),
-                        title: Text(
-                          "Jessica sent you a text",
-                          style: GoogleFonts.figtree(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        subtitle: Text(
-                          "2 hours ago",
-                          style: GoogleFonts.figtree(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        trailing: Icon(
-                          Icons.message,
-                          color: Get.theme.primaryColor,
-                        ),
-                      ),
-                    ],
-                  ),
+                      );
+                    }
+                    return ListView.builder(
+                      itemCount: userController.notificationList.length,
+                      itemBuilder: (context, index) {
+                        final notification =
+                            userController.notificationList[index];
+                        return buildNotificationCard(
+                          notification: notification,
+                        );
+                      },
+                    );
+                  }),
                 ),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  ListTile buildNotificationCard({required NotificationModel notification}) {
+    return ListTile(
+      contentPadding: EdgeInsets.symmetric(horizontal: 10),
+      horizontalTitleGap: 6,
+      leading: CircleAvatar(
+        radius: 24,
+        backgroundColor: Color(0xFF542C13),
+        child: Text(
+          "B",
+          style: GoogleFonts.figtree(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+          ),
+        ),
+      ),
+      title: Text(
+        notification.message,
+        style: GoogleFonts.figtree(fontSize: 14, fontWeight: FontWeight.w600),
+      ),
+      subtitle: Text(
+        DateFormat('hh:mm a').format(notification.createdAt),
+        style: GoogleFonts.figtree(
+          fontSize: 11,
+          fontStyle: FontStyle.italic,
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+      // trailing: Icon(Icons.verified, color: Colors.blue),
     );
   }
 }
