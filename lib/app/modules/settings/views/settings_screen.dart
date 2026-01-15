@@ -1,4 +1,5 @@
 import 'package:blume/app/controller/auth_controller.dart';
+import 'package:blume/app/controller/theme_controller.dart';
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/widgets/custom_button.dart';
@@ -9,7 +10,8 @@ import 'package:google_fonts/google_fonts.dart';
 class SettingsScreen extends StatelessWidget {
   SettingsScreen({super.key});
 
-  final RxBool _isDarkMode = false.obs;
+  // final RxBool _isDarkMode = false.obs;
+  final themeController = Get.find<ThemeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -59,13 +61,10 @@ class SettingsScreen extends StatelessWidget {
                   trailing: Transform.scale(
                     scale: 0.7,
                     child: Switch(
-                      value: _isDarkMode.value,
+                      value: themeController.isDarkMode.value,
                       activeThumbColor: AppColors.primaryColor,
-                      onChanged: (value) {
-                        Get.changeThemeMode(
-                          value ? ThemeMode.dark : ThemeMode.light,
-                        );
-                        _isDarkMode.value = value;
+                      onChanged: (value) async {
+                        await themeController.toggleTheme();
                       },
                     ),
                   ),
