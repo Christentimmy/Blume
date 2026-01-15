@@ -33,6 +33,7 @@ import 'package:blume/app/modules/profile/views/update_gender_screen.dart';
 import 'package:blume/app/modules/profile/views/update_name_screen.dart';
 import 'package:blume/app/modules/search/views/search_screen.dart';
 import 'package:blume/app/modules/settings/views/settings_screen.dart';
+import 'package:blume/app/modules/settings/views/support_screen.dart';
 import 'package:blume/app/modules/splash/views/splash_screen.dart';
 import 'package:blume/app/modules/story/views/view_story_screen.dart';
 import 'package:blume/app/modules/subscription/views/subscription_screen.dart';
@@ -211,5 +212,6 @@ class AppPages {
         return ResetPasswordScreen(email: email);
       },
     ),
+    GetPage(name: AppRoutes.support, page: () => SupportScreen()),
   ];
 }

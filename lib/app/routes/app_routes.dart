@@ -35,4 +35,5 @@ class AppRoutes {
   static const chooseBoostPlan = '/choose-boost-plan';
   static const gallery = '/gallery';
   static const resetPassword = '/reset-password';
+  static const support = '/support';
 }

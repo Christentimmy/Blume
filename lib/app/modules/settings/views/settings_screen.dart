@@ -53,7 +53,11 @@ class SettingsScreen extends StatelessWidget {
                 icon: Icons.person_outline_outlined,
                 ontap: () => Get.toNamed(AppRoutes.disclaimer),
               ),
-              buildSettingTile(title: 'Help & Safety', icon: Icons.help),
+              buildSettingTile(
+                title: 'Help & Safety',
+                icon: Icons.help,
+                ontap: () => Get.toNamed(AppRoutes.support),
+              ),
               Obx(
                 () => buildSettingTile(
                   title: 'Dark Mode',

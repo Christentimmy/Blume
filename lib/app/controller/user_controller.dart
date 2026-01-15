@@ -9,6 +9,7 @@ import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class UserController extends GetxController {
   final isloading = false.obs;
@@ -834,6 +835,83 @@ class UserController extends GetxController {
         CustomSnackbar.showErrorToast(message);
         return;
       }
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      isloading.value = false;
+    }
+  }
+
+  Future<void> createTicket({
+    required List<File> attachments,
+    required String subject,
+    required String description,
+  }) async {
+    isloading.value = true;
+    try {
+      final storageController = Get.find<StorageController>();
+      final token = await storageController.getToken();
+      if (token == null) return;
+
+      final response = await userService.createTicket(
+        token: token,
+        attachments: attachments,
+        subject: subject,
+        description: description,
+      );
+
+      if (response == null) return;
+      final decoded = await json.decode(response.body);
+
+      String message = decoded["message"] ?? "";
+      if (response.statusCode != 201) {
+        CustomSnackbar.showErrorToast(message);
+        return;
+      }
+      CustomSnackbar.showSuccessToast(message);
+      Get.offAllNamed(AppRoutes.bottomNavigation);
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      isloading.value = false;
+    }
+  }
+
+  Future<void> saveUserOneSignalId() async {
+    isloading.value = true;
+    try {
+      final storageController = Get.find<StorageController>();
+      String? token = await storageController.getToken();
+      if (token == null || token.isEmpty) return;
+      bool isPermission = OneSignal.Notifications.permission;
+      if (!isPermission) {
+        OneSignal.Notifications.requestPermission(true);
+      }
+
+      final userId = user.value?.id;
+      final subId = OneSignal.User.pushSubscription.id;
+      if (userId == null || subId == null) return;
+
+      final lastSaved = await storageController.getLastPushId(userId);
+      if (lastSaved == subId) {
+        return;
+      }
+      final response = await userService.saveUserOneSignalId(
+        token: token,
+        id: subId,
+      );
+      if (response == null) return;
+      final decoded = json.decode(response.body);
+      String message = decoded["message"] ?? "";
+      if (response.statusCode != 200) {
+        CustomSnackbar.showErrorToast(message);
+        return;
+      }
+      await storageController.saveLastPushId(
+        userId: userId,
+        oneSignalId: subId,
+      );
+      // Get.offAllNamed(AppRoutes.inputNameScreen);
     } catch (e) {
       debugPrint(e.toString());
     } finally {

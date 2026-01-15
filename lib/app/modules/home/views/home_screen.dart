@@ -5,9 +5,11 @@ import 'package:blume/app/data/models/user_model.dart';
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/utils/age_calculator.dart';
+import 'package:blume/app/widgets/snack_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -129,8 +131,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           buildActionButton(
                             icon: FontAwesomeIcons.arrowsRotate,
                             onTap: () async {
-                              if (userController.user.value?.plan == "free")
+                              HapticFeedback.lightImpact();
+                              if (userController.user.value?.plan == "free") {
+                                CustomSnackbar.showErrorToast(
+                                  "Kindly subscribe",
+                                );
                                 return;
+                              }
                               swiperController.unswipe();
                             },
                           ),

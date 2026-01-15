@@ -1,4 +1,5 @@
 import 'package:blume/app/controller/socket_controller.dart';
+import 'package:blume/app/controller/user_controller.dart';
 import 'package:blume/app/modules/home/views/home_screen.dart';
 import 'package:blume/app/modules/likes/views/likes_screen.dart';
 import 'package:blume/app/modules/messages/views/chat_list_screen.dart';
@@ -33,6 +34,12 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
     if (socketController.socket == null ||
         !socketController.socket!.connected) {
       socketController.initializeSocket();
+    }
+    final userController = Get.find<UserController>();
+    final user = userController.user.value;
+    if (user == null) return;
+    if (user.oneSignalId == null || user.oneSignalId!.isEmpty) {
+      userController.saveUserOneSignalId();
     }
   }
 

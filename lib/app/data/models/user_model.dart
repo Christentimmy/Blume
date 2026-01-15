@@ -19,6 +19,7 @@ class UserModel {
   final String? plan;
   final Boost? boost;
   final bool? isVerified;
+  final String? oneSignalId;
 
   UserModel({
     this.id,
@@ -40,6 +41,7 @@ class UserModel {
     this.plan,
     this.boost,
     this.isVerified,
+    this.oneSignalId,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -67,6 +69,7 @@ class UserModel {
       plan: json['plan'] ?? "",
       boost: json['boost'] != null ? Boost.fromMap(json['boost']) : Boost(),
       isVerified: json['isVerified'] ?? "",
+      oneSignalId:  json['one_signal_id'] ?? "",
     );
   }
 }
