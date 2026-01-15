@@ -11,15 +11,9 @@ import 'package:get/get.dart';
 
 class SubscriptionController extends GetxController {
   final isloading = false.obs;
-  final isLoadingCancel = false.obs;
+  // final isLoadingCancel = false.obs;
   final subscriptionService = SubscriptionService();
   final subscriptionPlans = <SubscriptionModel>[].obs;
-
-  // @override
-  // void onInit() {
-  //   super.onInit();
-  //   getSubscriptionPlans();
-  // }
 
   Future<void> getSubscriptionPlans() async {
     isloading.value = true;
@@ -85,7 +79,7 @@ class SubscriptionController extends GetxController {
   }
 
   Future<void> cancelSubscription() async {
-    isLoadingCancel.value = true;
+    isloading.value = true;
     try {
       final token = await Get.find<StorageController>().getToken();
       if (token == null) return;
@@ -106,12 +100,12 @@ class SubscriptionController extends GetxController {
     } catch (e) {
       debugPrint(e.toString());
     } finally {
-      isLoadingCancel.value = false;
+      isloading.value = false;
     }
   }
 
   Future<void> reactivateSubscription() async {
-    isLoadingCancel.value = true;
+    isloading.value = true;
     try {
       final token = await Get.find<StorageController>().getToken();
       if (token == null) return;
@@ -132,7 +126,7 @@ class SubscriptionController extends GetxController {
     } catch (e) {
       debugPrint(e.toString());
     } finally {
-      isLoadingCancel.value = false;
+      isloading.value = false;
     }
   }
 

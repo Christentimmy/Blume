@@ -34,7 +34,7 @@ class SubscriptionService {
   Future<http.Response?> getSubscriptionPlans({required String token}) {
     return safeRequest(() {
       return http.get(
-        Uri.parse("$baseUrl/subscription/plans"),
+        Uri.parse("$baseUrl/subscriptions/plans"),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token",
@@ -46,7 +46,7 @@ class SubscriptionService {
   Future<http.Response?> cancelSubscription({required String token}) {
     return safeRequest(() {
       return http.post(
-        Uri.parse("$baseUrl/subscription/cancel"),
+        Uri.parse("$baseUrl/subscriptions/cancel"),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token",
@@ -58,7 +58,7 @@ class SubscriptionService {
   Future<http.Response?> reactivateUserSubscription({required String token}) {
     return safeRequest(() {
       return http.post(
-        Uri.parse("$baseUrl/subscription/reactivate"),
+        Uri.parse("$baseUrl/subscriptions/reactivate"),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token",

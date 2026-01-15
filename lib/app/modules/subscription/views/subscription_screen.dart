@@ -1,5 +1,6 @@
 import 'package:blume/app/controller/subscription_controller.dart';
 import 'package:blume/app/controller/user_controller.dart';
+import 'package:blume/app/data/models/user_model.dart';
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
@@ -424,7 +425,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                           ),
                           const TextSpan(
                             text:
-                                'By tapping "Get Plus", you will be charged now, your subscription will auto-renew for the same price and plan length until you cancel via account management page, and you agree to our ',
+                                'By tapping "Get Plus", you will be charged now, your subscription will auto-renew for the same price and plan length until you cancel, and you agree to our ',
                           ),
                           TextSpan(
                             text: 'Terms',
@@ -444,25 +445,40 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                       return SizedBox.shrink();
                     }
 
-                    final status =
-                        userController.user.value?.subscription?.status ?? "";
-                    return Opacity(
-                      opacity: status == "active" ? 0.3 : 1.0,
-                      child: CustomButton(
-                        ontap: () async {
-                          if(status == "active") return;
+                    final subscription =
+                        userController.user.value?.subscription ??
+                        Subscription();
+                     String title = "Get Plus for ${plans[selectedPlanIndex].totalPrice} total";   
+                    if (subscription.status == "active" &&
+                        subscription.cancelAtPeriodEnd == false) {
+                          title = "Cancel Subscription";
+                    } else if (subscription.status == "active" &&
+                        subscription.cancelAtPeriodEnd == true) {
+                          title = "Reactivate Subscription";
+                        }
+                    return CustomButton(
+                      ontap: () async {
+                        if (subscription.status == "active" &&
+                            subscription.cancelAtPeriodEnd == false) {
+                          await subscriptionController.cancelSubscription();
+                          return;
+                        } else if (subscription.status == "active" &&
+                            subscription.cancelAtPeriodEnd == true) {
+                          await subscriptionController.reactivateSubscription();
+                          return;
+                        } else {
                           await subscriptionController.createSubscription(
                             planId: plans[selectedPlanIndex].id,
                           );
-                        },
-                        isLoading: false.obs,
-                        child: Text(
-                          'Get Plus for ${plans[selectedPlanIndex].totalPrice} total',
-                          style: GoogleFonts.figtree(
-                            fontSize: 16,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        }
+                      },
+                      isLoading: subscriptionController.isloading,
+                      child: Text(
+                        title,
+                        style: GoogleFonts.figtree(
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     );

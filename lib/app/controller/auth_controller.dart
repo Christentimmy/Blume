@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:blume/app/controller/message_controller.dart';
 import 'package:blume/app/controller/socket_controller.dart';
 import 'package:blume/app/controller/storage_controller.dart';
+import 'package:blume/app/controller/subscription_controller.dart';
 import 'package:blume/app/controller/user_controller.dart';
 import 'package:blume/app/data/services/auth_service.dart';
 import 'package:blume/app/routes/app_routes.dart';
@@ -258,7 +259,7 @@ class AuthController extends GetxController {
       await Get.find<StorageController>().deleteToken();
       await Get.find<MessageController>().clearChatHistory();
       Get.find<SocketController>().disconnectSocket();
-      // await Get.find<SubscriptionController>().clearSubscriptionData();
+      await Get.find<SubscriptionController>().clearSubscriptionData();
       // await Get.find<InviteController>().clearInviteData();
     } catch (error) {
       debugPrint(error.toString());
