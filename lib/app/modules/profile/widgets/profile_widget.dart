@@ -227,9 +227,9 @@ class ProfileBoostsSection extends StatelessWidget {
           const SizedBox(height: 16),
           Row(
             children: const [
-              _BoostCard(price: '\$2', description: '1 boost'),
+              _BoostCard(price: '\$4.99', description: '1 boost'),
               SizedBox(width: 16),
-              _BoostCard(price: '\$5', description: '5 boosts'),
+              _BoostCard(price: '\$7.99', description: '5 boosts'),
             ],
           ),
         ],

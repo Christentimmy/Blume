@@ -1,4 +1,5 @@
 import 'package:blume/app/controller/boost_controller.dart';
+import 'package:blume/app/controller/user_controller.dart';
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ class ChooseBoostPlanScreen extends StatelessWidget {
 
   final RxInt selectedIndex = (-1).obs;
   final boostController = Get.find<BoostController>();
+  final userController = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
@@ -101,33 +103,31 @@ class ChooseBoostPlanScreen extends StatelessWidget {
                 ),
               ),
               Spacer(),
-              Center(
-                child: Text(
-                  "Over 30,000 verified members near you ©",
-                  style: GoogleFonts.figtree(
-                    fontSize: 12,
-                    fontWeight: FontWeight.normal,
+              Obx(() {
+                final user = userController.user.value;
+                if (user == null) return const SizedBox.shrink();
+                return Opacity(
+                  opacity: user.boost?.isActive == true ? 0.2 : 1,
+                  child: CustomButton(
+                    ontap: () async {
+                      if (user.boost?.isActive == true) return;
+                      if (selectedIndex.value == -1) return;
+                      await boostController.purchaseBoost(
+                        boostType: boostList[selectedIndex.value]['id']!,
+                      );
+                    },
+                    isLoading: boostController.isloading,
+                    child: Text(
+                      'Get boost',
+                      style: GoogleFonts.figtree(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              SizedBox(height: Get.height * 0.005),
-              CustomButton(
-                ontap: () async {
-                  if (selectedIndex.value == -1) return;
-                  await boostController.purchaseBoost(
-                    boostType: boostList[selectedIndex.value]['id']!,
-                  );
-                },
-                isLoading: boostController.isloading,
-                child: Text(
-                  'Get boost',
-                  style: GoogleFonts.figtree(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+                );
+              }),
             ],
           ),
         ),
