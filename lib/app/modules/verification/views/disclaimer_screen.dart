@@ -45,15 +45,15 @@ class DisclaimerScreen extends StatelessWidget {
                 ),
               ),
               Spacer(),
-              Center(
-                child: Text(
-                  "Over 30,000 verified members near you ©",
-                  style: GoogleFonts.figtree(
-                    fontSize: 12,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-              ),
+              // Center(
+              //   child: Text(
+              //     "Over 30,000 verified members near you ©",
+              //     style: GoogleFonts.figtree(
+              //       fontSize: 12,
+              //       fontWeight: FontWeight.normal,
+              //     ),
+              //   ),
+              // ),
               SizedBox(height: Get.height * 0.005),
               CustomButton(
                 ontap: () => Get.toNamed(AppRoutes.verification),

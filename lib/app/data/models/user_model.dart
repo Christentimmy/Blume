@@ -18,6 +18,7 @@ class UserModel {
   final Subscription? subscription;
   final String? plan;
   final Boost? boost;
+  final bool? isVerified;
 
   UserModel({
     this.id,
@@ -38,6 +39,7 @@ class UserModel {
     this.subscription,
     this.plan,
     this.boost,
+    this.isVerified,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -64,6 +66,7 @@ class UserModel {
       subscription: Subscription.fromJson(json['subscription'] ?? {}),
       plan: json['plan'] ?? "",
       boost: json['boost'] != null ? Boost.fromMap(json['boost']) : Boost(),
+      isVerified: json['isVerified'] ?? "",
     );
   }
 }
