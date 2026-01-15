@@ -1,4 +1,5 @@
 import 'package:blume/app/controller/subscription_controller.dart';
+import 'package:blume/app/controller/user_controller.dart';
 import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
@@ -246,6 +247,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     'Ad-free experience',
   ];
   final subscriptionController = Get.find<SubscriptionController>();
+  final userController = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
@@ -437,22 +439,34 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                   ),
 
                   // Get Plus Button
-                  CustomButton(
-                    ontap: () async {
-                      await subscriptionController.createSubscription(
-                        planId: plans[selectedPlanIndex].id,
-                      );
-                    },
-                    isLoading: false.obs,
-                    child: Text(
-                      'Get Plus for ${plans[selectedPlanIndex].totalPrice} total',
-                      style: GoogleFonts.figtree(
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
+                  Obx(() {
+                    if (userController.user.value == null) {
+                      return SizedBox.shrink();
+                    }
+
+                    final status =
+                        userController.user.value?.subscription?.status ?? "";
+                    return Opacity(
+                      opacity: status == "active" ? 0.3 : 1.0,
+                      child: CustomButton(
+                        ontap: () async {
+                          if(status == "active") return;
+                          await subscriptionController.createSubscription(
+                            planId: plans[selectedPlanIndex].id,
+                          );
+                        },
+                        isLoading: false.obs,
+                        child: Text(
+                          'Get Plus for ${plans[selectedPlanIndex].totalPrice} total',
+                          style: GoogleFonts.figtree(
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  }),
                 ],
               ),
             ),

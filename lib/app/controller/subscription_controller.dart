@@ -15,11 +15,11 @@ class SubscriptionController extends GetxController {
   final subscriptionService = SubscriptionService();
   final subscriptionPlans = <SubscriptionModel>[].obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    getSubscriptionPlans();
-  }
+  // @override
+  // void onInit() {
+  //   super.onInit();
+  //   getSubscriptionPlans();
+  // }
 
   Future<void> getSubscriptionPlans() async {
     isloading.value = true;

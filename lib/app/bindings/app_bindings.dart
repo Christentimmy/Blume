@@ -1,4 +1,5 @@
 import 'package:blume/app/controller/auth_controller.dart';
+import 'package:blume/app/controller/boost_controller.dart';
 import 'package:blume/app/controller/location_controller.dart';
 import 'package:blume/app/controller/message_controller.dart';
 import 'package:blume/app/controller/socket_controller.dart';
@@ -17,5 +18,6 @@ class AppBindings implements Bindings {
     Get.put(MessageController());
     Get.put(SocketController());
     Get.put(SubscriptionController());
+    Get.put(BoostController());
   }
 }

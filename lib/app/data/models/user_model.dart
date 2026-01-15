@@ -17,6 +17,7 @@ class UserModel {
   final Preference? preference;
   final Subscription? subscription;
   final String? plan;
+  final Boost? boost;
 
   UserModel({
     this.id,
@@ -36,6 +37,7 @@ class UserModel {
     this.preference,
     this.subscription,
     this.plan,
+    this.boost,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -61,6 +63,7 @@ class UserModel {
           : Preference(),
       subscription: Subscription.fromJson(json['subscription'] ?? {}),
       plan: json['plan'] ?? "",
+      boost: json['boost'] != null ? Boost.fromMap(json['boost']) : Boost(),
     );
   }
 }
@@ -117,39 +120,33 @@ class Basics {
           : [],
       lifestyleAndValues: json['lifestyleAndValues'] != null
           ? (json['lifestyleAndValues'] as List)
-              .map((e) => e.toString())
-              .toList()
+                .map((e) => e.toString())
+                .toList()
           : [],
       hobbies: json['hobbies'] != null
           ? (json['hobbies'] as List).map((e) => e.toString()).toList()
           : [],
       artsAndCreativity: json['artsAndCreativity'] != null
           ? (json['artsAndCreativity'] as List)
-              .map((e) => e.toString())
-              .toList()
+                .map((e) => e.toString())
+                .toList()
           : [],
       sportsAndFitness: json['sportsAndFitness'] != null
-          ? (json['sportsAndFitness'] as List)
-              .map((e) => e.toString())
-              .toList()
+          ? (json['sportsAndFitness'] as List).map((e) => e.toString()).toList()
           : [],
       travelAndAdventure: json['travelAndAdventure'] != null
           ? (json['travelAndAdventure'] as List)
-              .map((e) => e.toString())
-              .toList()
+                .map((e) => e.toString())
+                .toList()
           : [],
       entertainment: json['entertainment'] != null
-          ? (json['entertainment'] as List)
-              .map((e) => e.toString())
-              .toList()
+          ? (json['entertainment'] as List).map((e) => e.toString()).toList()
           : [],
       music: json['music'] != null
           ? (json['music'] as List).map((e) => e.toString()).toList()
           : [],
       foodAndDrink: json['foodAndDrink'] != null
-          ? (json['foodAndDrink'] as List)
-              .map((e) => e.toString())
-              .toList()
+          ? (json['foodAndDrink'] as List).map((e) => e.toString()).toList()
           : [],
     );
   }
@@ -192,6 +189,24 @@ class Subscription {
           DateTime.tryParse(json['currentPeriodEnd'].toString()) ??
           DateTime.now(),
       cancelAtPeriodEnd: json['cancelAtPeriodEnd'] ?? false,
+    );
+  }
+}
+
+class Boost {
+  final bool? isActive;
+  final DateTime? expiresAt;
+  final String? boostType;
+  final num? boostMultiplier;
+
+  Boost({this.isActive, this.expiresAt, this.boostType, this.boostMultiplier});
+
+  factory Boost.fromMap(Map<String, dynamic> json){
+    return Boost(
+      isActive: json['isActive'] ?? false,
+      expiresAt: DateTime.tryParse(json['expiresAt'].toString()) ?? DateTime.now(),
+      boostType: json['boostType'] ?? "",
+      boostMultiplier: num.tryParse(json['boostMultiplier'].toString()) ?? 0,
     );
   }
 }
