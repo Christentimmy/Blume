@@ -326,7 +326,7 @@ class AuthController extends GetxController {
                   AppRoutes.otpVerify,
                   arguments: {
                     "email": emailController.text,
-                    "onVerifiedCallBack": () async {
+                    "whatNext": () async {
                       Get.toNamed(
                         AppRoutes.resetPassword,
                         arguments: {"email": emailController.text},
