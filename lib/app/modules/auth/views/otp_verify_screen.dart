@@ -45,7 +45,7 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
               SizedBox(height: Get.height * 0.02),
               Center(
                 child: Text(
-                  "We just sent an SMS",
+                  "We just sent an OTP",
                   style: GoogleFonts.figtree(
                     fontSize: 28,
                     fontWeight: FontWeight.w700,

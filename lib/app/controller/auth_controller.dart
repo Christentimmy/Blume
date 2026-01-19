@@ -5,8 +5,10 @@ import 'package:blume/app/controller/storage_controller.dart';
 import 'package:blume/app/controller/subscription_controller.dart';
 import 'package:blume/app/controller/user_controller.dart';
 import 'package:blume/app/data/services/auth_service.dart';
+import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/widgets/custom_button.dart';
+import 'package:blume/app/widgets/custom_textfield.dart';
 import 'package:blume/app/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -276,29 +278,20 @@ class AuthController extends GetxController {
         ),
         title: Text(
           "Forgot Password?",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+          style: TextStyle(fontWeight: FontWeight.w600),
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               "Enter your email address and we'll send you an OTP to reset your password.",
-              style: GoogleFonts.fredoka(color: Colors.white.withOpacity(0.8)),
+              style: GoogleFonts.fredoka(fontSize: 13),
             ),
             const SizedBox(height: 20),
-            TextFormField(
-              style: GoogleFonts.fredoka(color: Colors.white),
+            CustomTextField(
               controller: emailController,
-              decoration: InputDecoration(
-                hintText: "email",
-                hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
-                fillColor: Colors.white.withOpacity(0.1),
-                filled: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
-                ),
-              ),
+              hintText: "Enter your email",
+              prefixIconColor: AppColors.primaryColor,
             ),
           ],
         ),
@@ -306,8 +299,11 @@ class AuthController extends GetxController {
           TextButton(
             onPressed: () => Get.back(),
             child: Text(
-              "cancel",
-              style: TextStyle(color: Colors.white.withOpacity(0.7)),
+              "Cancel",
+              style: GoogleFonts.poppins(
+                color: AppColors.primaryColor,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
           SizedBox(
