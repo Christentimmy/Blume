@@ -411,6 +411,7 @@ class UserController extends GetxController {
         whatNext();
         return;
       }
+      await getUserDetails();
 
       Get.toNamed(AppRoutes.bottomNavigation);
     } catch (e) {
