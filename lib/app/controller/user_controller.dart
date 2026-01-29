@@ -764,7 +764,7 @@ class UserController extends GetxController {
     }
   }
 
-  Future<void> applyVerification({required List<File?> imageFiles}) async {
+  Future<void> applyVerification({required File videoPath}) async {
     isloading.value = true;
     try {
       final storageController = Get.find<StorageController>();
@@ -773,7 +773,7 @@ class UserController extends GetxController {
 
       final response = await userService.applyVerification(
         token: token,
-        imageFiles: imageFiles,
+        videoPath: videoPath,
       );
       if (response == null) return;
 

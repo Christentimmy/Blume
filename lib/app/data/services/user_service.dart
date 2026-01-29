@@ -579,7 +579,7 @@ class UserService {
 
   Future<http.Response?> applyVerification({
     required String token,
-    required List<File?> imageFiles,
+    required File videoPath,
   }) async {
     try {
       final uri = Uri.parse("$baseUrl/user/apply-selfie-verification");
@@ -587,16 +587,9 @@ class UserService {
         ..headers['Authorization'] = 'Bearer $token'
         ..headers['Content-Type'] = 'multipart/form-data';
 
-      final multipartFiles = await Future.wait(
-        imageFiles.map(
-          (file) async =>
-              await http.MultipartFile.fromPath('files', file!.path),
-        ),
-      );
+      request.files.add(await http.MultipartFile.fromPath('media', videoPath.path));
 
-      request.files.addAll(multipartFiles);
-
-      var response = await request.send().timeout(const Duration(seconds: 20));
+      var response = await request.send().timeout(const Duration(seconds: 30));
       return await http.Response.fromStream(response);
     } on SocketException catch (e) {
       CustomSnackbar.showErrorToast("Check internet connection, $e");

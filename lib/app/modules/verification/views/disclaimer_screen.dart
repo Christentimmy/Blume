@@ -56,7 +56,7 @@ class DisclaimerScreen extends StatelessWidget {
               // ),
               SizedBox(height: Get.height * 0.005),
               CustomButton(
-                ontap: () => Get.toNamed(AppRoutes.verification),
+                ontap: () => Get.toNamed(AppRoutes.selfieVerification),
                 isLoading: false.obs,
                 child: Text(
                   'Allow',

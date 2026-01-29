@@ -38,6 +38,7 @@ import 'package:blume/app/modules/splash/views/splash_screen.dart';
 import 'package:blume/app/modules/story/views/view_story_screen.dart';
 import 'package:blume/app/modules/subscription/views/subscription_screen.dart';
 import 'package:blume/app/modules/verification/views/disclaimer_screen.dart';
+import 'package:blume/app/modules/verification/views/selfie_verification_screen.dart';
 import 'package:blume/app/modules/verification/views/verification_screen.dart';
 import 'package:blume/app/widgets/bottom_navigation_widget.dart';
 import 'package:get/get.dart';
@@ -213,5 +214,6 @@ class AppPages {
       },
     ),
     GetPage(name: AppRoutes.support, page: () => SupportScreen()),
+    GetPage(name: AppRoutes.selfieVerification, page: () => SelfieVerificationScreen()),
   ];
 }

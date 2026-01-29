@@ -1,6 +1,6 @@
 import 'package:blume/app/controller/user_controller.dart';
 import 'package:blume/app/modules/likes/views/likes_screen.dart';
-import 'package:blume/app/resources/colors.dart';
+// import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -217,47 +217,47 @@ class _SearchScreenState extends State<SearchScreen>
             },
           ),
           SizedBox(height: 10),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            height: Get.height * 0.05,
-            margin: const EdgeInsets.only(bottom: 10),
-            child: Row(
-              children: [
-                Icon(Icons.filter_list_rounded),
-                SizedBox(width: 10),
-                Expanded(
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: filter.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        margin: const EdgeInsets.only(right: 10),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 15,
-                          vertical: 2,
-                        ),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: Get.isDarkMode
-                              ? AppColors.darkButtonColor
-                              : AppColors.lightButtonColor,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Text(
-                          filter[index],
-                          style: GoogleFonts.figtree(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Get.theme.primaryColor,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // Container(
+          //   padding: const EdgeInsets.symmetric(horizontal: 15),
+          //   height: Get.height * 0.05,
+          //   margin: const EdgeInsets.only(bottom: 10),
+          //   child: Row(
+          //     children: [
+          //       Icon(Icons.filter_list_rounded),
+          //       SizedBox(width: 10),
+          //       Expanded(
+          //         child: ListView.builder(
+          //           scrollDirection: Axis.horizontal,
+          //           itemCount: filter.length,
+          //           itemBuilder: (context, index) {
+          //             return Container(
+          //               margin: const EdgeInsets.only(right: 10),
+          //               padding: const EdgeInsets.symmetric(
+          //                 horizontal: 15,
+          //                 vertical: 2,
+          //               ),
+          //               alignment: Alignment.center,
+          //               decoration: BoxDecoration(
+          //                 color: Get.isDarkMode
+          //                     ? AppColors.darkButtonColor
+          //                     : AppColors.lightButtonColor,
+          //                 borderRadius: BorderRadius.circular(16),
+          //               ),
+          //               child: Text(
+          //                 filter[index],
+          //                 style: GoogleFonts.figtree(
+          //                   fontSize: 16,
+          //                   fontWeight: FontWeight.w600,
+          //                   color: Get.theme.primaryColor,
+          //                 ),
+          //               ),
+          //             );
+          //           },
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );
