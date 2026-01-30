@@ -5,7 +5,7 @@ class UserModel {
   final String? phoneNumber;
   final String? avatar;
   final String? education;
-  final String? bio;
+  String? bio;
   final Basics? basics;
 
   final bool? showGender;

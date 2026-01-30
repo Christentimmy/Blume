@@ -32,6 +32,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   bool get isOwnProfile =>
       widget.userId == null || widget.userId == userController.user.value?.id;
+  // final locationController = Get.find<LocationController>();
 
   Future<void> getUserDetails() async {
     isloading.value = true;
@@ -153,9 +154,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               fit: BoxFit.cover,
                               height: Get.height * 0.35,
                               placeholder: (context, url) => shimmerEffect(),
-                              errorWidget: (context, url, error) => const Center(
-                                child: Icon(Icons.error, color: AppColors.primaryColor),
-                              ),
+                              errorWidget: (context, url, error) =>
+                                  const Center(
+                                    child: Icon(
+                                      Icons.error,
+                                      color: AppColors.primaryColor,
+                                    ),
+                                  ),
                             ),
                             // Image.network(
                             //   userModel.value?.photos?[0] ?? "",
@@ -175,9 +180,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               fit: BoxFit.cover,
                               height: Get.height * 0.35,
                               placeholder: (context, url) => shimmerEffect(),
-                              errorWidget: (context, url, error) => const Center(
-                                child: Icon(Icons.error, color: AppColors.primaryColor),
-                              ),
+                              errorWidget: (context, url, error) =>
+                                  const Center(
+                                    child: Icon(
+                                      Icons.error,
+                                      color: AppColors.primaryColor,
+                                    ),
+                                  ),
                             ),
                           ),
                         ),

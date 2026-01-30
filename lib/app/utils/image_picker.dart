@@ -40,37 +40,41 @@ Future<File?> pickMedia() async {
   return null;
 }
 
-Future<List<File>?> pickMultipleImages() async {
+Future<List<File>?> pickMultipleImages({int? limit}) async {
   try {
     final picker = ImagePicker();
-    List<XFile> pickedFiles = await picker.pickMultiImage(limit: 10);
+    List<XFile> pickedFiles = await picker.pickMultiImage();
 
-    if (pickedFiles.isNotEmpty) {
-      List<File> compressedFiles = [];
+    if (pickedFiles.isEmpty) return null;
 
-      for (var file in pickedFiles) {
-        final dir = await getTemporaryDirectory();
-        final targetPath = path.join(
-          dir.path,
-          "${DateTime.now().millisecondsSinceEpoch}.jpg",
-        );
-
-        final compressedFile = await FlutterImageCompress.compressAndGetFile(
-          file.path,
-          targetPath,
-          quality: 65,
-        );
-
-        if (compressedFile != null) {
-          compressedFiles.add(File(compressedFile.path));
-        }
-      }
-
-      return compressedFiles;
+    // 🔒 Enforce limit manually (Android-safe)
+    if (limit != null && pickedFiles.length > limit) {
+      pickedFiles = pickedFiles.take(limit).toList();
     }
-    return null;
+
+    List<File> compressedFiles = [];
+
+    for (var file in pickedFiles) {
+      final dir = await getTemporaryDirectory();
+      final targetPath = path.join(
+        dir.path,
+        "${DateTime.now().millisecondsSinceEpoch}.jpg",
+      );
+
+      final compressedFile = await FlutterImageCompress.compressAndGetFile(
+        file.path,
+        targetPath,
+        quality: 65,
+      );
+
+      if (compressedFile != null) {
+        compressedFiles.add(File(compressedFile.path));
+      }
+    }
+
+    return compressedFiles;
   } catch (e) {
-    print('Error picking multiple images: $e');
+    debugPrint('Error picking multiple images: $e');
     return null;
   }
 }

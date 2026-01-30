@@ -6,6 +6,7 @@ import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/routes/app_routes.dart';
 import 'package:blume/app/utils/age_calculator.dart';
 import 'package:blume/app/widgets/custom_button.dart';
+import 'package:blume/app/widgets/custom_textfield.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -225,66 +226,79 @@ class ProfileBoostsSection extends StatelessWidget {
             style: GoogleFonts.figtree(fontSize: 16),
           ),
           const SizedBox(height: 16),
-          Row(
-            children: const [
-              _BoostCard(price: '\$4.99', description: '1 boost'),
-              SizedBox(width: 16),
-              _BoostCard(price: '\$7.99', description: '5 boosts'),
-            ],
+          CustomButton(
+            isLoading: false.obs,
+            ontap: () => Get.toNamed(AppRoutes.chooseBoostPlan),
+            bgColor: Colors.transparent,
+            border: Border.all(color: AppColors.primaryColor),
+            child: Text(
+              'Boost Profile',
+              style: GoogleFonts.figtree(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
+          // Row(
+          //   children: const [
+          //     _BoostCard(price: '\$4.99', description: '1 boost'),
+          //     SizedBox(width: 16),
+          //     _BoostCard(price: '\$7.99', description: '5 boosts'),
+          //   ],
+          // ),
         ],
       ),
     );
   }
 }
 
-class _BoostCard extends StatelessWidget {
-  final String price;
-  final String description;
+// class _BoostCard extends StatelessWidget {
+//   final String price;
+//   final String description;
 
-  const _BoostCard({required this.price, required this.description});
+//   const _BoostCard({required this.price, required this.description});
 
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: () => Get.toNamed(AppRoutes.chooseBoostPlan),
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: Get.isDarkMode
-                ? AppColors.darkButtonColor
-                : AppColors.lightButtonColor,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                price,
-                style: GoogleFonts.figtree(
-                  color: AppColors.primaryColor,
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                description,
-                style: GoogleFonts.figtree(
-                  color: AppColors.primaryColor,
-                  fontSize: 16,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Expanded(
+//       child: GestureDetector(
+//         onTap: () => Get.toNamed(AppRoutes.chooseBoostPlan),
+//         child: Container(
+//           padding: const EdgeInsets.all(20),
+//           decoration: BoxDecoration(
+//             color: Get.isDarkMode
+//                 ? AppColors.darkButtonColor
+//                 : AppColors.lightButtonColor,
+//             borderRadius: BorderRadius.circular(16),
+//           ),
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.center,
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             children: [
+//               Text(
+//                 price,
+//                 style: GoogleFonts.figtree(
+//                   color: AppColors.primaryColor,
+//                   fontSize: 32,
+//                   fontWeight: FontWeight.bold,
+//                 ),
+//               ),
+//               const SizedBox(height: 4),
+//               Text(
+//                 description,
+//                 style: GoogleFonts.figtree(
+//                   color: AppColors.primaryColor,
+//                   fontSize: 16,
+//                   fontWeight: FontWeight.normal,
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class ProfileDetailsSection extends StatelessWidget {
   final Rxn<UserModel> user;
@@ -295,6 +309,8 @@ class ProfileDetailsSection extends StatelessWidget {
     required this.user,
     required this.isOwnProfile,
   });
+
+  // final locationController = Get.find<LocationController>();
 
   @override
   Widget build(BuildContext context) {
@@ -555,9 +571,16 @@ void showEditBioSheet({required Rxn<UserModel> userModel}) {
           CustomButton(
             ontap: () async {
               if (bioController.text.isEmpty) return;
-              await userController.updateBio(bio: bioController.text);
+              await userController.updateBio(
+                bio: bioController.text,
+                whatNext: () async {
+                  await userController.getUserDetails();
+                  Get.back();
+                  Get.back();
+                },
+              );
             },
-            isLoading: false.obs,
+            isLoading: userController.isloading,
             child: Text(
               'Save',
               style: GoogleFonts.figtree(
@@ -603,23 +626,11 @@ void showEditLocationSheet({required Rxn<UserModel> userModel}) {
             ],
           ),
           SizedBox(height: 16),
-          TextField(
-            style: GoogleFonts.poppins(fontSize: 12),
-            decoration: InputDecoration(
-              hintText: userModel.value?.location ?? "",
-              prefixIcon: Icon(Icons.location_on),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: AppColors.primaryColor),
-              ),
-            ),
-          ),
-          SizedBox(height: 16),
-          CustomButton(
-            ontap: () async {
+          CustomTextField(
+            hintText: "Click to select location",
+            prefixIcon: Icons.location_on,
+            readOnly: true,
+            onTap: () async {
               await locationController.getCurrentCity(
                 nextScreen: () async {
                   await userController.getUserDetails();
@@ -627,6 +638,10 @@ void showEditLocationSheet({required Rxn<UserModel> userModel}) {
                 },
               );
             },
+          ),
+          SizedBox(height: 16),
+          CustomButton(
+            ontap: () => Get.back(),
             isLoading: locationController.isloading,
             child: Text(
               'Save',

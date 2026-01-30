@@ -308,7 +308,7 @@ class UserService {
 
       request.files.addAll(multipartFiles);
 
-      var response = await request.send().timeout(const Duration(seconds: 20));
+      var response = await request.send().timeout(const Duration(seconds: 60));
       return await http.Response.fromStream(response);
     } on SocketException catch (e) {
       CustomSnackbar.showErrorToast("Check internet connection, $e");
@@ -587,7 +587,9 @@ class UserService {
         ..headers['Authorization'] = 'Bearer $token'
         ..headers['Content-Type'] = 'multipart/form-data';
 
-      request.files.add(await http.MultipartFile.fromPath('media', videoPath.path));
+      request.files.add(
+        await http.MultipartFile.fromPath('media', videoPath.path),
+      );
 
       var response = await request.send().timeout(const Duration(seconds: 30));
       return await http.Response.fromStream(response);
@@ -706,5 +708,4 @@ class UserService {
     }
     return null;
   }
-
 }

@@ -39,11 +39,11 @@ class SettingsScreen extends StatelessWidget {
               //   icon: Icons.settings_outlined,
               // ),
               // buildSettingTile(title: 'Discovery settings', icon: Icons.map),
-              buildSettingTile(
-                title: 'Subscriptions',
-                icon: Icons.wallet_outlined,
-                ontap: () => Get.toNamed(AppRoutes.subscription),
-              ),
+              // buildSettingTile(
+              //   title: 'Subscriptions',
+              //   icon: Icons.wallet_outlined,
+              //   ontap: () => Get.toNamed(AppRoutes.subscription),
+              // ),
               // buildSettingTile(
               //   title: 'Contact',
               //   icon: Icons.help_outline_outlined,

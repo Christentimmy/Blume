@@ -45,7 +45,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (photos.isEmpty) {
         final userPhotos = userController.user.value?.photos ?? [];
-        photos.value = List.generate(6, (index) {
+        photos.value = List.generate(12, (index) {
           if (index < userPhotos.length) {
             return PhotoItem(url: userPhotos[index]);
           }
@@ -110,6 +110,12 @@ class _GalleryScreenState extends State<GalleryScreen> {
                         onTap: () async {
                           if (!hasContent) {
                             await _selectImage(index);
+                          } else {
+                            Get.dialog(
+                              photo.url != null
+                                  ? Image.network(photo.url!)
+                                  : Image.file(photo.file!),
+                            );
                           }
                         },
                         child: Stack(
@@ -225,10 +231,16 @@ class _GalleryScreenState extends State<GalleryScreen> {
   }
 
   Future<void> _selectImage(int index) async {
-    final image = await pickImage();
-    if (image == null) return;
+    final images = await pickMultipleImages(limit: photos.length - index);
+    if (images == null || images.isEmpty) return;
 
-    photos[index] = PhotoItem(file: image);
+    for (int i = 0; i < images.length; i++) {
+      final targetIndex = index + i;
+
+      if (targetIndex < photos.length) {
+        photos[targetIndex] = PhotoItem(file: images[i]);
+      }
+    }
     photos.refresh();
   }
 

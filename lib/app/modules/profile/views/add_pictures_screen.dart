@@ -14,12 +14,23 @@ class AddPicturesScreen extends StatelessWidget {
   AddPicturesScreen({super.key, this.whatNext});
 
   final userController = Get.find<UserController>();
-  final RxList<File?> images = List<File?>.filled(6, null).obs;
+  final RxList<File?> images = List<File?>.filled(12, null).obs;
 
   Future<void> selectImage(int index) async {
-    final image = await pickImage();
-    if (image == null) return;
-    images[index] = image;
+    final remainingSlots = images.length - index;
+    if (remainingSlots <= 0) return;
+
+    final imgs = await pickMultipleImages(limit: remainingSlots);
+    if (imgs == null || imgs.isEmpty) return;
+
+    for (int i = 0; i < imgs.length; i++) {
+      final targetIndex = index + i;
+
+      if (targetIndex < images.length) {
+        images[targetIndex] = imgs[i];
+      }
+    }
+
     images.refresh();
   }
 
@@ -111,6 +122,7 @@ class AddPicturesScreen extends StatelessWidget {
                   ),
                 );
               }),
+              SizedBox(height: 10),
               Center(
                 child: AnimatedSmoothIndicator(
                   activeIndex: 6,
