@@ -31,6 +31,7 @@ import 'package:blume/app/modules/profile/views/religion_work_screen.dart';
 import 'package:blume/app/modules/profile/views/update_dob_screen.dart';
 import 'package:blume/app/modules/profile/views/update_gender_screen.dart';
 import 'package:blume/app/modules/profile/views/update_name_screen.dart';
+import 'package:blume/app/modules/search/views/interest_result_screen.dart';
 import 'package:blume/app/modules/search/views/search_screen.dart';
 import 'package:blume/app/modules/settings/views/settings_screen.dart';
 import 'package:blume/app/modules/settings/views/support_screen.dart';
@@ -215,5 +216,6 @@ class AppPages {
     ),
     GetPage(name: AppRoutes.support, page: () => SupportScreen()),
     GetPage(name: AppRoutes.selfieVerification, page: () => SelfieVerificationScreen()),
+    GetPage(name: AppRoutes.interestResult, page: () => InterestResultScreen()),
   ];
 }

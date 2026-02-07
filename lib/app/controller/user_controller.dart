@@ -30,6 +30,7 @@ class UserController extends GetxController {
   RxInt searchPage = 1.obs;
   RxBool searchHasNextPage = false.obs;
   RxList<UserModel> searchResults = <UserModel>[].obs;
+  RxList<UserModel> interestResults = <UserModel>[].obs;
 
   //notification
   RxList<NotificationModel> notificationList = <NotificationModel>[].obs;
@@ -919,6 +920,73 @@ class UserController extends GetxController {
       isloading.value = false;
     }
   }
+
+  Future<void> getPeopleOfInterest({
+    required String interest,
+  }) async {
+    isloading.value = true;
+    Get.toNamed(AppRoutes.interestResult);
+    try {
+      final storageController = Get.find<StorageController>();
+      String? token = await storageController.getToken();
+      if (token == null || token.isEmpty) return;
+
+      final response = await userService.getPeopleOfInterest(
+        token: token,
+        interest: interest.toLowerCase(),
+      );
+
+      if (response == null) return;
+      final decoded = json.decode(response.body);
+      String message = decoded["message"] ?? "";
+
+      if (response.statusCode != 200) {
+        CustomSnackbar.showErrorToast(message);
+        return;
+      }
+      
+      var results = decoded["data"] as List;
+      interestResults.value = results.map((e) => UserModel.fromJson(e)).toList();
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      isloading.value = false;
+    }
+  }
+
+  Future<void> getPeopleOfRelationShipPreference({
+    required String preference,
+  }) async {
+    isloading.value = true;
+    Get.toNamed(AppRoutes.interestResult);
+    try {
+      final storageController = Get.find<StorageController>();
+      String? token = await storageController.getToken();
+      if (token == null || token.isEmpty) return;
+
+      final response = await userService.getPeopleOfRelationShipPreference(
+        token: token,
+        preference: preference.toLowerCase(),
+      );
+
+      if (response == null) return;
+      final decoded = json.decode(response.body);
+      String message = decoded["message"] ?? "";
+
+      if (response.statusCode != 200) {
+        CustomSnackbar.showErrorToast(message);
+        return;
+      }
+      
+      var results = decoded["data"] as List;
+      interestResults.value = results.map((e) => UserModel.fromJson(e)).toList();
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      isloading.value = false;
+    }
+  }
+
 }
 
 enum SwipeType { pass, superlike, like }

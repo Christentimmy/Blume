@@ -708,4 +708,44 @@ class UserService {
     }
     return null;
   }
+
+  Future<http.Response?> getPeopleOfInterest({
+    required String token,
+    required String interest,
+  }) async {
+    try {
+      final response = await http.post(
+        Uri.parse("$baseUrl/user/get-people-of-interest"),
+        headers: {
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode({"interest": interest}),
+      );
+      return response;
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
+
+  Future<http.Response?> getPeopleOfRelationShipPreference({
+    required String token,
+    required String preference,
+  }) async {
+    try {
+      final response = await http.post(
+        Uri.parse("$baseUrl/user/get-people-of-relationship-preference"),
+        headers: {
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode({"preference": preference}),
+      );
+      return response;
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
 }

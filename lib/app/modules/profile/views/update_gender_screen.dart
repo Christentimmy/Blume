@@ -99,6 +99,130 @@ class UpdateGenderScreen extends StatelessWidget {
                   ),
                 ),
               ),
+              SizedBox(height: Get.height * 0.01),
+              Obx(
+                () => CustomButton(
+                  bgColor: selectedGender.value == "lesbian"
+                      ? AppColors.primaryColor
+                      : Colors.transparent,
+                  border: Border.all(
+                    color: selectedGender.value == "lesbian"
+                        ? AppColors.primaryColor
+                        : Colors.grey.shade300,
+                  ),
+                  ontap: () {
+                    if (selectedGender.value == "lesbian") {
+                      selectedGender.value = null;
+                    } else {
+                      selectedGender.value = "lesbian";
+                    }
+                  },
+                  isLoading: false.obs,
+                  child: Text(
+                    "Lesbian",
+                    style: GoogleFonts.figtree(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: selectedGender.value == "lesbian"
+                          ? Colors.white
+                          : Get.theme.primaryColor,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: Get.height * 0.01),
+              Obx(
+                () => CustomButton(
+                  bgColor: selectedGender.value == "gay"
+                      ? AppColors.primaryColor
+                      : Colors.transparent,
+                  border: Border.all(
+                    color: selectedGender.value == "gay"
+                        ? AppColors.primaryColor
+                        : Colors.grey.shade300,
+                  ),
+                  ontap: () {
+                    if (selectedGender.value == "gay") {
+                      selectedGender.value = null;
+                    } else {
+                      selectedGender.value = "gay";
+                    }
+                  },
+                  isLoading: false.obs,
+                  child: Text(
+                    "Gay",
+                    style: GoogleFonts.figtree(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: selectedGender.value == "gay"
+                          ? Colors.white
+                          : Get.theme.primaryColor,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: Get.height * 0.01),
+              Obx(
+                () => CustomButton(
+                  bgColor: selectedGender.value == "transgender"
+                      ? AppColors.primaryColor
+                      : Colors.transparent,
+                  border: Border.all(
+                    color: selectedGender.value == "transgender"
+                        ? AppColors.primaryColor
+                        : Colors.grey.shade300,
+                  ),
+                  ontap: () {
+                    if (selectedGender.value == "transgender") {
+                      selectedGender.value = null;
+                    } else {
+                      selectedGender.value = "transgender";
+                    }
+                  },
+                  isLoading: false.obs,
+                  child: Text(
+                    "Transgender",
+                    style: GoogleFonts.figtree(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: selectedGender.value == "transgender"
+                          ? Colors.white
+                          : Get.theme.primaryColor,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: Get.height * 0.01),
+              Obx(
+                () => CustomButton(
+                  bgColor: selectedGender.value == "queer"
+                      ? AppColors.primaryColor
+                      : Colors.transparent,
+                  border: Border.all(
+                    color: selectedGender.value == "queer"
+                        ? AppColors.primaryColor
+                        : Colors.grey.shade300,
+                  ),
+                  ontap: () {
+                    if (selectedGender.value == "queer") {
+                      selectedGender.value = null;
+                    } else {
+                      selectedGender.value = "queer";
+                    }
+                  },
+                  isLoading: false.obs,
+                  child: Text(
+                    "Queer",
+                    style: GoogleFonts.figtree(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: selectedGender.value == "queer"
+                          ? Colors.white
+                          : Get.theme.primaryColor,
+                    ),
+                  ),
+                ),
+              ),
 
               const Spacer(),
               Row(

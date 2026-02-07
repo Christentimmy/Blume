@@ -37,4 +37,5 @@ class AppRoutes {
   static const resetPassword = '/reset-password';
   static const support = '/support';
   static const selfieVerification = '/selfie-verification';
+  static const interestResult = '/interest-result';
 }

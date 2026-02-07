@@ -1,8 +1,9 @@
 import 'package:blume/app/controller/user_controller.dart';
 import 'package:blume/app/modules/likes/views/likes_screen.dart';
-// import 'package:blume/app/resources/colors.dart';
+import 'package:blume/app/resources/colors.dart';
 import 'package:blume/app/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -124,7 +125,7 @@ class _SearchScreenState extends State<SearchScreen>
 
   Widget buildAppBar() {
     return SizedBox(
-      height: Get.height * 0.15,
+      height: Get.height * 0.085,
       width: Get.width,
       child: Column(
         children: [
@@ -290,29 +291,52 @@ class _SearchScreenState extends State<SearchScreen>
 
 class BuildSearchStaticData extends StatelessWidget {
   BuildSearchStaticData({super.key});
+  final RxInt selectedInterest = (-1).obs;
+  final userController = Get.find<UserController>();
 
   final List interests = [
-    "Art & Design 🎨",
-    "Video games 🎮",
+    "Reading 📚",
+    "Drawing 🎨",
     "Music 🎶",
-    "Culture 🪭",
+    "Dancing 🕺",
     "Movies 🎥",
-    "Traveling ✈️",
     "Camping 🏕️",
-    "People nearby 📍",
-    "Most compatible 🔗",
+    "Cooking 🍳",
   ];
 
   final List goalDrivenDating = [
-    {"title": "Serious Dater", "image": "assets/icons/love.png"},
-    {"title": "Short-term fun", "image": "assets/icons/flash.png"},
-    {"title": "New friends", "image": "assets/icons/sun-setting.png"},
-    {"title": "Free tonight", "image": "assets/icons/stars-03.png"},
-
-    {"title": "Lesbian", "image": "assets/icons/lesbian.png"},
-    {"title": "Gay", "image": "assets/icons/gay.png"},
-    {"title": "Transgender", "image": "assets/icons/transgender.png"},
-    {"title": "Queer", "image": "assets/icons/q.png"},
+    {
+      "title": "Serious Dater",
+      "image": "assets/icons/love.png",
+      "value": "long term partner",
+    },
+    {
+      "title": "Short-term fun",
+      "image": "assets/icons/flash.png",
+      "value": "short term partner",
+    },
+    {
+      "title": "New friends",
+      "image": "assets/icons/sun-setting.png",
+      "value": "new friends",
+    },
+    {
+      "title": "Free tonight",
+      "image": "assets/icons/stars-03.png",
+      "value": "short term partner",
+    },
+    {
+      "title": "Lesbian",
+      "image": "assets/icons/lesbian.png",
+      "value": "lesbian",
+    },
+    {"title": "Gay", "image": "assets/icons/gay.png", "value": "gay"},
+    {
+      "title": "Transgender",
+      "image": "assets/icons/transgender.png",
+      "value": "transgender",
+    },
+    {"title": "Queer", "image": "assets/icons/q.png", "value": "queer"},
   ];
 
   @override
@@ -320,115 +344,142 @@ class BuildSearchStaticData extends StatelessWidget {
     return Expanded(
       child: ListView(
         children: [
-          // Text(
-          //   "Interest",
-          //   style: GoogleFonts.figtree(
-          //     fontSize: 28,
-          //     fontWeight: FontWeight.w600,
-          //     color: Get.theme.primaryColor,
-          //   ),
-          // ),
-          // Text(
-          //   "People with similar interest around you",
-          //   style: GoogleFonts.figtree(
-          //     fontSize: 15,
-          //     fontWeight: FontWeight.w400,
-          //     color: Get.theme.primaryColor,
-          //   ),
-          // ),
-          // SizedBox(height: Get.height * 0.02),
-          // Wrap(
-          //   runSpacing: 2,
-          //   spacing: 5,
-          //   children: List.generate(
-          //     interests.length,
-          //     (index) => Chip(
-          //       side: BorderSide(color: Colors.transparent),
-          //       backgroundColor: Get.isDarkMode
-          //           ? AppColors.darkButtonColor
-          //           : AppColors.lightButtonColor,
-          //       label: Text(
-          //         interests[index],
-          //         style: GoogleFonts.figtree(
-          //           fontSize: 16,
-          //           fontWeight: FontWeight.w600,
-          //           color: Get.theme.primaryColor,
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // SizedBox(height: Get.height * 0.025),
-          // Text(
-          //   "Goal-driven dating",
-          //   style: GoogleFonts.figtree(
-          //     fontSize: 20,
-          //     fontWeight: FontWeight.w700,
-          //     color: Get.theme.primaryColor,
-          //   ),
-          // ),
-          // Text(
-          //   "People with similar relationship goals",
-          //   style: GoogleFonts.figtree(
-          //     fontSize: 15,
-          //     fontWeight: FontWeight.w400,
-          //     color: Get.theme.primaryColor,
-          //   ),
-          // ),
-          // SizedBox(height: Get.height * 0.03),
-          // GridView.builder(
-          //   shrinkWrap: true,
-          //   physics: const NeverScrollableScrollPhysics(),
-          //   itemCount: goalDrivenDating.length,
-          //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          //     crossAxisCount: 2,
-          //     crossAxisSpacing: 10,
-          //     mainAxisSpacing: 10,
-          //   ),
-          //   itemBuilder: (context, index) {
-          //     final item = goalDrivenDating[index];
-          //     return Container(
-          //       decoration: BoxDecoration(
-          //         borderRadius: BorderRadius.circular(16),
-          //         color: Get.isDarkMode
-          //             ? AppColors.darkButtonColor
-          //             : Colors.white,
-          //       ),
-          //       child: Column(
-          //         children: [
-          //           Container(
-          //             height: 45,
-          //             alignment: Alignment.center,
-          //             width: double.infinity,
-          //             decoration: BoxDecoration(
-          //               borderRadius: BorderRadius.only(
-          //                 topLeft: Radius.circular(16),
-          //                 topRight: Radius.circular(16),
-          //               ),
-          //               color: Get.isDarkMode
-          //                   ? AppColors.darkButtonColor
-          //                   : AppColors.lightButtonColor,
-          //             ),
-          //             child: Text(
-          //               item["title"],
-          //               style: GoogleFonts.figtree(
-          //                 fontSize: 16,
-          //                 fontWeight: FontWeight.w600,
-          //                 color: Get.theme.primaryColor,
-          //               ),
-          //             ),
-          //           ),
-          //           Expanded(
-          //             child: Center(
-          //               child: Image.asset(item["image"], height: 50),
-          //             ),
-          //           ),
-          //         ],
-          //       ),
-          //     );
-          //   },
-          // ),
-          // SizedBox(height: Get.height * 0.03),
+          Text(
+            "Interest",
+            style: GoogleFonts.figtree(
+              fontSize: 28,
+              fontWeight: FontWeight.w600,
+              color: Get.theme.primaryColor,
+            ),
+          ),
+          Text(
+            "People with similar interest around you",
+            style: GoogleFonts.figtree(
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+              color: Get.theme.primaryColor,
+            ),
+          ),
+          SizedBox(height: Get.height * 0.02),
+          Wrap(
+            runSpacing: 2,
+            spacing: 5,
+            children: List.generate(interests.length, (index) {
+              return Obx(() {
+                return InkWell(
+                  onTap: () async {
+                    selectedInterest.value = index;
+                    await Future.delayed(const Duration(milliseconds: 100));
+                    final interest = interests[index]
+                        .toString()
+                        .split(" ")
+                        .first;
+                    await userController.getPeopleOfInterest(
+                      interest: interest,
+                    );
+                  },
+                  child: Chip(
+                    side: BorderSide(color: Colors.transparent),
+                    color: selectedInterest.value == index
+                        ? WidgetStateProperty.all(Colors.red)
+                        : null,
+                    backgroundColor: Get.isDarkMode
+                        ? AppColors.darkButtonColor
+                        : AppColors.lightButtonColor,
+                    label: Text(
+                      interests[index],
+                      style: GoogleFonts.figtree(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Get.theme.primaryColor,
+                      ),
+                    ),
+                  ),
+                );
+              });
+            }),
+          ),
+          SizedBox(height: Get.height * 0.025),
+          Text(
+            "Goal-driven dating",
+            style: GoogleFonts.figtree(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              color: Get.theme.primaryColor,
+            ),
+          ),
+          Text(
+            "People with similar relationship goals",
+            style: GoogleFonts.figtree(
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+              color: Get.theme.primaryColor,
+            ),
+          ),
+          SizedBox(height: Get.height * 0.03),
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: goalDrivenDating.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+            ),
+            itemBuilder: (context, index) {
+              final item = goalDrivenDating[index];
+              return InkWell(
+                onTap: () async {
+                  HapticFeedback.lightImpact();
+                  final String? value = item["value"];
+                  if (value == null) return;
+                  await userController.getPeopleOfRelationShipPreference(
+                    preference: value,
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    color: Get.isDarkMode
+                        ? AppColors.darkButtonColor
+                        : Colors.white,
+                  ),
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 45,
+                        alignment: Alignment.center,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(16),
+                            topRight: Radius.circular(16),
+                          ),
+                          color: Get.isDarkMode
+                              ? AppColors.darkButtonColor
+                              : AppColors.lightButtonColor,
+                        ),
+                        child: Text(
+                          item["title"],
+                          style: GoogleFonts.figtree(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Get.theme.primaryColor,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Center(
+                          child: Image.asset(item["image"], height: 50),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+          SizedBox(height: Get.height * 0.03),
           // Text(
           //   "Around me",
           //   style: GoogleFonts.figtree(
