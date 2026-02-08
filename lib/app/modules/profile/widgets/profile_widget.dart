@@ -635,6 +635,7 @@ void showEditLocationSheet({required Rxn<UserModel> userModel}) {
                 nextScreen: () async {
                   await userController.getUserDetails();
                   Get.back();
+                  Get.back();
                 },
               );
             },
