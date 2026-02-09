@@ -329,14 +329,21 @@ class BuildSearchStaticData extends StatelessWidget {
       "title": "Lesbian",
       "image": "assets/icons/lesbian.png",
       "value": "lesbian",
+      "color": AppColors.primaryColor,
     },
-    {"title": "Gay", "image": "assets/icons/gay.png", "value": "gay"},
+    {
+      "title": "Gay",
+      "image": "assets/icons/gay.png",
+      "value": "gay",
+      "color": AppColors.primaryColor,
+    },
     {
       "title": "Transgender",
       "image": "assets/icons/transgender.png",
       "value": "transgender",
+      "color": AppColors.primaryColor,
     },
-    {"title": "Queer", "image": "assets/icons/q.png", "value": "queer"},
+    {"title": "Queer", "image": "assets/images/queer.png", "value": "queer"},
   ];
 
   @override
@@ -470,7 +477,11 @@ class BuildSearchStaticData extends StatelessWidget {
                       ),
                       Expanded(
                         child: Center(
-                          child: Image.asset(item["image"], height: 50),
+                          child: Image.asset(
+                            item["image"],
+                            height: index == 7 ? 70 : 50,
+                            color: item["color"],
+                          ),
                         ),
                       ),
                     ],
