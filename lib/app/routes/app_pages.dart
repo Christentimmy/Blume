@@ -35,6 +35,7 @@ import 'package:blume/app/modules/search/views/interest_result_screen.dart';
 import 'package:blume/app/modules/search/views/search_screen.dart';
 import 'package:blume/app/modules/settings/views/settings_screen.dart';
 import 'package:blume/app/modules/settings/views/support_screen.dart';
+import 'package:blume/app/modules/settings/views/update_match_preference_screen.dart';
 import 'package:blume/app/modules/splash/views/splash_screen.dart';
 import 'package:blume/app/modules/story/views/view_story_screen.dart';
 import 'package:blume/app/modules/subscription/views/subscription_screen.dart';
@@ -217,5 +218,6 @@ class AppPages {
     GetPage(name: AppRoutes.support, page: () => SupportScreen()),
     GetPage(name: AppRoutes.selfieVerification, page: () => SelfieVerificationScreen()),
     GetPage(name: AppRoutes.interestResult, page: () => InterestResultScreen()),
+    GetPage(name: AppRoutes.updateMatchPreference, page: () => UpdateMatchPreferenceScreen()),
   ];
 }

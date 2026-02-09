@@ -921,9 +921,7 @@ class UserController extends GetxController {
     }
   }
 
-  Future<void> getPeopleOfInterest({
-    required String interest,
-  }) async {
+  Future<void> getPeopleOfInterest({required String interest}) async {
     isloading.value = true;
     Get.toNamed(AppRoutes.interestResult);
     try {
@@ -944,9 +942,11 @@ class UserController extends GetxController {
         CustomSnackbar.showErrorToast(message);
         return;
       }
-      
+
       var results = decoded["data"] as List;
-      interestResults.value = results.map((e) => UserModel.fromJson(e)).toList();
+      interestResults.value = results
+          .map((e) => UserModel.fromJson(e))
+          .toList();
     } catch (e) {
       debugPrint(e.toString());
     } finally {
@@ -977,9 +977,11 @@ class UserController extends GetxController {
         CustomSnackbar.showErrorToast(message);
         return;
       }
-      
+
       var results = decoded["data"] as List;
-      interestResults.value = results.map((e) => UserModel.fromJson(e)).toList();
+      interestResults.value = results
+          .map((e) => UserModel.fromJson(e))
+          .toList();
     } catch (e) {
       debugPrint(e.toString());
     } finally {
@@ -987,6 +989,38 @@ class UserController extends GetxController {
     }
   }
 
+  Future<void> updateMatchPreference({
+    required List ageRange,
+    required int maxDistance,
+  }) async {
+    isloading.value = true;
+    try {
+      final storageController = Get.find<StorageController>();
+      String? token = await storageController.getToken();
+      if (token == null || token.isEmpty) return;
+
+      final response = await userService.updateMatchPreference(
+        token: token,
+        ageRange: ageRange,
+        maxDistance: maxDistance,
+      );
+
+      if (response == null) return;
+      final decoded = json.decode(response.body);
+      String message = decoded["message"] ?? "";
+
+      if (response.statusCode != 200) {
+        CustomSnackbar.showErrorToast(message);
+        return;
+      }
+      await getUserDetails();
+      Get.back();
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      isloading.value = false;
+    }
+  }
 }
 
 enum SwipeType { pass, superlike, like }

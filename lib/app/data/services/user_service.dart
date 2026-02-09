@@ -748,4 +748,25 @@ class UserService {
     }
     return null;
   }
+
+  Future<http.Response?> updateMatchPreference({
+    required String token,
+    required List ageRange,
+    required int maxDistance,
+  }) async {
+    try {
+      final response = await http.patch(
+        Uri.parse("$baseUrl/user/update-match-preference"),
+        headers: {
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode({"ageRange": ageRange, "maxDistance": maxDistance}),
+      );
+      return response;
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
 }

@@ -38,4 +38,5 @@ class AppRoutes {
   static const support = '/support';
   static const selfieVerification = '/selfie-verification';
   static const interestResult = '/interest-result';
+  static const updateMatchPreference = '/update-match-preference';
 }
